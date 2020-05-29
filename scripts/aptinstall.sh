@@ -31,6 +31,8 @@ install p7zip-full
 install steam
 install rsync
 install unzip
+install slack-desktop
+install discord
 
 # Image processing
 install gimp
