@@ -1,7 +1,5 @@
 # Dotfiles and set up scripts for my Pop! OS machine running Ubuntu 20.04
 
-Now in new-and-improved *Vaporwave flavor!*
-
 ## Included `scripts/`
 
 - `symlink.sh` sets up symbolic links in `$HOME`
@@ -37,3 +35,4 @@ Restore `dconf` configurations from a file:
 dconf load /org/gnome/ < settings.dconf
 ```
 
+This repository was heavily influenced by [Victoria Drake](https://github.com/victoriadrake)
