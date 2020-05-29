@@ -1,3 +1,12 @@
+# include other dotfiles
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+for file in ~/.{bash_prompt}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
+
 # History control
 # don't use duplicate lines or lines starting with space
 HISTCONTROL=ignoreboth
@@ -20,7 +29,10 @@ alias gcom='git commit'
 alias gsup='git status'
 alias goto='git checkout'
 
+alias node='nodejs'
+
 alias pip='pip3'
+alias python='python3'
 alias pym='python3 manage.py'
 alias mkenv='python3 -m venv env'
 alias startenv='source env/bin/activate && which python3'
@@ -54,25 +66,6 @@ function getghcli () {
     gh --version
 }
 
-# Hugo install or upgrade
-function gethugo () {
-    wget -q -P tmp/ https://github.com/gohugoio/hugo/releases/download/v"$@"/hugo_extended_"$@"_Linux-64bit.tar.gz
-    tar xf tmp/hugo_extended_"$@"_Linux-64bit.tar.gz -C tmp/
-    sudo mv -f tmp/hugo /usr/local/bin/
-    rm -rf tmp/
-    hugo version
-}
-
-# Hugo site from exampleSite in themes/
-function hugotheme () {
-    HUGO_THEME="$1" hugo "${@:2}" --themesDir ../.. -v
-}
-
-# Add GitLab remote to cwd git
-function glab () {
-    git remote set-url origin --add git@gitlab.com:victoriadrake/"${PWD##*/}".git
-    git remote -v
-}
 
 # Markdown link check in a folder, recursive
 function mlc () {
@@ -83,75 +76,15 @@ function mlc () {
 export PATH=$PATH:/usr/local/bin:/usr/local/go/bin:~/.local/bin:$GOPATH/bin
 export GOPATH=~/go
 
+# Yarn
+export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
+
 # Vim for life
 export EDITOR=/usr/bin/vim
 
 # Bash completion
 source ~/.git-completion.bash
 
-# Color prompt
-export TERM=xterm-256color
-
-# Colours have names too. Stolen from @tomnomnom who stole it from Arch wiki
-txtblk='\[\e[0;30m\]' # Black - Regular
-txtred='\[\e[0;31m\]' # Red
-txtgrn='\[\e[0;32m\]' # Green
-txtylw='\[\e[0;93m\]' # Yellow
-txtblu='\[\e[0;34m\]' # Blue
-txtpur='\[\e[0;35m\]' # Purple
-txtcyn='\[\e[0;96m\]' # Cyan
-txtwht='\[\e[0;37m\]' # White
-bldblk='\[\e[1;30m\]' # Black - Bold
-bldred='\[\e[1;31m\]' # Red
-bldgrn='\[\e[1;32m\]' # Green
-bldylw='\[\e[1;33m\]' # Yellow
-bldblu='\[\e[1;34m\]' # Blue
-bldpur='\[\e[1;35m\]' # Purple
-bldcyn='\[\e[1;36m\]' # Cyan
-bldwht='\[\e[1;37m\]' # White
-unkblk='\[\e[4;30m\]' # Black - Underline
-undred='\[\e[4;31m\]' # Red
-undgrn='\[\e[4;32m\]' # Green
-undylw='\[\e[4;33m\]' # Yellow
-undblu='\[\e[4;34m\]' # Blue
-undpur='\[\e[4;35m\]' # Purple
-undcyn='\[\e[4;36m\]' # Cyan
-undwht='\[\e[4;37m\]' # White
-bakblk='\[\e[40m\]'   # Black - Background
-bakred='\[\e[41m\]'   # Red
-badgrn='\[\e[42m\]'   # Green
-bakylw='\[\e[43m\]'   # Yellow
-bakblu='\[\e[44m\]'   # Blue
-bakpur='\[\e[45m\]'   # Purple
-bakcyn='\[\e[46m\]'   # Cyan
-bakwht='\[\e[47m\]'   # White
-txtrst='\[\e[0m\]'    # Text Reset
-
-# Prompt colours
-atC="${txtpur}"
-nameC="${txtblu}"
-hostC="${txtpur}"
-pathC="${txtcyn}"
-gitC="${txtpur}"
-pointerC="${txtwht}"
-normalC="${txtrst}"
-
-# Red pointer for root
-if [ "${UID}" -eq "0" ]; then
-    pointerC="${txtred}"
-fi
-
-gitBranch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-
-export PS1="${pathC}\w ${gitC}\$(gitBranch) ${pointerC}\$${normalC} "
-
-# Eddie
-python3 ~/src/ghub/eddie-terminal/randline.py ~/src/ghub/eddie-terminal/greetings.txt Victoria
-
-# oh-my-git prompt
-source ~/.oh-my-git/prompt.sh
 
 VIRTUAL_ENV_DISABLE_PROMPT=true
 function omg_prompt_callback() {

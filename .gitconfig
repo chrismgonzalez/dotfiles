@@ -1,7 +1,7 @@
 
 [user]
-    name = Victoria Drake
-    email = hello@victoria.dev
+    name = Chris Gonzalez
+    email = cmgonza89@gmail.com
 [color]
     diff = auto
     status = auto
@@ -9,10 +9,10 @@
 [color "status"]
     added = green
     changed = blue
-    untracked = red 
+    untracked = red
 [color "diff"]
     meta = yellow
-    old = red 
+    old = red
     new = green
 [commit]
     template = ~/.gitmessage
