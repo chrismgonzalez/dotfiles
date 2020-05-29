@@ -34,9 +34,10 @@ alias node='nodejs'
 alias pip='pip3'
 alias python='python3'
 alias pym='python3 manage.py'
-alias mkenv='python3 -m venv env'
-alias startenv='source env/bin/activate && which python3'
+alias mkenv='python3 -m virtualenv venv'
+alias startenv='source venv/bin/activate'
 alias stopenv='deactivate'
+alias pyinstall='pip install -r requirements.txt'
 
 # Use programs without a root-equivalent group
 alias docker='sudo docker'
