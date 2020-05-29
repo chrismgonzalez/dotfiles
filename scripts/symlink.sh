@@ -10,9 +10,9 @@ function linkDotfile {
   dateStr=$(date +%Y-%m-%d-%H%M)
 
   if [ -h ~/${1} ]; then
-    # Existing symlink 
+    # Existing symlink
     echo "Removing existing symlink: ${dest}"
-    rm ${dest} 
+    rm ${dest}
 
   elif [ -f "${dest}" ]; then
     # Existing file
@@ -33,6 +33,7 @@ linkDotfile .vimrc
 linkDotfile .tmux.conf
 linkDotfile .bashrc
 linkDotfile .bash_profile
+linkDotfile .bash_prompt
 linkDotfile .gitconfig
 linkDotfile .gitmessage
 linkDotfile .git-completion.bash

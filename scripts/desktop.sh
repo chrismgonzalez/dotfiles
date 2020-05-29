@@ -8,7 +8,3 @@ cd ..
 rm -rf panel
 gnome-shell-extension-tool -e dash-to-panel
 
-# Set up the desktop environment
-cp ../img/desktop.jpg ~/desktop.jpg
-cp ../img/lock.jpg ~/lock.jpg
-dconf load /org/gnome/ < ../../settings.dconf

@@ -1,8 +1,6 @@
-# Dotfiles and set up scripts for my Linux 💜 machine
+# Dotfiles and set up scripts for my Pop! OS machine running Ubuntu 20.04
 
 Now in new-and-improved *Vaporwave flavor!*
-
-My personal set-up scripts. I wrote about these in this [accompanying article](https://victoria.dev/verbose/how-to-set-up-a-fresh-ubuntu-desktop-using-only-dotfiles-and-bash-scripts/).
 
 ## Included `scripts/`
 
@@ -39,7 +37,3 @@ Restore `dconf` configurations from a file:
 dconf load /org/gnome/ < settings.dconf
 ```
 
-## My current themes
-
-- Visual Studio Code: [Kabukichō](https://github.com/victoriadrake/kabukicho-vscode)
-- Desktop environment: [Numix-BLACK-Grape](https://www.pling.com/p/1335655/)

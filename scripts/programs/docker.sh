@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo -e '\e[0;33mSetting up docker\e[0m'
 sudo apt update
 sudo apt-get install -y \
     apt-transport-https \
@@ -14,5 +14,8 @@ sudo add-apt-repository \
    stable"
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io
-sudo docker run hello-world
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo /etc/init.d/docker start
 

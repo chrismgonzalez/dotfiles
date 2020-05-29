@@ -22,9 +22,15 @@ install file
 install git
 install htop
 install nmap
+install neofetch
 install openvpn
 install tmux
 install vim
+install vlc
+install p7zip-full
+install steam
+install rsync
+install unzip
 
 # Image processing
 install gimp

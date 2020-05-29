@@ -9,31 +9,6 @@ sudo apt install -y apt-transport-https
 sudo apt update
 sudo apt install -y code
 rm microsoft.gpg
-ln -s $(pwd)/../../vscode/vsc_settings.json $HOME/.config/Code/User/settings.json
-function install {
-  name="${1}"
-  code --install-extension ${name} --force
-}
-install batisteo.vscode-django
-install be5invis.vscode-custom-css
-install bibhasdn.django-html
-install coenraads.bracket-pair-colorizer
-install davidanson.vscode-markdownlint
-install emmanuelbeziat.vscode-great-icons
-install glen-84.sass-lint
-install HookyQR.beautify
-install jolaleye.horizon-theme-vscode
-install killalau.vscode-liquid-snippets
-install liviuschera.noctis
-install ms-python.python
-install ms-vscode-remote.remote-containers
-install ms-vscode.Go
-install neilding.language-liquid
-install redhat.vscode-yaml
-install rido3.wordcount
-install streetsidesoftware.code-spell-checker
-install victoriadrake.kabukicho
-install vscode-icons-team.vscode-icons
-install yzhang.markdown-all-in-one
-install zxh404.vscode-proto3
+
+
 
