@@ -39,6 +39,9 @@ alias startenv='source venv/bin/activate'
 alias stopenv='deactivate'
 alias pyinstall='pip install -r requirements.txt'
 
+alias gr = 'go run'
+alias gb = 'go build'
+
 # Use programs without a root-equivalent group
 alias docker='sudo docker'
 alias npm='sudo npm'
@@ -176,14 +179,6 @@ function getgolang () {
     go version
 }
 
-# GHCLI install or upgrade
-function getghcli () {
-    wget -q -P tmp/ https://github.com/cli/cli/releases/download/v"$@"/gh_"$@"_linux_amd64.deb
-    cd tmp/ && sudo dpkg -i gh_"$@"_linux_amd64.deb
-    cd .. && rm -rf tmp/
-    gh --version
-}
-
 
 # Markdown link check in a folder, recursive
 function mlc () {
@@ -196,9 +191,6 @@ export GOPATH=~/go
 
 # Yarn
 export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
-
-# Vim for life
-export EDITOR=/usr/bin/vim
 
 # Bash completion
 source ~/.git-completion.bash
