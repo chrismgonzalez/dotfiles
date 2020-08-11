@@ -196,29 +196,18 @@ echo "------------------------------"
 }>>$MAC_SETUP_PROFILE
 brew install go
 
-
 echo "------------------------------"
-echo "Python, pip, pyenv, flask"
+echo "Clean python installs"
 echo "------------------------------"
 
-## python
-echo "export PATH=\"/usr/local/opt/python/libexec/bin:\$PATH\"" >> $MAC_SETUP_PROFILE
-brew install python
-pip install --user virtualenv
-pip install --upgrade setuptools
-pip install --upgrade pip
-pip install Flask
-brew install pyenv
-# shellcheck disable=SC2016
-echo 'eval "$(pyenv init -)"' >> $MAC_SETUP_PROFILE
+rm /usr/local/bin/python*
+rm /usr/local/bin/pip*
 
+rm -Rf /Library/Frameworks/Python.framework/Versions/*
 
-# Databases
-brew cask install dbeaver-community # db viewer
-brew install libpq                  # postgre command line
-brew link --force libpq
-# shellcheck disable=SC2016
-echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> $MAC_SETUP_PROFILE
+brew install python3
+brew install pipenv
+
 
 echo "------------------------------"
 echo "Docker"
