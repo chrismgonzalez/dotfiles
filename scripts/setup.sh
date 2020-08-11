@@ -69,7 +69,11 @@ brew install findutils
 brew install gnu-sed
 # Install Bash 4.
 brew install bash
-brew install bash-completion2
+brew install bash-completion
+
+echo "[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion" >> ~/.bashrc
+source ~/.bash_profile
+
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
 # Prompts for password
@@ -95,6 +99,7 @@ brew install wget
 
 # git
 brew install git
+git config --global credential.helper osxkeychain
 
 echo "------------------------------"
 echo "installing iTerm2 and other tools"
@@ -161,7 +166,7 @@ brew cask install slack
 
 # Dev tools
 brew cask install ngrok                                                                               # tunnel localhost over internet.
-brew cask install postman                                                                             # Postman makes sending API requests simple.
+brew cask install postman                                                                            # Postman makes sending API requests simple.
 
 # IDE
 brew cask install jetbrains-toolbox
