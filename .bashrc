@@ -189,6 +189,7 @@ function mlc () {
 export PATH=$PATH:/usr/local/bin:/usr/local/go/bin:~/.local/bin:$GOPATH/bin
 export GOPATH=~/go
 
+
 # Yarn
 export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
 

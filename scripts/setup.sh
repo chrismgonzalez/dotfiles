@@ -1,18 +1,84 @@
 #!/bin/bash
 
+sudo -v
+
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# Update the OS and Install Xcode Tools
+echo "------------------------------"
+echo "Updating OSX.  If this requires a restart, run the script again."
+# Install all available updates
+sudo softwareupdate -ia --verbose
+# Install only recommended available updates
+#sudo softwareupdate -ir --verbose
+
+echo "------------------------------"
+echo "Installing Xcode Command Line Tools."
+# Install Xcode command line tools
+xcode-select --install
+
+
+echo "-----Creating folder for install downloads----"
+
+
 # Create a folder who contains downloaded things for the setup
 INSTALL_FOLDER=~/.macsetup
 mkdir -p $INSTALL_FOLDER
 MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
+
+# initial setup for finder
+
+echo "-----customizing finder -----"
+
+# show library folder
+chflags nohidden ~/Library
+
+# show hidden folders
+defaults write com.apple.finder AppleShowAllFiles YES
+
+# show path bar
+defaults write com.apple.finder ShowPathbar -bool true
+
+# show status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+
+echo "--------------------------------"
+echo "installing homebrew"
+
 
 # install brew
 if ! hash brew
 then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   brew update
+  brew upgrade --all
 else
   printf "\e[93m%s\e[m\n" "You already have brew installed."
 fi
+
+# Install GNU core utilities (those that come with OS X are outdated).
+# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
+brew install coreutils
+sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
+
+# Install some other useful utilities like `sponge`.
+brew install moreutils
+# Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
+brew install findutils
+# Install GNU `sed`, overwriting the built-in `sed`.
+brew install gnu-sed
+# Install Bash 4.
+brew install bash
+brew install bash-completion2
+# We installed the new shell, now we have to activate it
+echo "Adding the newly installed shell to the list of allowed shells"
+# Prompts for password
+sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
+# Change to the new shell, prompts for password
+chsh -s /usr/local/bin/bash
+
+echo "------------------------------"
+echo "installing curl/wget/git/bash"
 
 # CURL / WGET
 brew install curl
@@ -28,10 +94,15 @@ brew install wget
 }>>$MAC_SETUP_PROFILE
 
 # git
-brew install git                                                                                      #
-brew install bash
+brew install git
+
+echo "------------------------------"
+echo "installing iTerm2 and other tools"
+
+
 # Terminal replacement https://www.iterm2.com
 brew cask install iterm2
+
 # Pimp command line
 brew install micro                                                                                    # replacement for nano/vi
 brew install lsd                                                                                      # replacement for ls
@@ -61,10 +132,17 @@ echo '. /usr/local/etc/profile.d/z.sh' >> $MAC_SETUP_PROFILE
 
 brew install ctop
 
+echo "------------------------------"
+echo "Fonts"
+echo "------------------------------"
+
 # fonts (https://github.com/tonsky/FiraCode/wiki/Intellij-products-instructions)
 brew tap homebrew/cask-fonts
 brew cask install font-jetbrains-mono
 
+echo "------------------------------"
+echo "Applications"
+echo "------------------------------"
 # Browser
 brew cask install google-chrome
 brew cask install firefox
@@ -75,7 +153,8 @@ brew cask install vlc
 
 # Productivity
 brew cask install kap                                                                                 # video screenshot
-brew cask install rectangle                                                                           # manage windows
+brew cask install rectangle
+brew cask install alfred                                                                         # manage windows
 
 # Communication
 brew cask install slack
@@ -88,17 +167,25 @@ brew cask install postman                                                       
 brew cask install jetbrains-toolbox
 brew cask install visual-studio-code
 
-# Language
-## Node / Javascript
-mkdir ~/.nvm
-brew install nvm                                                                                     # choose your version of npm
-nvm install node                                                                                     # "node" is an alias for the latest version
-{
-  echo "export NVM_DIR=\"$HOME/.nvm\""
-  echo '[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm'
-  echo '[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion'
-}>>$MAC_SETUP_PROFILE
+# install node and yarn
 
+echo "------------------------------"
+echo "Node and Yarn"
+echo "------------------------------"
+
+brew install n
+
+# make cache folder (if missing) and take ownership
+sudo mkdir -p /usr/local/n
+sudo chown -R $(whoami) /usr/local/n
+# take ownership of node install destination folders
+sudo chown -R $(whoami) /usr/local/bin /usr/local/lib /usr/local/include /usr/local/share
+
+n lts
+
+echo "------------------------------"
+echo "Go"
+echo "------------------------------"
 
 ## golang
 {
@@ -109,12 +196,18 @@ nvm install node                                                                
 }>>$MAC_SETUP_PROFILE
 brew install go
 
+
+echo "------------------------------"
+echo "Python, pip, pyenv, flask"
+echo "------------------------------"
+
 ## python
 echo "export PATH=\"/usr/local/opt/python/libexec/bin:\$PATH\"" >> $MAC_SETUP_PROFILE
 brew install python
-pip install --user pipenv
+pip install --user virtualenv
 pip install --upgrade setuptools
 pip install --upgrade pip
+pip install Flask
 brew install pyenv
 # shellcheck disable=SC2016
 echo 'eval "$(pyenv init -)"' >> $MAC_SETUP_PROFILE
@@ -127,24 +220,46 @@ brew link --force libpq
 # shellcheck disable=SC2016
 echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> $MAC_SETUP_PROFILE
 
+echo "------------------------------"
+echo "Docker"
+echo "------------------------------"
+
+
 # Docker
-brew cask install docker
-brew install bash-completion
-brew install docker-completion
-brew install docker-compose-completion
-brew install docker-machine-completion
+brew install docker docker-machine
+brew cask install virtualbox
+docker-machine create --driver virtualbox default
+docker-machine env default
+eval "$(docker-machine env default)"
+
+docker run hello-world
+docker-machine stop default
 
 
-# Change default shell to bash from ZSH
 
-chsh -s /bin/bash
 
-# reload profile files.
-{
-  echo "source $MAC_SETUP_PROFILE # alias and things added by mac_setup script"
-}>>"$HOME/.zsh_profile"
-# shellcheck disable=SC1090
-source "$HOME/.zsh_profile"
+echo "------------------------------"
+echo "Cleaning up homebrew installs"
+echo "------------------------------"
+brew cleanup
+
+# create ssh keys
+echo "------------------------------"
+echo "Creating SSH keys"
+echo "------------------------------"
+
+ssh-keygen -t rsa 4096 -C "cmgonza89@gmail.com"
+
+echo "------------------------------"
+echo "adding key to auth agent"
+echo "------------------------------"
+
+
+ssh-add ~/.ssh/id_rsa
+
+echo "------------------------------"
+echo "Source the shells"
+echo "------------------------------"
 
 {
   echo "source $MAC_SETUP_PROFILE # alias and things added by mac_setup script"
