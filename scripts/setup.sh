@@ -184,17 +184,20 @@ sudo chown -R $(whoami) /usr/local/bin /usr/local/lib /usr/local/include /usr/lo
 n lts
 
 echo "------------------------------"
+echo "Netlify and Gatsby"
+echo "------------------------------"
+
+npm install -g netlify-cli
+npm install -g gatsby-cli
+
+echo "------------------------------"
 echo "Go"
 echo "------------------------------"
 
 ## golang
-{
-  echo "# Go development"
-  echo "export GOPATH=\"\${HOME}/.go\""
-  echo "export GOROOT=\"\$(brew --prefix golang)/libexec\""
-  echo "export PATH=\"\$PATH:\${GOPATH}/bin:\${GOROOT}/bin\""
-}>>$MAC_SETUP_PROFILE
-brew install go
+
+brew install go@1.13
+mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
 echo "------------------------------"
 echo "Clean python installs"
