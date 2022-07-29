@@ -173,7 +173,6 @@ install 'brew cask install' "${important_casks[@]}"
 
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
-brew link --overwrite ruby
 
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
@@ -239,12 +238,10 @@ echo "Checking terraform version"
 echo "------------------------------"
 terraform --version
 
-echo "------------------------------"
-echo "Checking AWS CLI"
-echo "------------------------------"
-
-
-
+# todo
+# echo "------------------------------"
+# echo "Checking AWS CLI"
+# echo "------------------------------"
 
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
