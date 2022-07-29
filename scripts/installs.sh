@@ -82,14 +82,18 @@ pips=(
   pipenv
 )
 
-## todo - extensions for DevOps productivity
-# go
-# terraform
-# aws
-# docker
-
 vscode=(
   rust-lang.rust
+  formulahendry.auto-close-tag
+  ms-azuretools.vscode-docker
+  golang.go
+  premparihar.gotestexplorer
+  ms-kubernetes-tools.vscode-kubernetes-tools
+  taniarascia.new-moon-vscode
+  ms-python.python
+  RoscoP.ActiveFileInStatusBar
+  wesbos.theme-cobalt2
+  eamodio.gitlens
 )
 
 fonts=(

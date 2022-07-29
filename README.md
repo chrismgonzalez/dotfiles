@@ -1,38 +1,30 @@
-# Dotfiles and set up scripts for my Pop! OS machine running Ubuntu 20.04
+# Dotfiles and set up scripts (use at your own risk)
 
 ## Included `scripts/`
 
-- `symlink.sh` sets up symbolic links in `$HOME`
-- `aptinstall.sh` owns Ubuntu repository installs
-- `programs.sh` leverages progressive command line installation of other software
-- `desktop.sh` champions granular executive desktop environment settings
+- `installgo.sh` - checks the machine characteristics and installs the proper Go version based on CPU architectures
+- `create-macos-boot-iso.sh` - used to create a bootable .iso file to use when creating macOS virtual machines in virtual box
+- `installs.sh` - stripped down version of `setup.sh` that focuses on installing essential apps and settings for a new dev machine
 - `setup.sh` facilitates the scalable and proactive deliverables of running all the scripts and `apt upgrade`
 
-## Some helpful commands
+## Download & installation
 
-List current values of desktop configuration settings:
-
-```sh
-gsettings list-recursively org.gnome.desktop
-```
-
-List current values of Terminal configuration:
+Clone the repo to a hard disk location of your choice
 
 ```sh
-GNOME_TERMINAL_PROFILE=`gsettings get org.gnome.Terminal.ProfilesList default | awk -F \' '{print $2}'`
-gsettings list-recursively org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$GNOME_TERMINAL_PROFILE/
+git clone https://github.com/chrismgonzalez/dotfiles.git`
+
+cd scripts
+
+chmod +x installs.sh
 ```
 
-Back up `gsettings` configuration for `/org/gnome/` to a file, via [`dconf`](https://developer.gnome.org/dconf/unstable/dconf-tool.html):
+### Additional considerations
 
-```sh
-dconf dump /org/gnome/ > settings.dconf
-```
+The rest of the repository contains various configuration files for a handful of tools such as:
 
-Restore `dconf` configurations from a file:
-
-```sh
-dconf load /org/gnome/ < settings.dconf
-```
-
-This repository was heavily influenced by [Victoria Drake](https://github.com/victoriadrake)
+- `.zshrc`
+- `.bashrc`
+- `.gitcompletion.bash`
+- `.osx` (OS X specific configuration -- use at your own risk)
+- `.vimrc`
