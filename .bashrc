@@ -15,8 +15,6 @@ HISTFILESIZE=2000
 # append to the history file instead of overwrite
 shopt -s histappend
 
-
-
 # Aliases
 alias cp='cp -Rv'
 alias ls='ls --color=auto -ACF'
@@ -43,6 +41,9 @@ alias pyinstall='pip install -r requirements.txt'
 
 alias gr = 'go run'
 alias gb = 'go build'
+alias gt = 'go test'
+alias gmi = 'go mod init'
+alias gmt = 'go mod tidy'
 
 # Use programs without a root-equivalent group
 alias docker='sudo docker'
@@ -193,15 +194,10 @@ export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 
-
 # Yarn
 export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
-
 export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
 export PATH=${PATH}:/Users/<your username>/Library/Python/3.7/bin
-
-
-
 
 # Bash completion
 source ~/.git-completion.bash

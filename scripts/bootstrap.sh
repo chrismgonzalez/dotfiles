@@ -1,42 +1,50 @@
-# PERSONAL USE ONLY
-
 #!/bin/bash
+
+# This script is specifically targeted to setup the development environment for a work machine
+# it is stripped down compared to setup.sh
 
 sudo -v
 
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 
-echo "------------------------------"
+echo "------------------------------------"
 echo "Installing Xcode Command Line Tools."
+echo "------------------------------------"
 # Install Xcode command line tools
 xcode-select --install
 
 
+echo "----------------------------------------------"
 echo "-----Creating folder for install downloads----"
-# Create a folder who contains downloaded things for the setup
+# Create a folder that contains downloaded things for the setup
 INSTALL_FOLDER=~/.macsetup
 mkdir -p $INSTALL_FOLDER
 MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
 
 # initial setup for finder
 
-echo "-----customizing finder -----"
+echo "----- Customizing MacOS -----"
 
-# show library folder
-chflags nohidden ~/Library
+## call .osx script
+chmod +x ./.osx
+./.osx
 
-# show hidden folders
-defaults write com.apple.finder AppleShowAllFiles YES
+# # show library folder
+# chflags nohidden ~/Library
 
-# show path bar
-defaults write com.apple.finder ShowPathbar -bool true
+# # show hidden folders
+# defaults write com.apple.finder AppleShowAllFiles YES
 
-# show status bar
-defaults write com.apple.finder ShowStatusBar -bool true
+# # show path bar
+# defaults write com.apple.finder ShowPathbar -bool true
 
-echo "--------------------------------"
+# # show status bar
+# defaults write com.apple.finder ShowStatusBar -bool true
+
+echo "-------------------"
 echo "installing homebrew"
+echo "-------------------"
 
 
 # install brew
@@ -48,6 +56,9 @@ then
 else
   printf "\e[93m%s\e[m\n" "You already have brew installed."
 fi
+
+echo "-------------------------"
+echo "Installing brew applications"
 
 # Install GNU core utilities (those that come with OS X are outdated).
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
@@ -75,7 +86,8 @@ sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
 chsh -s /usr/local/bin/bash
 
 echo "------------------------------"
-echo "installing curl/wget/git/bash"
+echo "installing curl/wget/git/bash "
+echo "------------------------------"
 
 # CURL / WGET
 brew install curl
@@ -94,15 +106,11 @@ brew install wget
 brew install git
 git config --global credential.helper osxkeychain
 
-echo "------------------------------"
-echo "installing iTerm2 and other tools"
-
-
-# Terminal replacement https://www.iterm2.com
-brew cask install iterm2
+echo "------------------------------------"
+echo "installing Alacritty and other tools"
+echo "------------------------------------"
 
 # Pimp command line
-brew install micro                                                                                    # replacement for nano/vi
 brew install lsd                                                                                      # replacement for ls
 {
   echo "alias ls='lsd'"
@@ -112,94 +120,47 @@ brew install lsd                                                                
   echo "alias lt='ls --tree'"
 } >>$MAC_SETUP_PROFILE
 
-brew install tree
-brew install ack
-brew install bash-completion
-brew install jq
-brew install htop
-brew install tldr
-brew install coreutils
-brew install watch
-brew install tmux
-brew install vim
-brew install ssh-copy-id
-
-brew install z
-touch ~/.z
-echo '. /usr/local/etc/profile.d/z.sh' >> $MAC_SETUP_PROFILE
-
-brew install ctop
+brew install \
+awscli \
+tree \
+ack \
+jq \
+htop \
+tldr \
+coreutils \
+watch \
+vim \
+ssh-copy-id \
 
 echo "------------------------------"
-echo "Fonts"
+echo "Common Applications & Fonts"
 echo "------------------------------"
 
-# fonts (https://github.com/tonsky/FiraCode/wiki/Intellij-products-instructions)
-brew tap homebrew/cask-fonts
-brew cask install font-jetbrains-mono
+brew install --cask \
+font-jetbrains-mono \
+font-victor-mono \
+alacritty \
+google-chrome \
+firefox \
+kap \
+rectangle \
+slack \
+visual-studio-code \
 
 echo "------------------------------"
-echo "Applications"
-echo "------------------------------"
-# Browser
-brew cask install google-chrome
-brew cask install firefox
-
-# Music / Video
-brew cask install spotify
-brew cask install vlc
-
-# Productivity
-brew cask install kap                                                                                 # video screenshot
-brew cask install rectangle
-brew cask install alfred                                                                         # manage windows
-
-# Communication
-brew cask install slack
-
-# Dev tools
-brew cask install ngrok                                                                               # tunnel localhost over internet.
-brew cask install postman                                                                            # Postman makes sending API requests simple.
-
-# IDE
-brew cask install jetbrains-toolbox
-brew cask install visual-studio-code
-
-# install node and yarn
-
-echo "------------------------------"
-echo "Node and Yarn"
+echo "Install progrmaming languages "
 echo "------------------------------"
 
-brew install n
-
-# make cache folder (if missing) and take ownership
-sudo mkdir -p /usr/local/n
-sudo chown -R $(whoami) /usr/local/n
-# take ownership of node install destination folders
-sudo chown -R $(whoami) /usr/local/bin /usr/local/lib /usr/local/include /usr/local/share
-
-n lts
-
 echo "------------------------------"
-echo "Netlify and Gatsby"
+echo "Go@1.18"
 echo "------------------------------"
 
-npm install -g netlify-cli
-npm install -g gatsby-cli
-
-echo "------------------------------"
-echo "Go"
-echo "------------------------------"
-
-## golang
-
-brew install go@1.13
+brew install go@1.18
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
-echo "------------------------------"
-echo "Clean python installs"
-echo "------------------------------"
+echo "---------------------------------"
+echo "Clean up existing python installs"
+echo "---------------------------------"
 
 rm /usr/local/bin/python*
 rm /usr/local/bin/pip*
@@ -209,23 +170,14 @@ rm -Rf /Library/Frameworks/Python.framework/Versions/*
 brew install python3
 brew install pipenv
 
-
 echo "------------------------------"
 echo "Docker"
 echo "------------------------------"
 
-
 # Docker
-brew install docker docker-machine
-brew cask install virtualbox
-docker-machine create --driver virtualbox default
-docker-machine env default
-eval "$(docker-machine env default)"
-
+brew install docker
 docker run hello-world
 docker-machine stop default
-
-
 
 
 echo "------------------------------"
@@ -238,14 +190,20 @@ echo "------------------------------"
 echo "Creating SSH keys"
 echo "------------------------------"
 
-ssh-keygen -t rsa 4096 -C "cmgonza89@gmail.com"
+ssh-keygen -t ed25519 -C "$EMAIL"
 
 echo "------------------------------"
 echo "adding key to auth agent"
 echo "------------------------------"
 
-
 ssh-add ~/.ssh/id_rsa
+
+
+echo "--------------------------------"
+echo "Add aliases and paths to profile"
+echo "--------------------------------"
+
+## TODO
 
 echo "------------------------------"
 echo "Source the shells"
@@ -254,5 +212,10 @@ echo "------------------------------"
 {
   echo "source $MAC_SETUP_PROFILE # alias and things added by mac_setup script"
 }>>~/.bash_profile
+{
+  echo "source $MAC_SETUP_PROFILE"
+}>>~/.zshrc
+
 # shellcheck disable=SC1090
 source ~/.bash_profile
+source ~/.zshrc

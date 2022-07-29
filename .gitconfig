@@ -27,7 +27,7 @@
 [difftool]
   prompt = false  
 [commit]
-    template = ~/.gitmessage
+  template = ~/.gitmessage
 [alias]
   c = commit
   ca = commit -a
