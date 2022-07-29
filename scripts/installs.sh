@@ -179,11 +179,7 @@ echo "Adding the newly installed shell to the list of allowed shells"
 # Prompts for password
 sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
 # Change to the new shell, prompts for password
-chsh -s /usr/local/bin/bash
-
-
-
- 
+chsh -s /usr/local/bin/bash 
 
 echo "------------------------------"
 echo "Upgrade Bash"
@@ -239,9 +235,13 @@ echo "------------------------------"
 terraform --version
 
 # todo
+# install & configure zsh
+# verify tool installations like AWS cli
 # echo "------------------------------"
 # echo "Checking AWS CLI"
 # echo "------------------------------"
+
+
 
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
