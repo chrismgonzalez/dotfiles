@@ -16,7 +16,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 echo "------------------------------------"
 echo "Installing Xcode Command Line Tools."
 echo "------------------------------------"
-# Install Xcode command line tools
+# Install Xcode command line tools, this will take awhile
 xcode-select --install
 
 echo "------------------------------------"
@@ -68,7 +68,6 @@ brews=(
   git-extras    # for git undo
   git-lfs
   gnu-sed --with-default-names
-  gpg
 )
 
 casks=(
