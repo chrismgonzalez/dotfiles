@@ -3,6 +3,8 @@
 # This script is specifically targeted to setup the development environment for a work machine
 # please review code within to be sure it meets your expectations.
 
+# Newer macs may have certain software preinstalled, thus, be sure to check your system for existing defaults.
+
 # The intent behind this script is to bake in sensible defaults for a base configuration
 # of a new development machine
 
@@ -17,7 +19,14 @@ echo "------------------------------------"
 echo "Installing Xcode Command Line Tools."
 echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
-xcode-select --install
+# check if they are installed, if not, install them
+
+if [[-n xcode-select -p]]
+  then
+    printf "xcode command line tools already exist on system"
+  else
+    xcode-select --install
+fi
 
 echo "------------------------------------"
 echo "-----Create folder for downloads----"
@@ -33,23 +42,12 @@ echo "------------------------------------"
 echo "-------- Customizing MacOS ---------"
 echo "------------------------------------"
 
-## call .osx script
-chmod +x ./.osx
-./.osx
-
 # Install some stuff before others!
 important_casks=(
-  google-chrome
-  hyper
-  jetbrains-toolbox
-  spotify
   visual-studio-code
-  slack
 )
 
 brews=(
-  ##### Install these first ######
-  curl
   wget
   awscli
   cfn-lint
@@ -64,10 +62,11 @@ brews=(
   go@${GO_VERSION}
   tfenv
   terraform-docs
-  python3
   git-extras    # for git undo
   git-lfs
   gnu-sed --with-default-names
+  kubectl
+  kubernetes-cli
 )
 
 casks=(
@@ -77,12 +76,10 @@ casks=(
 )
 
 pips=(
-  pip
   pipenv
 )
 
 vscode=(
-  rust-lang.rust
   formulahendry.auto-close-tag
   ms-azuretools.vscode-docker
   golang.go
@@ -173,38 +170,27 @@ install 'brew cask install' "${important_casks[@]}"
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
 
-# We installed the new shell, now we have to activate it
-echo "Adding the newly installed shell to the list of allowed shells"
-# Prompts for password
-sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
-# Change to the new shell, prompts for password
-chsh -s /usr/local/bin/bash 
 
 echo "------------------------------"
 echo "Upgrade Bash"
 echo "------------------------------"
 
 prompt "Upgrade bash"
-brew install bash bash-completion2 fzf
+brew install bash bash-completion@2 fzf
 sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
 sudo chsh -s "$(brew --prefix)"/bin/bash
 
 echo "[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion" >> ~/.bashrc
 source ~/.bash_profile
 
-echo "------------------------------"
-echo "Clean python installs"
-echo "------------------------------"
-
-rm /usr/local/bin/python*
-rm /usr/local/bin/pip*
-
-rm -Rf /Library/Frameworks/Python.framework/Versions/*
+# We installed the new shell, now we have to activate it
+echo "Adding the newly installed shell to the list of allowed shells"
+# Prompts for password
+sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
 
 echo "------------------------------"
 echo "Begin installs..."
 echo "------------------------------"
-
 
 install 'brew cask install' "${casks[@]}"
 
@@ -228,18 +214,27 @@ echo "------------------------------"
 tfenv install ${TERRAFORM_VERSION}
 tfenv use ${TERRAFORM_VERSION}
 
+# verify tooling
 echo "------------------------------"
 echo "Checking terraform version"
 echo "------------------------------"
 terraform --version
 
-# todo
-# install & configure zsh
-# verify tool installations like AWS cli
-# echo "------------------------------"
-# echo "Checking AWS CLI"
-# echo "------------------------------"
 
+echo "------------------------------"
+echo "Checking AWS CLI"
+echo "------------------------------"
+
+aws --version
+
+echo "------------------------------"
+echo "Checking kubectl version & configuration"
+echo "------------------------------"
+
+kubectl version --client
+
+export BASH_COMPLETION_COMPAT_DIR="usr/local/etc/bash_completion.d"
+[[-r "usr/local/etc/profile.d/bash_completion.sh"]] && . "usr/local/etc/profile.d/bash_completion.sh"
 
 
 prompt "Update packages"
