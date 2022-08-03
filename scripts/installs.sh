@@ -87,6 +87,7 @@ fonts=(
   font-fira-code
   font-jetbrains-mono
   font-victor-mono
+  font-victor-mono-nerd-font
 )
 
 ######################################## End of app list ########################################
