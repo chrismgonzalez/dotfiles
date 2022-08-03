@@ -21,7 +21,7 @@ echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
 # check if they are installed, if not, install them
 
-if [[-n xcode-select -p]]
+if [[xcode-select -p]]
   then
     printf "xcode command line tools already exist on system"
   else
@@ -158,6 +158,11 @@ else
   fi
 fi
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+## add homebrew to path
+
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 
 echo "Install important software ..."
 brew tap homebrew/cask-versions
