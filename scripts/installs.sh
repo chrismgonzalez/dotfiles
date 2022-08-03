@@ -21,12 +21,7 @@ echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
 # check if they are installed, if not, install them
 
-if [[xcode-select -p]]
-  then
-    printf "xcode command line tools already exist on system"
-  else
-    xcode-select --install
-fi
+xcode-select --install
 
 # echo "------------------------------------"
 # echo "-----Create folder for downloads----"
@@ -158,10 +153,10 @@ else
 fi
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-## add homebrew to path
-
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+## add homebrew to path, if it's already there, don't add a new line entry
+if ! grep -qF "/opt/homebrew/bin/brew" $HOME/.zprofile; then
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' | sudo tee -a $HOME/.zprofile
+fi
 
 echo "Install important software ..."
 brew tap homebrew/cask-versions
@@ -176,16 +171,18 @@ echo "------------------------------"
 
 prompt "Upgrade bash"
 brew install bash bash-completion@2 fzf
-sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
-sudo chsh -s "$(brew --prefix)"/bin/bash
-
-echo "[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion" >> ~/.bashrc
-source ~/.bash_profile
+# sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
+#sudo chsh -s "$(brew --prefix)"/bin/bash
 
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
-# Prompts for password
-sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
+
+if ! grep -qF "echo $(brew --prefix)/bin/bash" /etc/shells; then
+    echo "$(brew --prefix)/bin/bash" >> /private/etc/shells
+    echo "/usr/local/bin/bash" >> /etc/shells
+    echo "$(brew --prefix)/bin/bash" >> /etc/shells
+fi
+
 
 echo "------------------------------"
 echo "Begin installs..."
@@ -229,17 +226,16 @@ echo "------------------------------"
 echo "Checking kubectl version & configuration"
 echo "------------------------------"
 
-kubectl version --client
-
-export BASH_COMPLETION_COMPAT_DIR="usr/local/etc/bash_completion.d"
-[[-r "usr/local/etc/profile.d/bash_completion.sh"]] && . "usr/local/etc/profile.d/bash_completion.sh"
-
+kubectl version --client --output=json
 
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
 
 prompt "Cleanup"
 brew cleanup
+
+# source shells
+source $HOME/.zprofile
 
 echo "Done!"
 
