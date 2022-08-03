@@ -1,7 +1,6 @@
-
 [user]
-  name = Chris Gonzalez
-  email = cmgonza89@gmail.com
+  name = ""
+  email = ""
 [core]
   editor = vi
   excludesfile = ~/.gitignore
@@ -27,7 +26,7 @@
 [difftool]
   prompt = false  
 [commit]
-    template = ~/.gitmessage
+  template = ~/.gitmessage
 [alias]
   c = commit
   ca = commit -a
