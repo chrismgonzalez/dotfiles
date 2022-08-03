@@ -93,7 +93,6 @@ vscode=(
 
 fonts=(
   font-fira-code
-  font-source-code-pro
   font-jetbrains-mono
   font-victor-mono
 )
