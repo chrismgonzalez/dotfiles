@@ -21,16 +21,11 @@ echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
 # check if they are installed, if not, install them
 
-xcode-select --install
-
-# echo "------------------------------------"
-# echo "-----Create folder for downloads----"
-# echo "------------------------------------"
-
-# # Create a folder that contains downloaded things for the setup
-# INSTALL_FOLDER=~/.macsetup
-# mkdir -p $INSTALL_FOLDER
-# MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
+if xcode-select --install 2>&1 | grep installed; then
+  echo xcode CLI tools are installed;
+else
+  echo not installed, installing, please follow xcode prompts;
+fi
 
 GO_VERSION=1.18
 TERRAFORM_VERSION=1.0.11
@@ -71,6 +66,8 @@ casks=(
 pips=(
   pipenv
 )
+
+npms=()
 
 vscode=(
   formulahendry.auto-close-tag
@@ -171,8 +168,6 @@ echo "------------------------------"
 
 prompt "Upgrade bash"
 brew install bash bash-completion@2 fzf
-# sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
-#sudo chsh -s "$(brew --prefix)"/bin/bash
 
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
@@ -191,9 +186,15 @@ echo "------------------------------"
 install 'brew install --cask' "${casks[@]}"
 
 prompt "Install secondary packages"
+
 install 'pip3 install --upgrade' "${pips[@]}"
+
 install 'gem install' "${gems[@]}"
+
+install 'npm install' "${npms[@]}"
+
 install 'code --install-extension' "${vscode[@]}"
+
 brew tap homebrew/cask-fonts
 install 'brew install --cask' "${fonts[@]}"
 
