@@ -33,7 +33,7 @@ cd mac-setup-v2/scripts
 chmod +x installs.sh
 
 # run the script
-./installs.sh
+installs.sh
 
 ```
 
@@ -44,9 +44,14 @@ Clone the repo to a hard disk location of your choice
 ```sh
 git clone https://github.com/chrismgonzalez/dotfiles.git`
 
+# change to the scripts directory
 cd scripts
 
+# make it executable
 chmod +x installs.sh
+
+# run
+installs.sh
 ```
 
 ### Additional considerations
