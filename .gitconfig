@@ -1,7 +1,6 @@
-
 [user]
-  name = Chris Gonzalez
-  email = cmgonza89@gmail.com
+  name = ""
+  email = ""
 [core]
   editor = vi
   excludesfile = ~/.gitignore

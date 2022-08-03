@@ -18,7 +18,7 @@ A brand new developer machine will most likely require you to install XCode and 
 
 ```sh
 # navigate to a director on your machine, in this instance, we'll use /Desktop
-cd Desktop
+cd $HOME
 
 # Use curl to download a tarball of our mac-setup-v2 branch
 curl -L -o mac-setup-v2.zip https://github.com/chrismgonzalez/dotfiles/archive/mac-setup-v2.zip
@@ -33,7 +33,7 @@ cd mac-setup-v2/scripts
 chmod +x installs.sh
 
 # run the script
-installs.sh
+./installs.sh
 
 ```
 
@@ -42,6 +42,9 @@ installs.sh
 Clone the repo to a hard disk location of your choice
 
 ```sh
+
+cd $HOME
+
 git clone https://github.com/chrismgonzalez/dotfiles.git`
 
 # change to the scripts directory
@@ -51,7 +54,7 @@ cd scripts
 chmod +x installs.sh
 
 # run
-installs.sh
+./installs.sh
 ```
 
 ### Additional considerations
