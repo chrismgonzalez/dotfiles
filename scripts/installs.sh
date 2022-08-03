@@ -37,6 +37,9 @@ echo "------------------------------------"
 # mkdir -p $INSTALL_FOLDER
 # MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
 
+GO_VERSION=1.18
+TERRAFORM_VERSION=1.0.11
+
 # Install some stuff before others!
 important_casks=(
   visual-studio-code
@@ -94,9 +97,6 @@ fonts=(
   font-jetbrains-mono
   font-victor-mono
 )
-
-GO_VERSION=1.18
-TERRAFORM_VERSION=1.0.11
 
 ######################################## End of app list ########################################
 
@@ -192,15 +192,14 @@ echo "------------------------------"
 echo "Begin installs..."
 echo "------------------------------"
 
-install 'brew cask install' "${casks[@]}"
+install 'brew install --cask' "${casks[@]}"
 
 prompt "Install secondary packages"
 install 'pip3 install --upgrade' "${pips[@]}"
 install 'gem install' "${gems[@]}"
-install 'npm install --global' "${npms[@]}"
 install 'code --install-extension' "${vscode[@]}"
 brew tap caskroom/fonts
-install 'brew cask install' "${fonts[@]}"
+install 'brew install --cask' "${fonts[@]}"
 
 echo "-----------------------------------"
 echo "Finish Go installation requirements"
