@@ -28,9 +28,9 @@ if [[xcode-select -p]]
     xcode-select --install
 fi
 
-echo "------------------------------------"
-echo "-----Create folder for downloads----"
-echo "------------------------------------"
+# echo "------------------------------------"
+# echo "-----Create folder for downloads----"
+# echo "------------------------------------"
 
 # # Create a folder that contains downloaded things for the setup
 # INSTALL_FOLDER=~/.macsetup
@@ -60,9 +60,9 @@ brews=(
   go@${GO_VERSION}
   tfenv
   terraform-docs
-  git-extras    # for git undo
+  git-extras
   git-lfs
-  gnu-sed --with-default-names
+  gnu-sed
   kubectl
   kubernetes-cli
 )
@@ -198,7 +198,7 @@ prompt "Install secondary packages"
 install 'pip3 install --upgrade' "${pips[@]}"
 install 'gem install' "${gems[@]}"
 install 'code --install-extension' "${vscode[@]}"
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 install 'brew install --cask' "${fonts[@]}"
 
 echo "-----------------------------------"
