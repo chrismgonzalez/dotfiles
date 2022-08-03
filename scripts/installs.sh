@@ -177,10 +177,10 @@ brew install bash bash-completion@2 fzf
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
 
-if ! grep -qF "echo $(brew --prefix)/bin/bash" /etc/shells; then
-    echo "$(brew --prefix)/bin/bash" >> /private/etc/shells
-    echo "/usr/local/bin/bash" >> /etc/shells
-    echo "$(brew --prefix)/bin/bash" >> /etc/shells
+if ! grep -qF "$(brew --prefix)/bin/bash" /etc/shells; then
+    sudo echo "$(brew --prefix)/bin/bash" >> /private/etc/shells
+    sudo echo "/usr/local/bin/bash" >> /etc/shells
+    sudo echo "$(brew --prefix)/bin/bash" >> /etc/shells
 fi
 
 
