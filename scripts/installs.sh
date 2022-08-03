@@ -32,15 +32,10 @@ echo "------------------------------------"
 echo "-----Create folder for downloads----"
 echo "------------------------------------"
 
-# Create a folder that contains downloaded things for the setup
-INSTALL_FOLDER=~/.macsetup
-mkdir -p $INSTALL_FOLDER
-MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
-
-# initial setup for finder
-echo "------------------------------------"
-echo "-------- Customizing MacOS ---------"
-echo "------------------------------------"
+# # Create a folder that contains downloaded things for the setup
+# INSTALL_FOLDER=~/.macsetup
+# mkdir -p $INSTALL_FOLDER
+# MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
 
 # Install some stuff before others!
 important_casks=(
@@ -90,6 +85,7 @@ vscode=(
   RoscoP.ActiveFileInStatusBar
   wesbos.theme-cobalt2
   eamodio.gitlens
+  HashiCorp.terraform
 )
 
 fonts=(
@@ -169,7 +165,6 @@ install 'brew cask install' "${important_casks[@]}"
 
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
-
 
 echo "------------------------------"
 echo "Upgrade Bash"
