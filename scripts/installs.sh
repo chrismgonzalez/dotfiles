@@ -161,7 +161,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 echo "Install important software ..."
 brew tap homebrew/cask-versions
-install 'brew cask install' "${important_casks[@]}"
+install 'brew install --cask' "${important_casks[@]}"
 
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
