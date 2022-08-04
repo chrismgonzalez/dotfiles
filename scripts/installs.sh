@@ -92,7 +92,7 @@ fonts=(
   font-victor-mono-nerd-font
 )
 
-config_files=(
+sourced_files=(
   .bash_profile
   .bashrc
   .gitconfig
@@ -100,24 +100,37 @@ config_files=(
   .inputrc
   .vimrc
   .zshrc
+  .git-completion.bash
 )
+
+
 
 ######################################## End of app list ########################################
 set +e
 set -x
-
-prompt "Create symlinks for config files"
-
-for file in "${config_files[@]}"; do
-  ln -s -f ~/dotfiles/$file ~/$file
-done
-
 
 function prompt {
   if [[ -z "${CI}" ]]; then
     read -p "Hit Enter to $1 ..."
   fi
 }
+
+# comment out the below if you would like to manually cp your own dotfiles
+# the below loop create symlinks for config files included in this repo
+prompt "Create symlinks for config files"
+for file in "${config_files[@]}"; do
+  ln -s -f ~/dotfiles/$file ~/$file
+done
+
+#Initial sourcing of shells
+prompt "Source the shells"
+
+source $HOME/.zprofile
+source $HOME/.zshrc
+source $HOME/.bashrc
+source $HOME/.bash_profile
+source $HOME/.git-completion.bash
+source $HOME/.vimrc
 
 function install {
   cmd=$1
@@ -206,6 +219,7 @@ fi
 # bash completion
 if [ -f /sw/etc/bash_completion ]; then
    . /sw/etc/bash_completion >> $HOME/.zshrc
+   source $HOME/.zshrc
 fi
 
 # Install node and npm through nvm, so that we can change node versions if needed.
@@ -217,14 +231,17 @@ echo "-------------------------------"
 
 # check if nvm is installed
 if [ ! -d "${HOME}/.nvm/.git" ]; then
-  echo 'nvm is not installed, installing'
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-  source $HOME/.zshrc
+    echo 'nvm is not installed, installing'
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    source $HOME/.zshrc
+  else
+    source $HOME/.zshrc
 fi
 
 echo "-------------------------------"
 echo "Installing NodeJS & npm via nvm"
 echo "-------------------------------"
+
 # check if node is installed, if not, install node and npm
 if ! [ -x "$(command -v node)" ]; then
   echo 'Node & npm is not installed, installing' >&2
@@ -294,10 +311,13 @@ prompt "Cleanup"
 brew cleanup
 
 # source shells one last time
+prompt "Source shells after install complete"
 source $HOME/.zprofile
 source $HOME/.zshrc
-source $HOME/.basrc
+source $HOME/.bashrc
 source $HOME/.bash_profile
+source $HOME/.git-completion.bash
+source $HOME/.vimrc
 
 echo "Done!"
 
