@@ -11,6 +11,9 @@
 # Example: "/Applications/Install macOS Catalina.app"
 APP_PATH=$1
 
+# the size that you want your install media (16m = 16mb, 16g=16gb)
+DISK_SIZE=16g
+
 # Installer name is used for the volume name and disk image names.
 INSTALLER_NAME="macOSinstaller$(date +%d%m%Y)"
 
@@ -18,7 +21,7 @@ INSTALLER_NAME="macOSinstaller$(date +%d%m%Y)"
 # Make sure the size is enough for future images. 9000m is enough for Catalina 10.15.4.
 # macOS Big Sur - 16g is needed
 # Next steps did not work with a dmg. So creating a sparsebundle is important.
-hdiutil create -type "SPARSEBUNDLE" -o "/tmp/$INSTALLER_NAME" -size 16g -volname "$INSTALLER_NAME" -layout "SPUD" -fs "HFS+J"
+hdiutil create -type "SPARSEBUNDLE" -o "/tmp/$INSTALLER_NAME" -size $DISK_SIZE -volname "$INSTALLER_NAME" -layout "SPUD" -fs "HFS+J"
 
 # Mount the created disk.
 hdiutil attach "/tmp/$INSTALLER_NAME.sparsebundle" -noverify -mountpoint "/Volumes/$INSTALLER_NAME"

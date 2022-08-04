@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# This script is specifically targeted to setup the development environment for a work machine
+# This script is specifically targeted to setup the development environment for a new macOS machine
 # please review code within to be sure it meets your expectations.
 
 # Newer macs may have certain software preinstalled, thus, be sure to check your system for existing defaults.
 
 # The intent behind this script is to bake in sensible defaults for a base configuration
-# of a new development machine
+# of a new development machine.
 
 # Requirements: MacOS
+
 sudo -v
 
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -18,12 +19,12 @@ echo "------------------------------------"
 echo "Installing Xcode Command Line Tools."
 echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
-# check if they are installed, if not, install them
+# check if they are installed, if not, install them.
 
-if xcode-select --install 2>&1 | grep installed; then
-  echo xcode CLI tools are installed;
-else
-  echo not installed, installing, please follow xcode prompts;
+if ! [ -x "$(command -v gcc)" ]; then
+  xcode-select --install
+  else
+  echo "xcode command line tools appear to be installed..."
 fi
 
 GO_VERSION=1.18
@@ -67,9 +68,7 @@ pips=(
   pipenv
 )
 
-npms=(
-  typescript
-)
+npms=()
 
 vscode=(
   formulahendry.auto-close-tag
@@ -92,15 +91,17 @@ fonts=(
   font-victor-mono-nerd-font
 )
 
-sourced_files=(
+config_files=(
   .bash_profile
   .bashrc
+  .zshrc
   .gitconfig
   .gitignore
   .inputrc
   .vimrc
-  .zshrc
-  .git-completion.bash
+  .git-completion.zsh
+  .aliases
+  .osx
 )
 
 
@@ -129,8 +130,9 @@ source $HOME/.zprofile
 source $HOME/.zshrc
 source $HOME/.bashrc
 source $HOME/.bash_profile
-source $HOME/.git-completion.bash
+source $HOME/.git-completion.zsh
 source $HOME/.vimrc
+source $HOME/.aliases
 
 function install {
   cmd=$1
@@ -187,6 +189,10 @@ if ! grep -qF "/opt/homebrew/bin/brew" $HOME/.zprofile; then
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' | sudo tee -a $HOME/.zprofile
 fi
 
+prompt "Install Oh My Zsh"
+chmod +x install-ohmyzsh.sh
+./install-ohmyzsh.sh
+
 echo "Install important software ..."
 brew tap homebrew/cask-versions
 install 'brew install --cask' "${important_casks[@]}"
@@ -233,8 +239,13 @@ echo "-------------------------------"
 if [ ! -d "${HOME}/.nvm/.git" ]; then
     echo 'nvm is not installed, installing'
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    source $HOME/.zshrc
+
+    if [ -s $HOME/.nvm/nvm.sh ]; then 
+      . $HOME/.nvm/nvm.sh >> $HOME/.zshrc
+      source $HOME/.zshrc
+    fi
   else
+    echo 'nvm is installed, sourcing .zshrc to be on the safe side'
     source $HOME/.zshrc
 fi
 
@@ -311,7 +322,7 @@ prompt "Cleanup"
 brew cleanup
 
 # source shells one last time
-prompt "Source shells after install complete"
+prompt "Source shells again"
 source $HOME/.zprofile
 source $HOME/.zshrc
 source $HOME/.bashrc

@@ -13,7 +13,7 @@ HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 # append to the history file instead of overwrite
-shopt -s histappend
+# shopt -s histappend
 
 # Shell prompt based on the Solarized Dark theme.
 # Screenshot: http://i.imgur.com/EkEtphC.png
@@ -164,7 +164,7 @@ function mlc () {
 # export PATH=${PATH}:/Users/<your username>/Library/Python/3.7/bin
 
 # Bash completion
-source ~/.git-completion.bash
+# source ~/.git-completion.zsh
 
 # # add venv prompt
 # add_venv_info () {

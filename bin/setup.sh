@@ -1,4 +1,4 @@
-# PERSONAL USE ONLY
+# DO NOT USE, THIS IS A SCRATCHPAD!!!
 
 #!/bin/bash
 
