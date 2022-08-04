@@ -10,6 +10,9 @@
 
 # Requirements: MacOS
 
+set +e
+set -x
+
 sudo -v
 
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -21,24 +24,15 @@ echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
 # check if they are installed, if not, install them
 
-if [[xcode-select -p]]
-  then
-    printf "xcode command line tools already exist on system"
-  else
-    xcode-select --install
+if xcode-select --install 2>&1 | grep installed; then
+  echo xcode CLI tools are installed;
+else
+  echo not installed, installing, please follow xcode prompts;
 fi
-
-# echo "------------------------------------"
-# echo "-----Create folder for downloads----"
-# echo "------------------------------------"
-
-# # Create a folder that contains downloaded things for the setup
-# INSTALL_FOLDER=~/.macsetup
-# mkdir -p $INSTALL_FOLDER
-# MAC_SETUP_PROFILE=$INSTALL_FOLDER/macsetup_profile
 
 GO_VERSION=1.18
 TERRAFORM_VERSION=1.0.11
+NODE_VERSION=16
 
 # Install some stuff before others!
 important_casks=(
@@ -77,6 +71,10 @@ pips=(
   pipenv
 )
 
+npms=(
+  typescript
+)
+
 vscode=(
   formulahendry.auto-close-tag
   ms-azuretools.vscode-docker
@@ -95,12 +93,26 @@ fonts=(
   font-fira-code
   font-jetbrains-mono
   font-victor-mono
+  font-victor-mono-nerd-font
+)
+
+config_files=(
+  .bash_profile
+  .bashrc
+  .gitconfig
+  .gitignore
+  .inputrc
+  .vimrc
+  .zshrc
 )
 
 ######################################## End of app list ########################################
 
-set +e
-set -x
+prompt "Create symlinks for config files"
+
+for file in config_files; do
+  ln -s -f $HOME/dotfiles/$file $HOME/$file
+done
 
 function prompt {
   if [[ -z "${CI}" ]]; then
@@ -158,10 +170,10 @@ else
 fi
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-## add homebrew to path
-
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+## add homebrew to path, if it's already there, don't add a new line entry
+if ! grep -qF "/opt/homebrew/bin/brew" $HOME/.zprofile; then
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' | sudo tee -a $HOME/.zprofile
+fi
 
 echo "Install important software ..."
 brew tap homebrew/cask-versions
@@ -170,22 +182,57 @@ install 'brew install --cask' "${important_casks[@]}"
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
 
+# check if .zshrc is present in the $HOME dir, if not, create it.  This file is needed for future commands.
+if ! [ -f $HOME/.zshrc ]; then
+  echo "Creeating .zshrc in $HOME directory"
+   touch $HOME/.zshrc
+fi
+
 echo "------------------------------"
 echo "Upgrade Bash"
 echo "------------------------------"
 
 prompt "Upgrade bash"
 brew install bash bash-completion@2 fzf
-sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
-sudo chsh -s "$(brew --prefix)"/bin/bash
-
-echo "[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion" >> ~/.bashrc
-source ~/.bash_profile
 
 # We installed the new shell, now we have to activate it
 echo "Adding the newly installed shell to the list of allowed shells"
-# Prompts for password
-sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
+
+if ! grep -qF "$(brew --prefix)/bin/bash" /etc/shells; then
+    sudo echo "$(brew --prefix)/bin/bash" >> /private/etc/shells
+    sudo echo "/usr/local/bin/bash" >> /etc/shells
+    sudo echo "$(brew --prefix)/bin/bash" >> /etc/shells
+fi
+
+# bash completion
+if [ -f /sw/etc/bash_completion ]; then
+   . /sw/etc/bash_completion >> $HOME/.zshrc
+fi
+
+# Install node and npm through nvm, so that we can change node versions if needed.
+prompt "Install nvm, node, npm"
+
+echo "-------------------------------"
+echo "Installing nvm"
+echo "-------------------------------"
+
+# check if nvm is installed
+if [ ! -d "${HOME}/.nvm/.git" ]; then
+  echo 'nvm is not installed, installing'
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+fi
+
+echo "-------------------------------"
+echo "Installing NodeJS & npm via nvm"
+echo "-------------------------------"
+# check if node is installed, if not, install node and npm
+if ! [ -x "$(command -v node)" ]; then
+  echo 'Node & npm is not installed, installing' >&2
+  nvm install ${NODE_VERSION}
+  nvm use ${NODE_VERSION}
+  npm -v
+  node -v
+fi
 
 echo "------------------------------"
 echo "Begin installs..."
@@ -194,21 +241,28 @@ echo "------------------------------"
 install 'brew install --cask' "${casks[@]}"
 
 prompt "Install secondary packages"
+
 install 'pip3 install --upgrade' "${pips[@]}"
+
 install 'gem install' "${gems[@]}"
+
+install 'npm install' "${npms[@]}"
+
 install 'code --install-extension' "${vscode[@]}"
+
 brew tap homebrew/cask-fonts
 install 'brew install --cask' "${fonts[@]}"
 
 echo "-----------------------------------"
 echo "Finish Go installation requirements"
 echo "-----------------------------------"
-
+GOPATH=$HOME/go
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
 echo "------------------------------"
 echo "Install Terraform"
 echo "------------------------------"
+
 tfenv install ${TERRAFORM_VERSION}
 tfenv use ${TERRAFORM_VERSION}
 
@@ -216,6 +270,7 @@ tfenv use ${TERRAFORM_VERSION}
 echo "------------------------------"
 echo "Checking terraform version"
 echo "------------------------------"
+
 terraform --version
 
 
@@ -229,17 +284,18 @@ echo "------------------------------"
 echo "Checking kubectl version & configuration"
 echo "------------------------------"
 
-kubectl version --client
-
-export BASH_COMPLETION_COMPAT_DIR="usr/local/etc/bash_completion.d"
-[[-r "usr/local/etc/profile.d/bash_completion.sh"]] && . "usr/local/etc/profile.d/bash_completion.sh"
-
+kubectl version --client --output=json
 
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
 
+
 prompt "Cleanup"
 brew cleanup
+
+# source shells
+source $HOME/.zprofile
+source $HOME/.zshrc
 
 echo "Done!"
 

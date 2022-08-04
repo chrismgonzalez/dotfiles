@@ -15,41 +15,6 @@ HISTFILESIZE=2000
 # append to the history file instead of overwrite
 shopt -s histappend
 
-# Aliases
-alias cp='cp -Rv'
-alias ls='ls --color=auto -ACF'
-alias ll='ls --color=auto -alF'
-alias grep='grep --color=auto'
-alias mkdir='mkdir -pv'
-alias mv='mv -v'
-alias wget='wget -c'
-
-alias gadd='git add'
-alias gcom='git commit'
-alias gsup='git status'
-alias goto='git checkout'
-
-alias node='nodejs'
-
-alias pip='pip3'
-alias python='python3'
-alias pym='python3 manage.py'
-alias mkenv='python3 -m venv venv'
-alias startenv='source venv/bin/activate'
-alias stopenv='deactivate'
-alias pyinstall='pip install -r requirements.txt'
-
-alias gr = 'go run'
-alias gb = 'go build'
-alias gt = 'go test'
-alias gmi = 'go mod init'
-alias gmt = 'go mod tidy'
-
-# Use programs without a root-equivalent group
-alias docker='sudo docker'
-alias npm='sudo npm'
-alias prtn='sudo protonvpn'
-
 # Shell prompt based on the Solarized Dark theme.
 # Screenshot: http://i.imgur.com/EkEtphC.png
 # Heavily inspired by @necolas’s prompt: https://github.com/necolas/dotfiles
@@ -174,47 +139,46 @@ function cd () {
 }
 
 # Golang install or upgrade
-function getgolang () {
-    sudo rm -rf /usr/local/go
-    wget -q -P tmp/ https://dl.google.com/go/go"$@".linux-amd64.tar.gz
-    sudo tar -C /usr/local -xzf tmp/go"$@".linux-amd64.tar.gz
-    rm -rf tmp/
-    go version
-}
-
+# function getgolang () {
+#     sudo rm -rf /usr/local/go
+#     wget -q -P tmp/ https://dl.google.com/go/go"$@".linux-amd64.tar.gz
+#     sudo tar -C /usr/local -xzf tmp/go"$@".linux-amd64.tar.gz
+#     rm -rf tmp/
+#     go version
+# }
 
 # Markdown link check in a folder, recursive
 function mlc () {
     find $1 -name \*.md -exec markdown-link-check -p {} \;
 }
 
-# Go
-export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
-export GOROOT=/usr/local/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
+# # Go
+# export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
+# export GOROOT=/usr/local/opt/go/libexec
+# export PATH=$PATH:$GOPATH/bin
+# export PATH=$PATH:$GOROOT/bin
 
-# Yarn
-export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
-export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
-export PATH=${PATH}:/Users/<your username>/Library/Python/3.7/bin
+# # Yarn
+# export PATH=$PATH:/opt/yarn-1.22.4/bin:$PATH
+# export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+# export PATH=${PATH}:/Users/<your username>/Library/Python/3.7/bin
 
 # Bash completion
 source ~/.git-completion.bash
 
-# add venv prompt
-add_venv_info () {
-    if [ -z "$VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
-        _OLD_VIRTUAL_PS1="$PS1"
+# # add venv prompt
+# add_venv_info () {
+#     if [ -z "$VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
+#         _OLD_VIRTUAL_PS1="$PS1"
 
-        if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
-            # special case for Aspen magic directories
-            # see http://www.zetadev.com/software/aspen/
-            PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
-        elif [ "$VIRTUAL_ENV" != "" ]; then
-            PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
-        fi
-    fi
-    export PS1
-}
-PROMPT_COMMAND=add_venv_info
+#         if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
+#             # special case for Aspen magic directories
+#             # see http://www.zetadev.com/software/aspen/
+#             PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
+#         elif [ "$VIRTUAL_ENV" != "" ]; then
+#             PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
+#         fi
+#     fi
+#     export PS1
+# }
+# PROMPT_COMMAND=add_venv_info
