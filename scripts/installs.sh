@@ -9,10 +9,6 @@
 # of a new development machine
 
 # Requirements: MacOS
-
-set +e
-set -x
-
 sudo -v
 
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -107,12 +103,15 @@ config_files=(
 )
 
 ######################################## End of app list ########################################
+set +e
+set -x
 
 prompt "Create symlinks for config files"
 
-for file in config_files; do
-  ln -s -f $HOME/dotfiles/$file $HOME/$file
+for file in "${config_files[@]}"; do
+  ln -s -f ~/dotfiles/$file ~/$file
 done
+
 
 function prompt {
   if [[ -z "${CI}" ]]; then
@@ -220,6 +219,7 @@ echo "-------------------------------"
 if [ ! -d "${HOME}/.nvm/.git" ]; then
   echo 'nvm is not installed, installing'
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  source $HOME/.zshrc
 fi
 
 echo "-------------------------------"
@@ -293,9 +293,11 @@ pip3 install --upgrade pip setuptools wheel
 prompt "Cleanup"
 brew cleanup
 
-# source shells
+# source shells one last time
 source $HOME/.zprofile
 source $HOME/.zshrc
+source $HOME/.basrc
+source $HOME/.bash_profile
 
 echo "Done!"
 
