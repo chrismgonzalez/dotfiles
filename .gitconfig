@@ -1,6 +1,6 @@
 [user]
-  name = ""
-  email = ""
+  name = "chris-caylent"
+  email = "chris.gonzalez@caylent.com"
 [core]
   editor = vi
   excludesfile = ~/.gitignore
@@ -25,8 +25,8 @@
   tool = kdiff3
 [difftool]
   prompt = false  
-[commit]
-  template = ~/.gitmessage
+# [commit]
+#   template = ~/.gitmessage
 [alias]
   c = commit
   ca = commit -a
