@@ -209,17 +209,30 @@ if [ -f /sw/etc/bash_completion ]; then
    . /sw/etc/bash_completion >> $HOME/.zshrc
 fi
 
+# Install node and npm through nvm, so that we can change node versions if needed.
 prompt "Install nvm, node, npm"
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+echo "-------------------------------"
+echo "Installing nvm"
+echo "-------------------------------"
+
+# check if nvm is installed
+if [ ! -d "${HOME}/.nvm/.git" ]; then
+  echo 'nvm is not installed, installing'
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+fi
 
 echo "-------------------------------"
 echo "Installing NodeJS & npm via nvm"
 echo "-------------------------------"
-
-nvm install ${NODE_VERSION}
-nvm use ${NODE_VERSION}
-node -v && npm -v
+# check if node is installed, if not, install node and npm
+if ! [ -x "$(command -v node)" ]; then
+  echo 'Node & npm is not installed, installing' >&2
+  nvm install ${NODE_VERSION}
+  nvm use ${NODE_VERSION}
+  npm -v
+  node -v
+fi
 
 echo "------------------------------"
 echo "Begin installs..."
@@ -243,7 +256,7 @@ install 'brew install --cask' "${fonts[@]}"
 echo "-----------------------------------"
 echo "Finish Go installation requirements"
 echo "-----------------------------------"
-
+GOPATH=$HOME/go
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
 echo "------------------------------"
