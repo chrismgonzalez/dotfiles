@@ -39,7 +39,7 @@ chmod +x installs.sh
 
 ### If Git is already installed on your machine, follow the below steps
 
-Clone the repo to a hard disk location of your choice
+Clone the repo to a hard disk location of your choice, for me, it's the home directory.
 
 ```sh
 
@@ -64,5 +64,5 @@ The rest of the repository contains various configuration files for a handful of
 - `.zshrc`
 - `.bashrc`
 - `.gitcompletion.bash`
-- `.osx` (OS X specific configuration -- use at your own risk)
+- `.osx` (OS X specific configuration -- use at your own risk, I recommend analyzing this file and running it independently from the `installs.sh` script)
 - `.vimrc`

@@ -10,6 +10,9 @@
 
 # Requirements: MacOS
 
+set +e
+set -x
+
 sudo -v
 
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -29,6 +32,7 @@ fi
 
 GO_VERSION=1.18
 TERRAFORM_VERSION=1.0.11
+NODE_VERSION=16
 
 # Install some stuff before others!
 important_casks=(
@@ -67,7 +71,9 @@ pips=(
   pipenv
 )
 
-npms=()
+npms=(
+  typescript
+)
 
 vscode=(
   formulahendry.auto-close-tag
@@ -90,10 +96,23 @@ fonts=(
   font-victor-mono-nerd-font
 )
 
+config_files=(
+  .bash_profile
+  .bashrc
+  .gitconfig
+  .gitignore
+  .inputrc
+  .vimrc
+  .zshrc
+)
+
 ######################################## End of app list ########################################
 
-set +e
-set -x
+prompt "Create symlinks for config files"
+
+for file in config_files; do
+  ln -s -f $HOME/dotfiles/$file $HOME/$file
+done
 
 function prompt {
   if [[ -z "${CI}" ]]; then
@@ -163,6 +182,12 @@ install 'brew install --cask' "${important_casks[@]}"
 prompt "Install packages"
 install 'brew_install_or_upgrade' "${brews[@]}"
 
+# check if .zshrc is present in the $HOME dir, if not, create it.  This file is needed for future commands.
+if ! [ -f $HOME/.zshrc ]; then
+  echo "Creeating .zshrc in $HOME directory"
+   touch $HOME/.zshrc
+fi
+
 echo "------------------------------"
 echo "Upgrade Bash"
 echo "------------------------------"
@@ -179,6 +204,22 @@ if ! grep -qF "$(brew --prefix)/bin/bash" /etc/shells; then
     sudo echo "$(brew --prefix)/bin/bash" >> /etc/shells
 fi
 
+# bash completion
+if [ -f /sw/etc/bash_completion ]; then
+   . /sw/etc/bash_completion >> $HOME/.zshrc
+fi
+
+prompt "Install nvm, node, npm"
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+echo "-------------------------------"
+echo "Installing NodeJS & npm via nvm"
+echo "-------------------------------"
+
+nvm install ${NODE_VERSION}
+nvm use ${NODE_VERSION}
+node -v && npm -v
 
 echo "------------------------------"
 echo "Begin installs..."
@@ -208,6 +249,7 @@ mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 echo "------------------------------"
 echo "Install Terraform"
 echo "------------------------------"
+
 tfenv install ${TERRAFORM_VERSION}
 tfenv use ${TERRAFORM_VERSION}
 
@@ -215,6 +257,7 @@ tfenv use ${TERRAFORM_VERSION}
 echo "------------------------------"
 echo "Checking terraform version"
 echo "------------------------------"
+
 terraform --version
 
 
@@ -233,11 +276,13 @@ kubectl version --client --output=json
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
 
+
 prompt "Cleanup"
 brew cleanup
 
 # source shells
 source $HOME/.zprofile
+source $HOME/.zshrc
 
 echo "Done!"
 
