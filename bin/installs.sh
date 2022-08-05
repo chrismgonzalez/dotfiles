@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# This script is specifically targeted to setup the development environment for a work machine
+# This script is specifically targeted to setup the development environment for a new macOS machine
 # please review code within to be sure it meets your expectations.
 
 # Newer macs may have certain software preinstalled, thus, be sure to check your system for existing defaults.
 
 # The intent behind this script is to bake in sensible defaults for a base configuration
-# of a new development machine
+# of a new development machine.
 
 # Requirements: MacOS
-
-set +e
-set -x
 
 sudo -v
 
@@ -22,12 +19,12 @@ echo "------------------------------------"
 echo "Installing Xcode Command Line Tools."
 echo "------------------------------------"
 # Install Xcode command line tools, this will take awhile
-# check if they are installed, if not, install them
+# check if they are installed, if not, install them.
 
-if xcode-select --install 2>&1 | grep installed; then
-  echo xcode CLI tools are installed;
-else
-  echo not installed, installing, please follow xcode prompts;
+if ! [ -x "$(command -v gcc)" ]; then
+  xcode-select --install
+  else
+  echo "xcode command line tools appear to be installed..."
 fi
 
 GO_VERSION=1.18
@@ -41,6 +38,7 @@ important_casks=(
 
 brews=(
   wget
+  gnupg
   awscli
   cfn-lint
   tree
@@ -49,6 +47,7 @@ brews=(
   htop
   tldr
   coreutils
+  pre-commit
   vim  
   git
   go@${GO_VERSION}
@@ -71,9 +70,7 @@ pips=(
   pipenv
 )
 
-npms=(
-  typescript
-)
+npms=()
 
 vscode=(
   formulahendry.auto-close-tag
@@ -99,26 +96,45 @@ fonts=(
 config_files=(
   .bash_profile
   .bashrc
+  .zshrc
   .gitconfig
   .gitignore
   .inputrc
   .vimrc
-  .zshrc
+  .git-completion.zsh
+  .aliases
+  .osx
 )
 
+
+
 ######################################## End of app list ########################################
-
-prompt "Create symlinks for config files"
-
-for file in config_files; do
-  ln -s -f $HOME/dotfiles/$file $HOME/$file
-done
+set +e
+set -x
 
 function prompt {
   if [[ -z "${CI}" ]]; then
     read -p "Hit Enter to $1 ..."
   fi
 }
+
+# comment out the below if you would like to manually cp your own dotfiles
+# the below loop create symlinks for config files included in this repo
+prompt "Create symlinks for config files"
+for file in "${config_files[@]}"; do
+  ln -s -f ~/dotfiles/$file ~/$file
+done
+
+#Initial sourcing of shells
+prompt "Source the shells"
+
+source $HOME/.zprofile
+source $HOME/.zshrc
+source $HOME/.bashrc
+source $HOME/.bash_profile
+source $HOME/.git-completion.zsh
+source $HOME/.vimrc
+source $HOME/.aliases
 
 function install {
   cmd=$1
@@ -175,6 +191,10 @@ if ! grep -qF "/opt/homebrew/bin/brew" $HOME/.zprofile; then
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' | sudo tee -a $HOME/.zprofile
 fi
 
+prompt "Install Oh My Zsh"
+chmod +x install-ohmyzsh.sh
+./install-ohmyzsh.sh
+
 echo "Install important software ..."
 brew tap homebrew/cask-versions
 install 'brew install --cask' "${important_casks[@]}"
@@ -207,6 +227,7 @@ fi
 # bash completion
 if [ -f /sw/etc/bash_completion ]; then
    . /sw/etc/bash_completion >> $HOME/.zshrc
+   source $HOME/.zshrc
 fi
 
 # Install node and npm through nvm, so that we can change node versions if needed.
@@ -218,13 +239,22 @@ echo "-------------------------------"
 
 # check if nvm is installed
 if [ ! -d "${HOME}/.nvm/.git" ]; then
-  echo 'nvm is not installed, installing'
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    echo 'nvm is not installed, installing'
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+    if [ -s $HOME/.nvm/nvm.sh ]; then 
+      . $HOME/.nvm/nvm.sh >> $HOME/.zshrc
+      source $HOME/.zshrc
+    fi
+  else
+    echo 'nvm is installed, sourcing .zshrc to be on the safe side'
+    source $HOME/.zshrc
 fi
 
 echo "-------------------------------"
 echo "Installing NodeJS & npm via nvm"
 echo "-------------------------------"
+
 # check if node is installed, if not, install node and npm
 if ! [ -x "$(command -v node)" ]; then
   echo 'Node & npm is not installed, installing' >&2
@@ -293,9 +323,14 @@ pip3 install --upgrade pip setuptools wheel
 prompt "Cleanup"
 brew cleanup
 
-# source shells
+# source shells one last time
+prompt "Source shells again"
 source $HOME/.zprofile
 source $HOME/.zshrc
+source $HOME/.bashrc
+source $HOME/.bash_profile
+source $HOME/.git-completion.bash
+source $HOME/.vimrc
 
 echo "Done!"
 
