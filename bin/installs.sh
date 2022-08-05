@@ -38,6 +38,7 @@ important_casks=(
 
 brews=(
   wget
+  gnupg
   awscli
   cfn-lint
   tree
