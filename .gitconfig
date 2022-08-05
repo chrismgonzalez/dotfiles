@@ -1,6 +1,7 @@
 [user]
   name = "chris-caylent"
   email = "chris.gonzalez@caylent.com"
+	signingKey = 90DCBC013C757E3F8337A3D037423E6F8BF4546A
 [core]
   editor = vi
   excludesfile = ~/.gitignore
@@ -35,3 +36,7 @@
   d = diff
   dc = diff --cached
   l  = log --graph --pretty=format:'%C(bold blue)%h%Creset - %C(yellow)%d%Creset %s %C(cyan dim)(%cr)%Creset %n' --abbrev-commit --branches
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
