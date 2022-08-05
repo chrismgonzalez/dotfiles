@@ -56,8 +56,10 @@ brews=(
   git-extras
   git-lfs
   gnu-sed
+  gnupg
   kubectl
   kubernetes-cli
+  pinentry-mac # to resolve gpg signing issues on mac
 )
 
 casks=(
