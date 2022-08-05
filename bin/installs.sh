@@ -47,6 +47,7 @@ brews=(
   htop
   tldr
   coreutils
+  pre-commit
   vim  
   git
   go@${GO_VERSION}
