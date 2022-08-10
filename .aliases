@@ -35,8 +35,13 @@ alias gmi='go mod init'
 alias gmt='go mod tidy'
 
 # Use programs without a root-equivalent group
-alias docker='sudo docker'
+alias docker='docker'
 alias npm='sudo npm'
+
+# Kubernetes
+alias k='kubectl'
+alias kga='kubectl get all'
+alias kgp='kubectl get pods'
 
 # Git aliases.
 alias gs='git status'
