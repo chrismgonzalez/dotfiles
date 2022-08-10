@@ -40,6 +40,7 @@ brews=(
   wget
   gnupg
   awscli
+  granted
   cfn-lint
   tree
   ack
@@ -58,6 +59,7 @@ brews=(
   gnu-sed
   gnupg
   kubectl
+  minikube
   kubernetes-cli
   pinentry-mac # to resolve gpg signing issues on mac
 )

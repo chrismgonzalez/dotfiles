@@ -1,5 +1,7 @@
+DavidAnson.vscode-markdownlint
 eamodio.gitlens
 formulahendry.auto-close-tag
+GitHub.vscode-pull-request-github
 golang.go
 hashicorp.terraform
 ms-azuretools.vscode-docker
