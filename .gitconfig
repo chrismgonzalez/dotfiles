@@ -1,7 +1,7 @@
 [user]
   name = "chris-caylent"
-  email = "chris.gonzalez@caylent.com"
-	signingKey = 90DCBC013C757E3F8337A3D037423E6F8BF4546A
+  email = "cmgonza89@gmail.com"
+  signingKey = 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
 [core]
   editor = vi
   excludesfile = ~/.gitignore
