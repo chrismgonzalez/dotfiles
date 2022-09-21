@@ -2,8 +2,12 @@
     "workbench.colorTheme": "Cobalt2",
     "redhat.telemetry.enabled": false,
     "editor.fontLigatures": true,
-    "editor.fontFamily": "Victor Mono, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontFamily": "Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "explorer.confirmDelete": false,
+    "window.zoomLevel": -1,
+    "terminal.external.osxExec": "Alacritty.app",
+    "terminal.integrated.fontFamily": "VictorMono Nerd Font"
 }
