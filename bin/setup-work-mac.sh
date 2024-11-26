@@ -6,6 +6,7 @@
 # Global flags
 DRY_RUN=false
 GO_VERSION="1.23"
+GO_PATH="$HOME/go"
 
 # Package lists
 important_casks=(
