@@ -1,60 +1,108 @@
 {
-    "workbench.colorTheme": "Cobalt2",
-    "redhat.telemetry.enabled": false,
-    "editor.fontLigatures": true,
-    "editor.fontFamily": "Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "files.autoSave": "afterDelay",
-    "explorer.confirmDelete": false,
-    "terminal.external.osxExec": "Alacritty.app",
-    "terminal.integrated.fontFamily": "VictorMono Nerd Font",
-    "git.ignoreRebaseWarning": true,
-    "git.enableSmartCommit": true,
-    "git.ignoreMissingGitWarning": true,
-    "githubPullRequests.createOnPublishBranch": "never",
-    "[python]": {
-        "editor.formatOnType": true
-    },
-    "vs-kubernetes": {
-        "vscode-kubernetes.helm-path.mac": "/Users/chris/.vs-kubernetes/tools/helm/darwin-arm64/helm",
-        "vscode-kubernetes.kubectl-path.mac": "/Users/chris/.vs-kubernetes/tools/kubectl/kubectl",
-        "vscode-kubernetes.minikube-path.mac": "/Users/chris/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
-        "vs-kubernetes.minikube-show-information-expiration": "2023-08-11T13:02:03.627Z"
-    },
-    "vscode-kubernetes.helm-path.mac": "/opt/homebrew/bin/helm",
-    "vscode-kubernetes.kubectl-path.mac": "opt/homebrew/bin/kubectl",
-    "window.zoomLevel": -1,
-    "editor.minimap.size": "fill",
-    "yaml.customTags": [
-        "!And",
-        "!And sequence",
-        "!If",
-        "!If sequence",
-        "!Not",
-        "!Not sequence",
-        "!Equals",
-        "!Equals sequence",
-        "!Or",
-        "!Or sequence",
-        "!FindInMap",
-        "!FindInMap sequence",
-        "!Base64",
-        "!Join",
-        "!Join sequence",
-        "!Cidr",
-        "!Ref",
-        "!Sub",
-        "!Sub sequence",
-        "!GetAtt",
-        "!GetAZs",
-        "!ImportValue",
-        "!ImportValue sequence",
-        "!Select",
-        "!Select sequence",
-        "!Split",
-        "!Split sequence"
-    ],
-    "aws.codeWhisperer.shareCodeWhispererContentWithAWS": false,
-    "aws.codeWhisperer.includeSuggestionsWithCodeReferences": false
+  "workbench.colorTheme": "One Monokai",
+  "redhat.telemetry.enabled": false,
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Jetbrains Mono, Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "files.autoSave": "afterDelay",
+  "explorer.confirmDelete": false,
+  "terminal.external.osxExec": "Warp.app",
+  "terminal.integrated.fontFamily": "VictorMono Nerd Font",
+  "git.ignoreRebaseWarning": true,
+  "git.enableSmartCommit": true,
+  "git.ignoreMissingGitWarning": true,
+  "githubPullRequests.createOnPublishBranch": "never",
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "vs-kubernetes": {
+    "vscode-kubernetes.helm-path.mac": "/Users/chris/.vs-kubernetes/tools/helm/darwin-arm64/helm",
+    "vscode-kubernetes.kubectl-path.mac": "/Users/chris/.vs-kubernetes/tools/kubectl/kubectl",
+    "vscode-kubernetes.minikube-path.mac": "/Users/chris/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
+    "vs-kubernetes.minikube-show-information-expiration": "2023-08-11T13:02:03.627Z"
+  },
+  "vscode-kubernetes.helm-path.mac": "/opt/homebrew/bin/helm",
+  "vscode-kubernetes.kubectl-path.mac": "opt/homebrew/bin/kubectl",
+  "window.zoomLevel": -1,
+  "editor.minimap.size": "fill",
+  "yaml.customTags": [
+    "!And",
+    "!And sequence",
+    "!If",
+    "!If sequence",
+    "!Not",
+    "!Not sequence",
+    "!Equals",
+    "!Equals sequence",
+    "!Or",
+    "!Or sequence",
+    "!FindInMap",
+    "!FindInMap sequence",
+    "!Base64",
+    "!Join",
+    "!Join sequence",
+    "!Cidr",
+    "!Ref",
+    "!Sub",
+    "!Sub sequence",
+    "!GetAtt",
+    "!GetAZs",
+    "!ImportValue",
+    "!ImportValue sequence",
+    "!Select",
+    "!Select sequence",
+    "!Split",
+    "!Split sequence"
+  ],
+  "aws.codeWhisperer.shareCodeWhispererContentWithAWS": false,
+  "aws.codeWhisperer.includeSuggestionsWithCodeReferences": false,
+  "aws.suppressPrompts": {
+    "codeWhispererNewWelcomeMessage": true
+  },
+  "editor.inlineSuggest.showToolbar": "always",
+  "remote.autoForwardPortsSource": "hybrid",
+  "editor.detectIndentation": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "git.confirmSync": false,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
+  "amazonQ.shareContentWithAWS": false,
+  "python.venvFolders": [
+    "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.cache/virtualenvs"
+  ],
+  "python.venvPath": "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.venv",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+  "aws.resources.enabledResources": ["AWS::DynamoDB::Table"],
+  "githubPullRequests.fileListLayout": "flat",
+  "workbench.editor.enablePreview": false,
+  "go.toolsManagement.autoUpdate": true,
+  "amazonQ.workspaceIndex": true,
+  "terminal.integrated.automationProfile.osx": {
+    "args": ["ssh-add work-mac-air-sep24"]
+  },
+  "amazonQ.suppressPrompts": {
+    "amazonQSessionConfigurationMessage": true
+  },
+  "eslint.run": "onSave",
+  "remote.SSH.remotePlatform": {
+    "srv-prod-docker01": "linux"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "githubPullRequests.pullBranch": "never",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+}
 }

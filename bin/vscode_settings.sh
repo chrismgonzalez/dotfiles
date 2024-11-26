@@ -2,6 +2,8 @@
 
 VSCODE_USER_PATH="$HOME/Library/Application Support/Code/User"
 DOTFILES_VSCODE_PATH="$HOME/.dotfiles/vscode"
+SYMLINK_PATH="$HOME/dotfiles/vscode"
+
 
 function export_vscode_settings() {
     echo "Exporting VS Code settings..."
