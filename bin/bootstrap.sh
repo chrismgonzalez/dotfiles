@@ -144,7 +144,6 @@ google-chrome \
 firefox \
 kap \
 rectangle \
-slack \
 visual-studio-code \
 
 echo "------------------------------"
@@ -164,6 +163,8 @@ echo "---------------------------------"
 
 rm /usr/local/bin/python*
 rm /usr/local/bin/pip*
+rm /usr/bin/python*
+rm /usr/bin/pip*
 
 rm -Rf /Library/Frameworks/Python.framework/Versions/*
 
@@ -185,18 +186,18 @@ echo "Cleaning up homebrew installs"
 echo "------------------------------"
 brew cleanup
 
-# create ssh keys
-echo "------------------------------"
-echo "Creating SSH keys"
-echo "------------------------------"
+# # create ssh keys
+# echo "------------------------------"
+# echo "Creating SSH keys"
+# echo "------------------------------"
 
-ssh-keygen -t ed25519 -C "$EMAIL"
+# ssh-keygen -t ed25519 -C "$EMAIL"
 
-echo "------------------------------"
-echo "adding key to auth agent"
-echo "------------------------------"
+# echo "------------------------------"
+# echo "adding key to auth agent"
+# echo "------------------------------"
 
-ssh-add ~/.ssh/id_rsa
+# ssh-add ~/.ssh/id_rsa
 
 
 echo "--------------------------------"

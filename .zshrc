@@ -1,6 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+
+dotfilesdir = $HOME/dotfiles
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -121,7 +124,6 @@ source $ZSH/oh-my-zsh.sh
 
 source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
 
-autoload -Uz compinit && compinit
 # Case insensitive.
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
 
@@ -134,6 +136,24 @@ export NVM_DIR="$HOME/.nvm"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
-
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+complete -C '/opt/homebrew/bin/aws_completer' aws
 
 export GODEBUG=asyncpreemptoff=1
+export GOPATH=$HOME/go
+export GOROOT="$(brew --prefix golang)/libexec"
+export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.2.0/terraform terraform
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
+
+ssh-add --apple-use-keychain ~/.ssh/gh_id_ed25519
+
+# Created by `pipx` on 2024-05-15 18:11:56
+export PATH="$PATH:/Users/chris/.local/bin"

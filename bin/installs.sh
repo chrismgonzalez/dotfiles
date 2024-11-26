@@ -28,53 +28,15 @@ if ! [ -x "$(command -v gcc)" ]; then
 fi
 
 GO_VERSION=1.18
-TERRAFORM_VERSION=1.0.11
+TERRAFORM_VERSION=1.2.0
 NODE_VERSION=16
 
 # Install some stuff before others!
-important_casks=(
-  visual-studio-code
-)
-
-brews=(
-  wget
-  gnupg
-  awscli
-  granted
-  cfn-lint
-  tree
-  ack
-  jq
-  htop
-  tldr
-  coreutils
-  pre-commit
-  vim  
-  git
-  go@${GO_VERSION}
-  tfenv
-  terraform-docs
-  git-extras
-  git-lfs
-  gnu-sed
-  gnupg
-  kubectl
-  minikube
-  kubernetes-cli
-  pinentry-mac # to resolve gpg signing issues on mac
-)
-
-casks=(
-  docker
-  alacritty
-  rectangle
-)
 
 pips=(
   pipenv
 )
 
-npms=()
 
 vscode=(
   formulahendry.auto-close-tag
@@ -97,20 +59,6 @@ fonts=(
   font-victor-mono-nerd-font
 )
 
-config_files=(
-  .bash_profile
-  .bashrc
-  .zshrc
-  .gitconfig
-  .gitignore
-  .inputrc
-  .vimrc
-  .git-completion.zsh
-  .aliases
-  .osx
-)
-
-
 
 ######################################## End of app list ########################################
 set +e
@@ -122,41 +70,6 @@ function prompt {
   fi
 }
 
-# comment out the below if you would like to manually cp your own dotfiles
-# the below loop create symlinks for config files included in this repo
-prompt "Create symlinks for config files"
-for file in "${config_files[@]}"; do
-  ln -s -f ~/dotfiles/$file ~/$file
-done
-
-#Initial sourcing of shells
-prompt "Source the shells"
-
-source $HOME/.zprofile
-source $HOME/.zshrc
-source $HOME/.bashrc
-source $HOME/.bash_profile
-source $HOME/.git-completion.zsh
-source $HOME/.vimrc
-source $HOME/.aliases
-
-function install {
-  cmd=$1
-  shift
-  for pkg in "$@";
-  do
-    exec="$cmd $pkg"
-    #prompt "Execute: $exec"
-    if ${exec} ; then
-      echo "Installed $pkg"
-    else
-      echo "Failed to execute: $exec"
-      if [[ ! -z "${CI}" ]]; then
-        exit 1
-      fi
-    fi
-  done
-}
 
 function brew_install_or_upgrade {
   if brew ls --versions "$1" >/dev/null; then
@@ -208,12 +121,12 @@ install 'brew_install_or_upgrade' "${brews[@]}"
 
 # check if .zshrc is present in the $HOME dir, if not, create it.  This file is needed for future commands.
 if ! [ -f $HOME/.zshrc ]; then
-  echo "Creeating .zshrc in $HOME directory"
+  echo "Creating .zshrc in $HOME directory"
    touch $HOME/.zshrc
 fi
 
 echo "------------------------------"
-echo "Upgrade Bash"
+echo "        Upgrade Bash          "
 echo "------------------------------"
 
 prompt "Upgrade bash"
@@ -234,62 +147,10 @@ if [ -f /sw/etc/bash_completion ]; then
    source $HOME/.zshrc
 fi
 
-# Install node and npm through nvm, so that we can change node versions if needed.
-prompt "Install nvm, node, npm"
-
-echo "-------------------------------"
-echo "Installing nvm"
-echo "-------------------------------"
-
-# check if nvm is installed
-if [ ! -d "${HOME}/.nvm/.git" ]; then
-    echo 'nvm is not installed, installing'
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-    if [ -s $HOME/.nvm/nvm.sh ]; then 
-      . $HOME/.nvm/nvm.sh >> $HOME/.zshrc
-      source $HOME/.zshrc
-    fi
-  else
-    echo 'nvm is installed, sourcing .zshrc to be on the safe side'
-    source $HOME/.zshrc
-fi
-
-echo "-------------------------------"
-echo "Installing NodeJS & npm via nvm"
-echo "-------------------------------"
-
-# check if node is installed, if not, install node and npm
-if ! [ -x "$(command -v node)" ]; then
-  echo 'Node & npm is not installed, installing' >&2
-  nvm install ${NODE_VERSION}
-  nvm use ${NODE_VERSION}
-  npm -v
-  node -v
-fi
-
-echo "------------------------------"
-echo "Begin installs..."
-echo "------------------------------"
-
-install 'brew install --cask' "${casks[@]}"
-
-prompt "Install secondary packages"
-
-install 'pip3 install --upgrade' "${pips[@]}"
-
-install 'gem install' "${gems[@]}"
-
-install 'npm install' "${npms[@]}"
-
-install 'code --install-extension' "${vscode[@]}"
-
-brew tap homebrew/cask-fonts
-install 'brew install --cask' "${fonts[@]}"
-
 echo "-----------------------------------"
 echo "Finish Go installation requirements"
 echo "-----------------------------------"
+
 GOPATH=$HOME/go
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
@@ -302,21 +163,20 @@ tfenv use ${TERRAFORM_VERSION}
 
 # verify tooling
 echo "------------------------------"
-echo "Checking terraform version"
+echo "  Checking terraform version  "
 echo "------------------------------"
 
 terraform --version
 
-
 echo "------------------------------"
-echo "Checking AWS CLI"
+echo "      Checking AWS CLI        "
 echo "------------------------------"
 
 aws --version
 
-echo "------------------------------"
-echo "Checking kubectl version & configuration"
-echo "------------------------------"
+echo "-----------------------------------------"
+echo " Checking kubectl version & configuration "
+echo "-----------------------------------------"
 
 kubectl version --client --output=json
 

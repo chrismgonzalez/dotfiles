@@ -181,17 +181,6 @@ sudo chown -R $(whoami) /usr/local/bin /usr/local/lib /usr/local/include /usr/lo
 
 n lts
 
-echo "------------------------------"
-echo "Netlify and Gatsby"
-echo "------------------------------"
-
-npm install -g netlify-cli
-npm install -g gatsby-cli
-
-echo "------------------------------"
-echo "Go"
-echo "------------------------------"
-
 ## golang
 
 brew install go@1.13
@@ -203,6 +192,8 @@ echo "------------------------------"
 
 rm /usr/local/bin/python*
 rm /usr/local/bin/pip*
+rm /usr/bin/python*
+rm /usr/bin/pip*
 
 rm -Rf /Library/Frameworks/Python.framework/Versions/*
 

@@ -42,6 +42,12 @@ alias npm='sudo npm'
 alias k='kubectl'
 alias kga='kubectl get all'
 alias kgp='kubectl get pods'
+alias k=kubectl
+alias kd=kubectl delete
+alias kds=kubectl describe
+alias ke=kubectl edit
+alias kr=kubectl run
+alias kg=kubectl get
 
 # Git aliases.
 alias gs='git status'
