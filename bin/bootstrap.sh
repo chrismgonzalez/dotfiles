@@ -130,7 +130,18 @@ tldr \
 coreutils \
 watch \
 vim \
+nvm \
 ssh-copy-id \
+bash-completion@2 \
+fzf \
+cdk \
+k9s \
+yq \
+neovim \
+powerlevel10k \
+tldr \
+vim \
+zsh \
 
 echo "------------------------------"
 echo "Common Applications & Fonts"
@@ -141,7 +152,6 @@ font-jetbrains-mono \
 font-victor-mono \
 alacritty \
 google-chrome \
-firefox \
 kap \
 rectangle \
 visual-studio-code \
@@ -154,7 +164,7 @@ echo "------------------------------"
 echo "Go@1.18"
 echo "------------------------------"
 
-brew install go@1.18
+brew install go@1.23
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
 echo "---------------------------------"
@@ -168,8 +178,14 @@ rm /usr/bin/pip*
 
 rm -Rf /Library/Frameworks/Python.framework/Versions/*
 
-brew install python3
-brew install pipenv
+echo "---------------------------------"
+echo "Install Python, Pipx, and Poetry"
+echo "---------------------------------"
+
+brew install python@3.12
+brew install pipx
+pipx ensurepath
+pipx install poetry
 
 echo "------------------------------"
 echo "Docker"

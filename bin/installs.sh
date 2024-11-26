@@ -27,8 +27,7 @@ if ! [ -x "$(command -v gcc)" ]; then
   echo "xcode command line tools appear to be installed..."
 fi
 
-GO_VERSION=1.18
-TERRAFORM_VERSION=1.2.0
+GO_VERSION=1.23
 NODE_VERSION=16
 
 # Install some stuff before others!
@@ -49,7 +48,6 @@ vscode=(
   RoscoP.ActiveFileInStatusBar
   wesbos.theme-cobalt2
   eamodio.gitlens
-  HashiCorp.terraform
 )
 
 fonts=(
@@ -154,19 +152,19 @@ echo "-----------------------------------"
 GOPATH=$HOME/go
 mkdir -p $GOPATH $GOPATH/src $GOPATH/pkg $GOPATH/bin
 
-echo "------------------------------"
-echo "Install Terraform"
-echo "------------------------------"
+# echo "------------------------------"
+# echo "Install Terraform"
+# echo "------------------------------"
 
-tfenv install ${TERRAFORM_VERSION}
-tfenv use ${TERRAFORM_VERSION}
+# tfenv install ${TERRAFORM_VERSION}
+# tfenv use ${TERRAFORM_VERSION}
 
 # verify tooling
-echo "------------------------------"
-echo "  Checking terraform version  "
-echo "------------------------------"
+# echo "------------------------------"
+# echo "  Checking terraform version  "
+# echo "------------------------------"
 
-terraform --version
+# terraform --version
 
 echo "------------------------------"
 echo "      Checking AWS CLI        "

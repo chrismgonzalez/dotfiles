@@ -1,26 +1,68 @@
-# Aliases
+###############################
+# System Commands
+###############################
+# Better defaults for common commands
 alias cp='cp -Rv'
-alias ls='ls --color=auto -ACF'
-alias ll='ls --color=auto -alF'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias grep='grep --color=auto'
-alias mkdir='mkdir -pv'
 alias mv='mv -v'
+alias mkdir='mkdir -pv'
 alias wget='wget -c'
-alias dot= 'cd /dotfiles'
 
-alias gadd='git add'
-alias gcom='git commit'
-alias gsup='git status'
-alias goto='git checkout'
+# ls improvements
+alias ls='ls --color=auto -ACF'
+alias ll='ls -la'
+alias l='ls -l'
+alias la='ls -A'
+alias lla='ls -la'
 
-alias node='nodejs'
+# Search improvements
+alias grep='grep --color=auto'
 
-# python
-alias pip='pip3'
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias dev='cd ~/Development'
+alias docs='cd ~/Documents'
+alias dot='cd /dotfiles'
+
+# System configuration
+alias zshrc='vim ~/.zshrc'
+alias reload='source ~/.zshrc'
+
+###############################
+# Development Tools
+###############################
+# Git
+alias gs='git status'
+alias gc='git commit'
+alias gcam='git commit -am'
+alias gp='git push'
+alias gl='git pull --rebase'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+# Docker
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'
+alias di='docker images'
+
+# Kubernetes
+alias k='kubectl'
+alias kg='kubectl get'
+alias kga='kubectl get all'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get services'
+alias kgn='kubectl get nodes'
+alias kd='kubectl delete'
+alias kds='kubectl describe'
+alias ke='kubectl edit'
+alias kr='kubectl run'
+
+# Python
 alias python='python3'
+alias pip='pip3'
 alias pym='python3 manage.py'
 alias mkenv='python3 -m venv venv'
 alias startenv='source venv/bin/activate'
@@ -34,24 +76,5 @@ alias gt='go test'
 alias gmi='go mod init'
 alias gmt='go mod tidy'
 
-# Use programs without a root-equivalent group
-alias docker='docker'
-alias npm='sudo npm'
-
-# Kubernetes
-alias k='kubectl'
-alias kga='kubectl get all'
-alias kgp='kubectl get pods'
-alias k=kubectl
-alias kd=kubectl delete
-alias kds=kubectl describe
-alias ke=kubectl edit
-alias kr=kubectl run
-alias kg=kubectl get
-
-# Git aliases.
-alias gs='git status'
-alias gc='git commit'
-alias gp='git pull --rebase'
-alias gcam='git commit -am'
-alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+# Node.js
+alias node='nodejs'
