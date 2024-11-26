@@ -182,3 +182,4 @@ function mlc () {
 #     export PS1
 # }
 # PROMPT_COMMAND=add_venv_info
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

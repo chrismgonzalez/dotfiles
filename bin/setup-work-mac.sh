@@ -3,9 +3,9 @@
 # Mac Development Environment Setup Script
 # Requirements: MacOS
 
-# Global variables
+# Global flags
+DRY_RUN=false
 GO_VERSION="1.23"
-NODE_VERSION="16"
 
 # Package lists
 important_casks=(
@@ -140,6 +140,48 @@ zsh_plugins=(
     zsh-autosuggestions
     zsh-completions
 )
+
+
+# Confirmation function
+function confirm() {
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
+# Backup function
+function backup_existing() {
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_dir="$HOME/.dotfiles_backup_$timestamp"
+    
+    echo "Creating backup in $backup_dir"
+    mkdir -p "$backup_dir"
+    
+    # Backup existing dotfiles
+    for file in "${config_files[@]}"; do
+        if [ -f "$HOME/$file" ]; then
+            cp "$HOME/$file" "$backup_dir/"
+        fi
+    done
+    
+    # Backup VS Code settings
+    if [ -d "$HOME/Library/Application Support/Code/User" ]; then
+        cp -R "$HOME/Library/Application Support/Code/User" "$backup_dir/vscode"
+    fi
+
+    # Backup existing Python setup
+    if [ -f "/usr/local/bin/python3" ]; then
+        echo "Python version before changes: $(/usr/local/bin/python3 --version)" >> "$backup_dir/python_info.txt"
+    fi
+
+    echo "Backup completed in $backup_dir"
+}
 
 # Utility functions
 function prompt() {
@@ -402,6 +444,49 @@ function setup_dotfiles() {
             echo "Warning: $file not found in dotfiles directory"
         fi
     done
+
+    echo "Setting up VS Code configuration..."
+    
+    # Define VS Code paths
+    local vscode_user_dir="$HOME/Library/Application Support/Code/User"
+    local dotfiles_vscode_dir="$HOME/.dotfiles/vscode"
+    local vscode_files=(
+        "settings.json"
+        "keybindings.json"
+    )
+
+    # Create VS Code directories if they don't exist
+    mkdir -p "$vscode_user_dir"
+    mkdir -p "$dotfiles_vscode_dir"
+
+    # Create symlinks for VS Code files
+    for file in "${vscode_files[@]}"; do
+        # Check if original file exists
+        if [ -f "$vscode_user_dir/$file" ] && [ ! -L "$vscode_user_dir/$file" ]; then
+            echo "Backing up existing VS Code $file"
+            mv "$vscode_user_dir/$file" "$vscode_user_dir/$file.backup"
+        fi
+
+        # Create symlink if VS Code config file exists
+        if [ -f "$dotfiles_vscode_dir/$file" ]; then
+            echo "Creating symlink for VS Code $file"
+            ln -s -f "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
+        else
+            echo "Warning: $file not found in dotfiles VS Code directory"
+        fi
+    done
+
+    # Install VS Code extensions if extensions.txt exists
+    if [ -f "$dotfiles_vscode_dir/extensions.txt" ]; then
+        echo "Installing VS Code extensions..."
+        while read -r extension; do
+            if [[ ! -z "$extension" ]]; then  # Skip empty lines
+                code --install-extension "$extension"
+            fi
+        done < "$dotfiles_vscode_dir/extensions.txt"
+    else
+        echo "Warning: extensions.txt not found in dotfiles VS Code directory"
+    fi
 }
 
 function configure_zsh() {
@@ -468,9 +553,6 @@ function install_packages() {
     # Install pip packages
     install 'pipx install' "${pipx[@]}"
     
-    # Install VS Code extensions
-    install 'code --install-extension' "${vscode[@]}"
-    
     # Install fonts
     brew tap homebrew/cask-fonts
     install 'brew install --cask' "${fonts[@]}"
@@ -501,30 +583,97 @@ function setup_vscode() {
 
 
 # Main function to run the script
-function main() {
-    keep_sudo_alive
-    create_directories
-    install_xcode_tools
-    setup_homebrew
-    setup_dotfiles
-    install_zsh
-    configure_zsh
-    setup_python
-    setup_node
-    install_packages
-    setup_vscode
-    
-    if [ "$SHELL" != "$(which zsh)" ]; then
-        echo "Changing shell to Zsh..."
-        chsh -s "$(which zsh)"
-    fi
-    # Final cleanup
-    brew cleanup
-    
-    echo "Installation complete! Please restart your terminal."
-    echo "After restart, run 'p10k configure' to customize your prompt."
+# Then replace the main function with:
 
+function main() {
+    # Check for dry run flag
+    if [[ "$1" == "--dry-run" ]]; then
+        DRY_RUN=true
+        echo "Running in dry-run mode - no changes will be made"
+    fi
+
+    # Initial warning
+    echo "This script will set up your macOS development environment."
+    echo "It may modify existing configurations and install new software."
+    
+    if ! $DRY_RUN; then
+        if ! confirm "Would you like to proceed? [y/N]"; then
+            echo "Setup cancelled."
+            exit 0
+        fi
+
+        if confirm "Would you like to backup existing configurations? [y/N]"; then
+            backup_existing
+        fi
+    fi
+
+    keep_sudo_alive
+
+    # Core setup
+    create_directories
+    if confirm "Install Xcode Command Line Tools? [y/N]"; then
+        install_xcode_tools
+    fi
+
+    if confirm "Set up Homebrew and install packages? [y/N]"; then
+        setup_homebrew
+        install_packages
+    fi
+
+    # Dotfiles setup
+    if confirm "Set up dotfiles? This will create symlinks to your dotfiles [y/N]"; then
+        setup_dotfiles
+    fi
+
+    # Shell setup
+    if confirm "Install and configure Zsh with Oh My Zsh? [y/N]"; then
+        install_zsh
+        configure_zsh
+    fi
+
+    # Python setup
+    if confirm "Set up Python? This will modify existing Python installations [y/N]"; then
+        setup_python
+    fi
+
+    # Node.js setup
+    if confirm "Set up Node.js and related tools? [y/N]"; then
+        setup_node
+    fi
+
+    # VS Code setup
+    if confirm "Set up VS Code and install extensions? [y/N]"; then
+        setup_vscode
+    fi
+
+    # Shell change
+    if [ "$SHELL" != "$(which zsh)" ]; then
+        if confirm "Change default shell to Zsh? [y/N]"; then
+            chsh -s "$(which zsh)"
+        fi
+    fi
+
+    # Final cleanup
+    if ! $DRY_RUN; then
+        brew cleanup
+    fi
+    
+    echo "Installation complete!"
+    if ! $DRY_RUN; then
+        echo "Please restart your terminal."
+        echo "After restart, run 'p10k configure' to customize your prompt."
+    else
+        echo "Dry run completed. No changes were made."
+    fi
 }
 
-# Run the script
-main
+# Modify the script execution to handle arguments
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: $0 [--dry-run]"
+    echo "  --dry-run  Show what would be done without making changes"
+    echo "  --help     Show this help message"
+    exit 0
+fi
+
+# Run the script with any provided arguments
+main "$@"
