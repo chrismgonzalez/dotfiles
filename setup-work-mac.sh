@@ -50,74 +50,74 @@ node_packages=(
     npm@latest
 )
 
-vscode=(
-    amazonwebservices.aws-toolkit-vscode
-    ameenahsanma.poetry-monorepo
-    antfu.browse-lite
-    azemoh.one-monokai
-    batisteo.vscode-django
-    bierner.markdown-preview-github-styles
-    boto3typed.boto3-ide
-    continue.continue
-    cstrap.flask-snippets
-    davidanson.vscode-markdownlint
-    dbaeumer.vscode-eslint
-    donjayamanne.python-environment-manager
-    donjayamanne.python-extension-pack
-    dsznajder.es7-react-js-snippets
-    eamodio.gitlens
-    edison1105.vite-theme-night
-    esbenp.prettier-vscode
-    formulahendry.auto-close-tag
-    github.copilot
-    github.copilot-chat
-    github.vscode-github-actions
-    github.vscode-pull-request-github
-    golang.go
-    hashicorp.terraform
-    hbenl.vscode-test-explorer
-    kevinrose.vsc-python-indent
-    littlefoxteam.vscode-python-test-adapter
-    me-dutour-mathieu.vscode-github-actions
-    meezilla.json
-    mightbesimon.emoji-icons
-    ms-azuretools.vscode-docker
-    ms-kubernetes-tools.vscode-kubernetes-tools
-    ms-python.autopep8
-    ms-python.black-formatter
-    ms-python.debugpy
-    ms-python.isort
-    ms-python.python
-    ms-python.vscode-pylance
-    ms-toolsai.jupyter
-    ms-toolsai.jupyter-keymap
-    ms-toolsai.jupyter-renderers
-    ms-toolsai.vscode-jupyter-cell-tags
-    ms-toolsai.vscode-jupyter-slideshow
-    ms-vscode-remote.remote-containers
-    ms-vscode-remote.remote-ssh
-    ms-vscode-remote.remote-ssh-edit
-    ms-vscode-remote.remote-wsl
-    ms-vscode-remote.vscode-remote-extensionpack
-    ms-vscode.makefile-tools
-    ms-vscode.remote-explorer
-    ms-vscode.remote-server
-    ms-vscode.test-adapter-converter
-    njpwerner.autodocstring
-    pkief.material-icon-theme
-    premparihar.gotestexplorer
-    redhat.vscode-yaml
-    roscop.activefileinstatusbar
-    sameeramin.cdk-snippets-for-python
-    taniarascia.new-moon-vscode
-    tomoki1207.pdf
-    visualstudioexptteam.intellicode-api-usage-examples
-    visualstudioexptteam.vscodeintellicode
-    vscodevim.vim
-    wesbos.theme-cobalt2
-    wholroyd.jinja
-    zainchen.json
-)
+# vscode=(
+#     amazonwebservices.aws-toolkit-vscode
+#     ameenahsanma.poetry-monorepo
+#     antfu.browse-lite
+#     azemoh.one-monokai
+#     batisteo.vscode-django
+#     bierner.markdown-preview-github-styles
+#     boto3typed.boto3-ide
+#     continue.continue
+#     cstrap.flask-snippets
+#     davidanson.vscode-markdownlint
+#     dbaeumer.vscode-eslint
+#     donjayamanne.python-environment-manager
+#     donjayamanne.python-extension-pack
+#     dsznajder.es7-react-js-snippets
+#     eamodio.gitlens
+#     edison1105.vite-theme-night
+#     esbenp.prettier-vscode
+#     formulahendry.auto-close-tag
+#     github.copilot
+#     github.copilot-chat
+#     github.vscode-github-actions
+#     github.vscode-pull-request-github
+#     golang.go
+#     hashicorp.terraform
+#     hbenl.vscode-test-explorer
+#     kevinrose.vsc-python-indent
+#     littlefoxteam.vscode-python-test-adapter
+#     me-dutour-mathieu.vscode-github-actions
+#     meezilla.json
+#     mightbesimon.emoji-icons
+#     ms-azuretools.vscode-docker
+#     ms-kubernetes-tools.vscode-kubernetes-tools
+#     ms-python.autopep8
+#     ms-python.black-formatter
+#     ms-python.debugpy
+#     ms-python.isort
+#     ms-python.python
+#     ms-python.vscode-pylance
+#     ms-toolsai.jupyter
+#     ms-toolsai.jupyter-keymap
+#     ms-toolsai.jupyter-renderers
+#     ms-toolsai.vscode-jupyter-cell-tags
+#     ms-toolsai.vscode-jupyter-slideshow
+#     ms-vscode-remote.remote-containers
+#     ms-vscode-remote.remote-ssh
+#     ms-vscode-remote.remote-ssh-edit
+#     ms-vscode-remote.remote-wsl
+#     ms-vscode-remote.vscode-remote-extensionpack
+#     ms-vscode.makefile-tools
+#     ms-vscode.remote-explorer
+#     ms-vscode.remote-server
+#     ms-vscode.test-adapter-converter
+#     njpwerner.autodocstring
+#     pkief.material-icon-theme
+#     premparihar.gotestexplorer
+#     redhat.vscode-yaml
+#     roscop.activefileinstatusbar
+#     sameeramin.cdk-snippets-for-python
+#     taniarascia.new-moon-vscode
+#     tomoki1207.pdf
+#     visualstudioexptteam.intellicode-api-usage-examples
+#     visualstudioexptteam.vscodeintellicode
+#     vscodevim.vim
+#     wesbos.theme-cobalt2
+#     wholroyd.jinja
+#     zainchen.json
+# )
 
 fonts=(
     font-fira-code
@@ -226,7 +226,7 @@ function keep_sudo_alive() {
     sudo -v
     while true; do 
         sudo -n true
-        sleep 60
+        sleep 300
         kill -0 "$$" || exit
     done 2>/dev/null &
 }
@@ -406,24 +406,37 @@ function install_zsh() {
 function setup_dotfiles() {
     echo "Setting up dotfiles..."
     
-    # Define configuration files
-    local config_files=(
-        .bash_profile
-        .bashrc
-        .zshrc
-        .gitconfig
-        .gitignore
-        .inputrc
-        .vimrc
-        .git-completion.zsh
-        .aliases
-        .p10k.zsh
-    )
+    # Get the directory where the script is being run from
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    
+    # Define configuration files - find all dotfiles in script directory
+    local config_files=($(find "$SCRIPT_DIR" -maxdepth 1 -type f -name ".*" -exec basename {} \;))
+    echo "Found dotfiles: ${config_files[@]}"
 
-    # Create dotfiles directory if it doesn't exist
+    # Create necessary directories
     mkdir -p ~/.dotfiles
 
-    # Create symlinks
+    # First, copy files to ~/.dotfiles
+    echo "Copying dotfiles to ~/.dotfiles..."
+    for file in "${config_files[@]}"; do
+        if [ -f "$SCRIPT_DIR/$file" ]; then
+            echo "Copying $file to ~/.dotfiles"
+            cp "$SCRIPT_DIR/$file" "$HOME/.dotfiles/"
+        fi
+    done
+
+    # Then, create symlinks from ~/code/dotfiles to ~/.dotfiles
+    echo "Creating symlinks from ~/code/dotfiles to ~/.dotfiles..."
+    for file in "${config_files[@]}"; do
+        if [ -f "$HOME/.dotfiles/$file" ]; then
+            # Create symlink in ~/code/dotfiles
+            echo "Creating symlink for $file in ~/code/dotfiles"
+            ln -s -f "$HOME/.dotfiles/$file" "$HOME/code/dotfiles/$file"
+        fi
+    done
+
+    # Finally, create symlinks in home directory
+    echo "Creating symlinks in home directory..."
     for file in "${config_files[@]}"; do
         # Check if original file exists in home directory
         if [ -f "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
@@ -433,7 +446,7 @@ function setup_dotfiles() {
 
         # Create symlink if dotfile exists
         if [ -f "$HOME/.dotfiles/$file" ]; then
-            echo "Creating symlink for $file"
+            echo "Creating symlink for $file in home directory"
             ln -s -f "$HOME/.dotfiles/$file" "$HOME/$file"
             # Source the file if it's a shell config file
             case $file in
@@ -441,8 +454,6 @@ function setup_dotfiles() {
                     source "$HOME/$file" 2>/dev/null
                     ;;
             esac
-        else
-            echo "Warning: $file not found in dotfiles directory"
         fi
     done
 
@@ -459,6 +470,12 @@ function setup_dotfiles() {
     # Create VS Code directories if they don't exist
     mkdir -p "$vscode_user_dir"
     mkdir -p "$dotfiles_vscode_dir"
+
+    # Copy VS Code settings from script directory if they exist
+    if [ -d "$SCRIPT_DIR/vscode" ]; then
+        echo "Copying VS Code settings from script directory..."
+        cp -R "$SCRIPT_DIR/vscode/"* "$dotfiles_vscode_dir/"
+    fi
 
     # Create symlinks for VS Code files
     for file in "${vscode_files[@]}"; do
@@ -488,6 +505,8 @@ function setup_dotfiles() {
     else
         echo "Warning: extensions.txt not found in dotfiles VS Code directory"
     fi
+
+    echo "Dotfiles setup complete!"
 }
 
 function configure_zsh() {
@@ -612,19 +631,20 @@ function main() {
 
     # Core setup
     create_directories
+
     if confirm "Install Xcode Command Line Tools? [y/N]"; then
         install_xcode_tools
-    fi
-
-    if confirm "Set up Homebrew and install packages? [y/N]"; then
-        setup_homebrew
-        install_packages
     fi
 
     # Dotfiles setup
     if confirm "Set up dotfiles? This will create symlinks to your dotfiles [y/N]"; then
         setup_dotfiles
     fi
+
+    if confirm "Set up Homebrew? [y/N]"; then
+        setup_homebrew
+    fi
+
 
     # Shell setup
     if confirm "Install and configure Zsh with Oh My Zsh? [y/N]"; then
@@ -645,6 +665,10 @@ function main() {
     # VS Code setup
     if confirm "Set up VS Code and install extensions? [y/N]"; then
         setup_vscode
+    fi
+
+    if confirm "Set up packages ? [y/N]"; then
+        install_packages
     fi
 
     # Shell change
