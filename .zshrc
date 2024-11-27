@@ -104,7 +104,3 @@ for config_file in ~/.{bashrc,p10k.sh}; do
     [ -f "$config_file" ] && source "$config_file"
 done
 
-# Theme and integration files
-source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-[[ -f "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"

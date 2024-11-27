@@ -36,7 +36,6 @@ brews=(
     gnupg
     kubectl
     pinentry-mac
-    powerlevel10k
     bash-completion@2
     ssh-copy-id
 )
@@ -325,10 +324,10 @@ function install_zsh() {
     fi
 
     # Install Powerlevel10k theme
-    if [ ! -d "$(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme" ]; then
+    if [ ! -d "$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" ]; then
         echo "Installing Powerlevel10k theme..."
         brew install romkatv/powerlevel10k/powerlevel10k
-        echo "source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme" >>~/.zshrc
+        echo "source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >>~/.zshrc
     fi
 
     # Install Zsh plugins
