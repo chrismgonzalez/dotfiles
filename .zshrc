@@ -88,15 +88,13 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# SSH configuration
-ssh-add --apple-use-keychain ~/.ssh/gh_id_ed25519
 
 ###############################
 # Source Additional Files
 ###############################
 # Source aliases first (so they're available in other sourced files)
-if [ -f "$DOTFILES/.aliases" ]; then
-    source "$DOTFILES/.aliases"
+if [ -f "$DOTFILESDIR/.aliases" ]; then
+    source "$DOTFILESDIR/.aliases"
 else
     echo "Warning: .aliases file not found in $DOTFILES"
 fi

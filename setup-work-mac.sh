@@ -36,6 +36,9 @@ brews=(
     gnupg
     kubectl
     pinentry-mac
+    powerlevel10k
+    bash-completion@2
+    ssh-copy-id
 )
 
 casks=(
@@ -50,74 +53,6 @@ node_packages=(
     npm@latest
 )
 
-# vscode=(
-#     amazonwebservices.aws-toolkit-vscode
-#     ameenahsanma.poetry-monorepo
-#     antfu.browse-lite
-#     azemoh.one-monokai
-#     batisteo.vscode-django
-#     bierner.markdown-preview-github-styles
-#     boto3typed.boto3-ide
-#     continue.continue
-#     cstrap.flask-snippets
-#     davidanson.vscode-markdownlint
-#     dbaeumer.vscode-eslint
-#     donjayamanne.python-environment-manager
-#     donjayamanne.python-extension-pack
-#     dsznajder.es7-react-js-snippets
-#     eamodio.gitlens
-#     edison1105.vite-theme-night
-#     esbenp.prettier-vscode
-#     formulahendry.auto-close-tag
-#     github.copilot
-#     github.copilot-chat
-#     github.vscode-github-actions
-#     github.vscode-pull-request-github
-#     golang.go
-#     hashicorp.terraform
-#     hbenl.vscode-test-explorer
-#     kevinrose.vsc-python-indent
-#     littlefoxteam.vscode-python-test-adapter
-#     me-dutour-mathieu.vscode-github-actions
-#     meezilla.json
-#     mightbesimon.emoji-icons
-#     ms-azuretools.vscode-docker
-#     ms-kubernetes-tools.vscode-kubernetes-tools
-#     ms-python.autopep8
-#     ms-python.black-formatter
-#     ms-python.debugpy
-#     ms-python.isort
-#     ms-python.python
-#     ms-python.vscode-pylance
-#     ms-toolsai.jupyter
-#     ms-toolsai.jupyter-keymap
-#     ms-toolsai.jupyter-renderers
-#     ms-toolsai.vscode-jupyter-cell-tags
-#     ms-toolsai.vscode-jupyter-slideshow
-#     ms-vscode-remote.remote-containers
-#     ms-vscode-remote.remote-ssh
-#     ms-vscode-remote.remote-ssh-edit
-#     ms-vscode-remote.remote-wsl
-#     ms-vscode-remote.vscode-remote-extensionpack
-#     ms-vscode.makefile-tools
-#     ms-vscode.remote-explorer
-#     ms-vscode.remote-server
-#     ms-vscode.test-adapter-converter
-#     njpwerner.autodocstring
-#     pkief.material-icon-theme
-#     premparihar.gotestexplorer
-#     redhat.vscode-yaml
-#     roscop.activefileinstatusbar
-#     sameeramin.cdk-snippets-for-python
-#     taniarascia.new-moon-vscode
-#     tomoki1207.pdf
-#     visualstudioexptteam.intellicode-api-usage-examples
-#     visualstudioexptteam.vscodeintellicode
-#     vscodevim.vim
-#     wesbos.theme-cobalt2
-#     wholroyd.jinja
-#     zainchen.json
-# )
 
 fonts=(
     font-fira-code
@@ -595,21 +530,12 @@ function setup_completions() {
         # npm
         "source <(npm completion)"
         
-        # gh (GitHub CLI)
-        "source <(gh completion -s zsh)"
-        
         # poetry
         "source <(poetry completions zsh)"
         
         # pipenv
         "eval \"$(pipenv --completion)\""
-        
-        # brew
-        "if type brew &>/dev/null; then
-            FPATH=\"$(brew --prefix)/share/zsh/site-functions:${FPATH}\"
-            autoload -Uz compinit
-            compinit
-        fi"
+       
     )
 
     # Create a temporary file for new completions
