@@ -441,8 +441,8 @@ function setup_dotfiles() {
     mkdir -p "$DOTFILES_DIR"
     for file in "${config_files[@]}"; do
         if [ -f "$HOME/$file" ]; then
-            echo "Creating symlink from $HOME/$file to $DOTFILES_DIR/$file"
-            ln -s "$HOME/$file" "$DOTFILES_DIR/$file"
+            echo "Creating symlinks from $DOTFILES_DIR/$file" to $HOME/$file"
+            ln -s -f "$DOTFILES_DIR/$FILE "$HOME/$file"
         fi
     done
 
@@ -477,7 +477,7 @@ function setup_dotfiles() {
                 
                 # Create symlink in dotfiles directory
                 echo "Creating symlink from VS Code user directory to dotfiles"
-                ln -s "$vscode_user_dir/$file" "$dotfiles_vscode_dir/$file"
+                ln -s -f "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
             fi
         done
     fi

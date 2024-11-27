@@ -21,7 +21,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 ###############################
 export LANG=en_US.UTF-8
 export EDITOR='vim'
-export DOTFILES="$HOME/.dotfiles"
+export DOTFILESDIR=$HOME
 
 # Go configuration
 export GODEBUG=asyncpreemptoff=1
