@@ -375,7 +375,8 @@ function install_zsh() {
     echo "Installing and configuring Zsh..."
     
     # Backup existing .zshrc
-    if [ -f "$HOME/.zshrc" ]; then
+    # Only backup if it's not a symlink
+    if [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
         echo "Backing up existing .zshrc..."
         mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
     fi
@@ -563,7 +564,12 @@ function setup_completions() {
 
     # Create completions directory if it doesn't exist
     mkdir -p ~/.zsh/completion
-    
+       # Get the actual .zshrc file (follow symlink if it exists)
+    ZSHRC_PATH="$HOME/.zshrc"
+    if [ -L "$ZSHRC_PATH" ]; then
+        ZSHRC_PATH="$(readlink -f "$ZSHRC_PATH")"
+    fi
+     
     # Array of completion setup commands
     local completion_cmds=(
         # AWS CLI
@@ -584,7 +590,7 @@ function setup_completions() {
         fi"
         
         # pip
-        "eval \"$(pip completion --zsh)\""
+        "eval \"$(pipx completion --zsh)\""
         
         # npm
         "source <(npm completion)"
@@ -640,10 +646,10 @@ function setup_completions() {
         echo "zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'" >> "$TEMP_FILE"
     fi
 
-    # Only append new content if there's anything in the temp file
+    # When appending, use the actual file path
     if [ -s "$TEMP_FILE" ]; then
         echo "Adding new completions to .zshrc..."
-        cat "$TEMP_FILE" >> "$HOME/.zshrc"
+        cat "$TEMP_FILE" >> "$ZSHRC_PATH"
     else
         echo "No new completions to add."
     fi
