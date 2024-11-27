@@ -502,7 +502,7 @@ function configure_zsh() {
     echo "Configuring Zsh..."
     
     # Only create minimal initial configuration if .zshrc doesn't exist in dotfiles
-    if [ ! -f "$HOME/.dotfiles/.zshrc" ]; then
+    if [ ! -f "$HOME/.zshrc" ]; then
         echo "Creating basic .zshrc in dotfiles..."
         cat << 'EOF' > "$HOME/.dotfiles/.zshrc"
 # Enable Powerlevel10k instant prompt
@@ -539,9 +539,9 @@ EOF
     fi
 
     # Create Powerlevel10k configuration if it doesn't exist
-    if [ ! -f "$HOME/.dotfiles/.p10k.zsh" ]; then
+    if [ ! -f "$HOME/.p10k.zsh" ]; then
         echo "Creating default Powerlevel10k configuration..."
-        curl -fsSL https://raw.githubusercontent.com/romkatv/powerlevel10k/master/config/p10k-lean.zsh > "$HOME/.dotfiles/.p10k.zsh"
+        curl -fsSL https://raw.githubusercontent.com/romkatv/powerlevel10k/master/config/p10k-lean.zsh > "$HOME/.p10k.zsh"
     fi
 }
 
