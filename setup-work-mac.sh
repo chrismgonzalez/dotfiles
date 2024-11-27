@@ -406,26 +406,24 @@ function install_zsh() {
 function setup_dotfiles() {
     echo "Setting up dotfiles..."
     
-    # Get the directory where the script is being run from
-    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     DOTFILES_DIR="$HOME/code/dotfiles"
     
-    # Define configuration files - find all dotfiles in script directory
-    local config_files=($(find "$SCRIPT_DIR" -maxdepth 1 -type f -name ".*" -exec basename {} \;))
+    # Define configuration files - find all dotfiles in your existing dotfiles directory
+    local config_files=($(find "$DOTFILES_DIR" -maxdepth 1 -type f -name ".*" -exec basename {} \;))
     echo "Found dotfiles: ${config_files[@]}"
 
-    # First, copy files to home directory (these will be the source files)
-    echo "Copying dotfiles to home directory..."
+    # Create symlinks in home directory pointing to files in ~/code/dotfiles
+    echo "Creating symlinks in home directory..."
     for file in "${config_files[@]}"; do
-        if [ -f "$SCRIPT_DIR/$file" ]; then
-            # Backup existing file if it exists
-            if [ -f "$HOME/$file" ]; then
+        if [ -f "$DOTFILES_DIR/$file" ]; then
+            # Backup existing file if it exists and is not a symlink
+            if [ -f "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
                 echo "Backing up existing $file"
                 mv "$HOME/$file" "$HOME/$file.backup"
             fi
             
-            echo "Copying $file to home directory"
-            cp "$SCRIPT_DIR/$file" "$HOME/"
+            echo "Creating symlink from $DOTFILES_DIR/$file to $HOME/$file"
+            ln -sf "$DOTFILES_DIR/$file" "$HOME/$file"
             
             # Source the file if it's a shell config file
             case $file in
@@ -436,63 +434,33 @@ function setup_dotfiles() {
         fi
     done
 
-    # Then create symlinks from home directory to ~/code/dotfiles
-    echo "Creating symlinks in $DOTFILES_DIR..."
-    mkdir -p "$DOTFILES_DIR"
-    for file in "${config_files[@]}"; do
-        if [ -f "$HOME/$file" ]; then
-            echo "Creating symlinks from $DOTFILES_DIR/$file" to $HOME/$file"
-            ln -s -f "$DOTFILES_DIR/$FILE "$HOME/$file"
-        fi
-    done
+    # Handle VS Code settings
+    if [ -d "$DOTFILES_DIR/vscode" ]; then
+        echo "Setting up VS Code configuration..."
+        
+        local vscode_user_dir="$HOME/Library/Application Support/Code/User"
+        local dotfiles_vscode_dir="$DOTFILES_DIR/vscode"
+        local vscode_files=(
+            "settings.json"
+            "keybindings.json"
+        )
 
-    # Handle VS Code settings similarly
-    echo "Setting up VS Code configuration..."
-    
-    # Define VS Code paths
-    local vscode_user_dir="$HOME/Library/Application Support/Code/User"
-    local dotfiles_vscode_dir="$DOTFILES_DIR/vscode"
-    local vscode_files=(
-        "settings.json"
-        "keybindings.json"
-    )
+        # Create VS Code user directory if it doesn't exist
+        mkdir -p "$vscode_user_dir"
 
-    # Create directories
-    mkdir -p "$vscode_user_dir"
-    mkdir -p "$dotfiles_vscode_dir"
-
-    # Copy VS Code settings to user directory and create symlinks
-    if [ -d "$SCRIPT_DIR/vscode" ]; then
+        # Create symlinks for VS Code files
         for file in "${vscode_files[@]}"; do
-            if [ -f "$SCRIPT_DIR/vscode/$file" ]; then
-                # Backup existing file if it exists
-                if [ -f "$vscode_user_dir/$file" ]; then
+            if [ -f "$dotfiles_vscode_dir/$file" ]; then
+                # Backup existing file if it exists and is not a symlink
+                if [ -f "$vscode_user_dir/$file" ] && [ ! -L "$vscode_user_dir/$file" ]; then
                     echo "Backing up existing VS Code $file"
                     mv "$vscode_user_dir/$file" "$vscode_user_dir/$file.backup"
                 fi
                 
-                # Copy to VS Code user directory
-                echo "Copying $file to VS Code user directory"
-                cp "$SCRIPT_DIR/vscode/$file" "$vscode_user_dir/"
-                
-                # Create symlink in dotfiles directory
-                echo "Creating symlink from VS Code user directory to dotfiles"
-                ln -s -f "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
+                echo "Creating symlink from $dotfiles_vscode_dir/$file to $vscode_user_dir/$file"
+                ln -sf "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
             fi
         done
-    fi
-
-    # Handle VS Code extensions
-    if [ -f "$SCRIPT_DIR/vscode/extensions.txt" ]; then
-        echo "Copying extensions list and installing VS Code extensions..."
-        cp "$SCRIPT_DIR/vscode/extensions.txt" "$dotfiles_vscode_dir/"
-        while read -r extension; do
-            if [[ ! -z "$extension" ]]; then  # Skip empty lines
-                code --install-extension "$extension"
-            fi
-        done < "$dotfiles_vscode_dir/extensions.txt"
-    else
-        echo "Warning: extensions.txt not found"
     fi
 
     echo "Dotfiles setup complete!"
