@@ -592,6 +592,125 @@ function setup_vscode() {
     echo "VS Code setup complete!"
 }
 
+function setup_completions() {
+    echo "Setting up shell completions..."
+
+    # Create completions directory if it doesn't exist
+    mkdir -p ~/.zsh/completion
+    
+    # Array of completion setup commands
+    local completion_cmds=(
+        # AWS CLI
+        "complete -C '/usr/local/bin/aws_completer' aws"
+        
+        # kubectl
+        "source <(kubectl completion zsh)"
+        
+        # terraform
+        "complete -o nospace -C $(which terraform) terraform"
+        
+        # docker
+        "if [ -f /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion ]; then
+            source /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion
+        fi"
+        "if [ -f /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion ]; then
+            source /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion
+        fi"
+        
+        # pip
+        "eval \"$(pip completion --zsh)\""
+        
+        # npm
+        "source <(npm completion)"
+        
+        # gh (GitHub CLI)
+        "source <(gh completion -s zsh)"
+        
+        # poetry
+        "source <(poetry completions zsh)"
+        
+        # pipenv
+        "eval \"$(pipenv --completion)\""
+        
+        # brew
+        "if type brew &>/dev/null; then
+            FPATH=\"$(brew --prefix)/share/zsh/site-functions:${FPATH}\"
+            autoload -Uz compinit
+            compinit
+        fi"
+    )
+
+    # Add completions to .zshrc if they don't already exist
+    echo "Adding completions to .zshrc..."
+    
+    # First, add the completion setup section if it doesn't exist
+    if ! grep -q "# Shell Completions" "$HOME/.zshrc"; then
+        echo "" >> "$HOME/.zshrc"
+        echo "# Shell Completions" >> "$HOME/.zshrc"
+        echo "fpath=(~/.zsh/completion \$fpath)" >> "$HOME/.zshrc"
+        echo "autoload -Uz compinit && compinit -i" >> "$HOME/.zshrc"
+    fi
+
+    # Add each completion command if it's not already present
+    for cmd in "${completion_cmds[@]}"; do
+        if ! grep -qF "$cmd" "$HOME/.zshrc"; then
+            echo "$cmd" >> "$HOME/.zshrc"
+        fi
+    done
+
+    # Install additional completion packages via Homebrew
+    echo "Installing completion packages..."
+    brew install \
+        bash-completion@2 \
+        zsh-completions \
+        docker-completion \
+        docker-compose-completion \
+        pip-completion \
+        terraform-completion
+
+    # Download additional completions
+    echo "Downloading additional completions..."
+
+    # Git completions
+    curl -o ~/.zsh/completion/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh 2>/dev/null
+
+    # AWS CLI v2 completions
+    if command -v aws >/dev/null; then
+        aws --version | grep -q "aws-cli/2" && {
+            curl -o ~/.zsh/completion/_aws https://raw.githubusercontent.com/aws/aws-cli/v2/contrib/completion/zsh/_aws 2>/dev/null
+        }
+    fi
+
+    # Setup bash-completion for both bash and zsh
+    echo "Setting up bash-completion..."
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        echo "[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion" >> "$HOME/.bashrc"
+    fi
+
+    # Add completion initialization to .zshrc if not present
+    if ! grep -q "# Initialize completion system" "$HOME/.zshrc"; then
+        cat << 'EOF' >> "$HOME/.zshrc"
+
+# Initialize completion system
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+EOF
+    fi
+
+    # Source completions immediately
+    source "$HOME/.zshrc"
+
+    echo "Shell completions setup complete!"
+}
+
 
 # Main function to run the script
 # Then replace the main function with:
@@ -660,6 +779,10 @@ function main() {
 
     if confirm "Set up packages ? [y/N]"; then
         install_packages
+    fi
+
+    if confirm "Set up shell completions? [y/N]"; then
+        setup_completions
     fi
 
     # Shell change
