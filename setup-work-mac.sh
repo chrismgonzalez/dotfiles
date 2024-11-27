@@ -606,23 +606,50 @@ function setup_completions() {
         fi"
     )
 
-    # Add completions to .zshrc if they don't already exist
-    echo "Adding completions to .zshrc..."
-    
-    # First, add the completion setup section if it doesn't exist
+    # Create a temporary file for new completions
+    TEMP_FILE=$(mktemp)
+
+    # Add completion setup section if it doesn't exist
     if ! grep -q "# Shell Completions" "$HOME/.zshrc"; then
-        echo "" >> "$HOME/.zshrc"
-        echo "# Shell Completions" >> "$HOME/.zshrc"
-        echo "fpath=(~/.zsh/completion \$fpath)" >> "$HOME/.zshrc"
-        echo "autoload -Uz compinit && compinit -i" >> "$HOME/.zshrc"
+        echo "" >> "$TEMP_FILE"
+        echo "# Shell Completions" >> "$TEMP_FILE"
+        echo "fpath=(~/.zsh/completion \$fpath)" >> "$TEMP_FILE"
+        echo "autoload -Uz compinit && compinit -i" >> "$TEMP_FILE"
     fi
 
-    # Add each completion command if it's not already present
+    # Add each completion command if it's not already in .zshrc
     for cmd in "${completion_cmds[@]}"; do
         if ! grep -qF "$cmd" "$HOME/.zshrc"; then
-            echo "$cmd" >> "$HOME/.zshrc"
+            echo "$cmd" >> "$TEMP_FILE"
         fi
     done
+
+    # Add completion initialization if not already present
+    if ! grep -q "# Initialize completion system" "$HOME/.zshrc"; then
+        echo "" >> "$TEMP_FILE"
+        echo "# Initialize completion system" >> "$TEMP_FILE"
+        echo "autoload -Uz compinit && compinit" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*' menu select" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*' list-colors \"\${(s.:.)LS_COLORS}\"" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*' verbose yes" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*' group-name ''" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*:descriptions' format '%B%d%b'" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*:messages' format '%d'" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*:warnings' format 'No matches for: %d'" >> "$TEMP_FILE"
+        echo "zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'" >> "$TEMP_FILE"
+    fi
+
+    # Only append new content if there's anything in the temp file
+    if [ -s "$TEMP_FILE" ]; then
+        echo "Adding new completions to .zshrc..."
+        cat "$TEMP_FILE" >> "$HOME/.zshrc"
+    else
+        echo "No new completions to add."
+    fi
+
+    # Clean up temp file
+    rm "$TEMP_FILE"
 
     # Install additional completion packages via Homebrew
     echo "Installing completion packages..."
@@ -650,31 +677,13 @@ function setup_completions() {
     # Setup bash-completion for both bash and zsh
     echo "Setting up bash-completion..."
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
-        echo "[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion" >> "$HOME/.bashrc"
+        if ! grep -q "bash_completion" "$HOME/.bashrc"; then
+            echo "[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion" >> "$HOME/.bashrc"
+        fi
     fi
-
-    # Add completion initialization to .zshrc if not present
-    if ! grep -q "# Initialize completion system" "$HOME/.zshrc"; then
-        cat << 'EOF' >> "$HOME/.zshrc"
-
-# Initialize completion system
-autoload -Uz compinit && compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-EOF
-    fi
-
-    # Source completions immediately
-    source "$HOME/.zshrc"
 
     echo "Shell completions setup complete!"
+    echo "Please restart your shell or run 'source ~/.zshrc' to apply changes."
 }
 
 
