@@ -104,3 +104,6 @@ for config_file in ~/.{bashrc,p10k.sh}; do
     [ -f "$config_file" ] && source "$config_file"
 done
 
+
+# Python configuration
+export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"

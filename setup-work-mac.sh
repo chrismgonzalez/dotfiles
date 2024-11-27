@@ -342,15 +342,23 @@ function setup_dotfiles() {
     echo "Setting up dotfiles..."
     
     DOTFILES_DIR="$HOME/code/dotfiles"
+    echo "Using dotfiles directory: $DOTFILES_DIR"
     
     # Define configuration files - find all dotfiles in your existing dotfiles directory
+    echo "Searching for dotfiles..."
     local config_files=($(find "$DOTFILES_DIR" -maxdepth 1 -type f -name ".*" -exec basename {} \;))
     echo "Found dotfiles: ${config_files[@]}"
+    
+    # Debug: Count number of files
+    echo "Number of dotfiles found: ${#config_files[@]}"
 
     # Create symlinks in home directory pointing to files in ~/code/dotfiles
     echo "Creating symlinks in home directory..."
     for file in "${config_files[@]}"; do
+        echo "Processing file: $file"
         if [ -f "$DOTFILES_DIR/$file" ]; then
+            echo "Found source file: $DOTFILES_DIR/$file"
+            
             # Backup existing file if it exists and is not a symlink
             if [ -f "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
                 echo "Backing up existing $file"
@@ -358,20 +366,25 @@ function setup_dotfiles() {
             fi
             
             echo "Creating symlink from $DOTFILES_DIR/$file to $HOME/$file"
-            ln -sf "$DOTFILES_DIR/$file" "$HOME/$file"
+            ln -sfv "$DOTFILES_DIR/$file" "$HOME/$file"
             
             # Source the file if it's a shell config file
-            case $file in
-                .bash_profile|.bashrc|.zshrc|.aliases)
-                    source "$HOME/$file" 2>/dev/null
-                    ;;
-            esac
+            # case $file in
+            #     .bash_profile|.bashrc|.zshrc|.aliases)
+            #         echo "Sourcing $file"
+            #         source "$HOME/$file" 2>/dev/null || echo "Failed to source $file"
+            #         ;;
+            # esac
+        else
+            echo "Warning: Source file $DOTFILES_DIR/$file not found"
         fi
     done
+    echo "Finished processing dotfiles"
 
     # Handle VS Code settings
+    echo "Starting VS Code configuration..."
     if [ -d "$DOTFILES_DIR/vscode" ]; then
-        echo "Setting up VS Code configuration..."
+        echo "Found VS Code directory"
         
         local vscode_user_dir="$HOME/Library/Application Support/Code/User"
         local dotfiles_vscode_dir="$DOTFILES_DIR/vscode"
@@ -380,12 +393,16 @@ function setup_dotfiles() {
             "keybindings.json"
         )
 
-        # Create VS Code user directory if it doesn't exist
-        mkdir -p "$vscode_user_dir"
+        echo "Creating VS Code user directory..."
+        mkdir -pv "$vscode_user_dir"
 
         # Create symlinks for VS Code files
+        echo "Creating VS Code symlinks..."
         for file in "${vscode_files[@]}"; do
+            echo "Processing VS Code file: $file"
             if [ -f "$dotfiles_vscode_dir/$file" ]; then
+                echo "Found source file: $dotfiles_vscode_dir/$file"
+                
                 # Backup existing file if it exists and is not a symlink
                 if [ -f "$vscode_user_dir/$file" ] && [ ! -L "$vscode_user_dir/$file" ]; then
                     echo "Backing up existing VS Code $file"
@@ -393,12 +410,17 @@ function setup_dotfiles() {
                 fi
                 
                 echo "Creating symlink from $dotfiles_vscode_dir/$file to $vscode_user_dir/$file"
-                ln -sf "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
+                ln -sfv "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
+            else
+                echo "Warning: VS Code file $dotfiles_vscode_dir/$file not found"
             fi
         done
+    else
+        echo "VS Code directory not found in dotfiles"
     fi
 
     echo "Dotfiles setup complete!"
+    return 0
 }
 
 function configure_zsh() {
