@@ -414,18 +414,28 @@ function setup_dotfiles() {
     local config_files=($(find "$SCRIPT_DIR" -maxdepth 1 -type f -name ".*" -exec basename {} \;))
     echo "Found dotfiles: ${config_files[@]}"
 
-    # First, copy files to home directory
-    echo "Copying dotfiles to home directory..."
+    # First, copy files to ~/code/dotfiles
+    echo "Copying dotfiles to $DOTFILES_DIR..."
+    mkdir -p "$DOTFILES_DIR"
     for file in "${config_files[@]}"; do
         if [ -f "$SCRIPT_DIR/$file" ]; then
+            echo "Copying $file to $DOTFILES_DIR"
+            cp "$SCRIPT_DIR/$file" "$DOTFILES_DIR/"
+        fi
+    done
+
+    # Create symlinks in home directory pointing to files in ~/code/dotfiles
+    echo "Creating symlinks in home directory..."
+    for file in "${config_files[@]}"; do
+        if [ -f "$DOTFILES_DIR/$file" ]; then
             # Backup existing file if it exists and is not a symlink
             if [ -f "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
                 echo "Backing up existing $file"
                 mv "$HOME/$file" "$HOME/$file.backup"
             fi
             
-            echo "Copying $file to home directory"
-            cp "$SCRIPT_DIR/$file" "$HOME/"
+            echo "Creating symlink for $file in home directory"
+            ln -s -f "$DOTFILES_DIR/$file" "$HOME/$file"
             
             # Source the file if it's a shell config file
             case $file in
@@ -433,17 +443,6 @@ function setup_dotfiles() {
                     source "$HOME/$file" 2>/dev/null
                     ;;
             esac
-        fi
-    done
-
-    # Create symlinks in ~/code/dotfiles
-    echo "Creating symlinks in $DOTFILES_DIR..."
-    mkdir -p "$DOTFILES_DIR"
-    
-    for file in "${config_files[@]}"; do
-        if [ -f "$HOME/$file" ]; then
-            echo "Creating symlink for $file in $DOTFILES_DIR"
-            ln -s -f "$HOME/$file" "$DOTFILES_DIR/$file"
         fi
     done
 
@@ -462,22 +461,23 @@ function setup_dotfiles() {
     mkdir -p "$vscode_user_dir"
     mkdir -p "$dotfiles_vscode_dir"
 
-    # Copy VS Code settings to user directory and create symlinks
+    # Copy VS Code settings to dotfiles and create symlinks
     if [ -d "$SCRIPT_DIR/vscode" ]; then
         echo "Setting up VS Code configuration..."
         for file in "${vscode_files[@]}"; do
             if [ -f "$SCRIPT_DIR/vscode/$file" ]; then
+                # Copy to dotfiles directory
+                cp "$SCRIPT_DIR/vscode/$file" "$dotfiles_vscode_dir/"
+                
                 # Backup existing file if it exists and is not a symlink
                 if [ -f "$vscode_user_dir/$file" ] && [ ! -L "$vscode_user_dir/$file" ]; then
                     echo "Backing up existing VS Code $file"
                     mv "$vscode_user_dir/$file" "$vscode_user_dir/$file.backup"
                 fi
                 
-                # Copy to VS Code user directory
-                cp "$SCRIPT_DIR/vscode/$file" "$vscode_user_dir/"
-                
-                # Create symlink in dotfiles directory
-                ln -s -f "$vscode_user_dir/$file" "$dotfiles_vscode_dir/$file"
+                # Create symlink in VS Code user directory
+                echo "Creating symlink for VS Code $file"
+                ln -s -f "$dotfiles_vscode_dir/$file" "$vscode_user_dir/$file"
             fi
         done
     fi
@@ -485,14 +485,12 @@ function setup_dotfiles() {
     # Handle VS Code extensions
     if [ -f "$SCRIPT_DIR/vscode/extensions.txt" ]; then
         echo "Installing VS Code extensions..."
+        cp "$SCRIPT_DIR/vscode/extensions.txt" "$dotfiles_vscode_dir/"
         while read -r extension; do
             if [[ ! -z "$extension" ]]; then  # Skip empty lines
                 code --install-extension "$extension"
             fi
-        done < "$SCRIPT_DIR/vscode/extensions.txt"
-        
-        # Copy extensions list to dotfiles
-        cp "$SCRIPT_DIR/vscode/extensions.txt" "$dotfiles_vscode_dir/"
+        done < "$dotfiles_vscode_dir/extensions.txt"
     else
         echo "Warning: extensions.txt not found"
     fi
