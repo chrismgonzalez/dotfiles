@@ -38,6 +38,7 @@ brews=(
     pinentry-mac
     bash-completion@2
     ssh-copy-id
+    uv
 )
 
 casks=(
@@ -529,33 +530,17 @@ function setup_completions() {
     # Array of completion setup commands
     local completion_cmds=(
         # AWS CLI
-        "complete -C '/usr/local/bin/aws_completer' aws"
+        "complete -C 'opt/homebrew/bin/aws_completer' aws"
         
         # kubectl
         "source <(kubectl completion zsh)"
         
-        # terraform
-        "complete -o nospace -C $(which terraform) terraform"
-        
-        # docker
-        "if [ -f /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion ]; then
-            source /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion
-        fi"
-        "if [ -f /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion ]; then
-            source /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion
-        fi"
-        
-        # pip
-        "eval \"$(pipx completion --zsh)\""
-        
-        # npm
-        "source <(npm completion)"
+        # uv
+        'eval "$(uv generate-shell-completion zsh)"'     
         
         # poetry
         "source <(poetry completions zsh)"
         
-        # pipenv
-        "eval \"$(pipenv --completion)\""
        
     )
 
@@ -607,12 +592,7 @@ function setup_completions() {
     # Install additional completion packages via Homebrew
     echo "Installing completion packages..."
     brew install \
-        bash-completion@2 \
         zsh-completions \
-        docker-completion \
-        docker-compose-completion \
-        pip-completion \
-        terraform-completion
 
     # Download additional completions
     echo "Downloading additional completions..."
@@ -709,9 +689,9 @@ function main() {
         install_packages
     fi
 
-    if confirm "Set up shell completions? [y/N]"; then
-        setup_completions
-    fi
+    # if confirm "Set up shell completions? [y/N]"; then
+    #     setup_completions
+    # fi
 
     # Shell change
     if [ "$SHELL" != "$(which zsh)" ]; then

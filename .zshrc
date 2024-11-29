@@ -107,3 +107,5 @@ done
 
 # Python configuration
 export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+
