@@ -30,19 +30,18 @@ create_symlinks() {
 }
 
 common_directories=(
-  "$XDG_CONFIG_HOME/alacritty"
-  "$XDG_CONFIG_HOME/alacritty/themes"
   "$XDG_CONFIG_HOME/k9s"
+  "$XDG_CONFIG_HOME/kitty"
 )
 
 common_items=(
-  "alacritty.toml:$XDG_CONFIG_HOME/alacritty/alacritty.toml"
   "k9s/skin.yml:$XDG_CONFIG_HOME/k9s/skin.yml"
   ".inputrc:$HOME/.inputrc"
   ".tmux.conf:$HOME/.tmux.conf"
   "nvim:$XDG_CONFIG_HOME/nvim"
   ".zprofile:$HOME/.zprofile"
   ".zshrc:$HOME/.zshrc"
+  kitty.conf:$XDG_CONFIG_HOME/kitty/kitty.conf
 )
 
 create_directories "${common_directories[@]}"
@@ -79,13 +78,14 @@ fi
 brew install --cask font-iosevka-nerd-font
 brew install --cask font-ubuntu-mono-nerd-font
 brew install --cask font-hack-nerd-font
+brew install --cask font-meslo-lg-nerd-font
 
 # For ubuntu:
 # mkdir -p $HOME/.local/share/fonts
 # cp $PWD/fonts/UbuntuMono* $HOME/.local/share/fonts
 
 # brew packages Mac
-brew install --cask alacritty
+brew install --cask kitty
 
 install_brew_packages() {
   local packages=("$@")
@@ -95,23 +95,23 @@ install_brew_packages() {
 }
 
 brew_packages=(
-"go"
-"neovim" 
-"lazygit" 
-"tmux" 
-"uv"
-"amethyst" 
-"fzf" 
-"fd" 
-"eza" 
-"hugo" 
-"bash-completion@2"
-"newsboat" 
-"kubectl" 
-"starship" 
-"gh" 
-"derailed/k9s/k9s" 
-"wget"
+  "go"
+  "neovim"
+  "lazygit"
+  "tmux"
+  "uv"
+  "amethyst"
+  "fzf"
+  "fd"
+  "eza"
+  "hugo"
+  "bash-completion@2"
+  "newsboat"
+  "kubectl"
+  "starship"
+  "gh"
+  "derailed/k9s/k9s"
+  "wget"
 )
 
 install_brew_packages "${brew_packages[@]}"
