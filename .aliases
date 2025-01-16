@@ -26,6 +26,7 @@ alias evo='cd ~/code/caylent/builders/evo'
 alias fe='cd ~/code/caylent/builders/evo/evo-frontend/'
 alias docs='cd ~/Documents'
 alias dot='cd ~/code/dotfiles'
+alias ru='cd ~/code/sandbox/rust/'
 
 # System configuration
 alias zshrc='nvim ~/.zshrc'

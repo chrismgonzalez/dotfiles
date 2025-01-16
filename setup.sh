@@ -38,6 +38,8 @@ common_directories=(
   "$XDG_CONFIG_HOME/kitty"
   "$XDG_CONFIG_HOME/zk"
   "$XDG_CONFIG_HOME/zk/templates"
+  "$HOME/.aws"
+  "$HOME/.kube"
   "$GO_PATH"
   "$GO_PATH/src"
   "$GO_PATH/pkg"
@@ -355,9 +357,6 @@ function install_zsh() {
 # Function to install all packages
 function install_packages() {
   echo "Installing packages..."
-
-  # Install important software first
-  brew tap homebrew/cask-versions
 
   # Install brew packages
   install 'brew_install_or_upgrade' "${brews[@]}"
