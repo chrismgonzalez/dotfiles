@@ -1,5 +1,5 @@
 {
-  "workbench.colorTheme": "One Monokai",
+  "workbench.colorTheme": "Cobalt2",
   "redhat.telemetry.enabled": false,
   "editor.fontLigatures": true,
   "editor.fontFamily": "Jetbrains Mono, Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
@@ -104,5 +104,10 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
+  },
+"workbench.activityBar.location": "top",
+"workbench.sideBar.location": "right",
+"[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
 }
 }

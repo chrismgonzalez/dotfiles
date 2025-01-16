@@ -8,10 +8,11 @@ alias mkdir='mkdir -pv'
 alias wget='wget -c'
 
 # ls improvements
+
+alias la='exa -laghm@ --all --icons --git --color=always'
 alias ls='ls --color=auto -ACF'
 alias ll='ls -la'
 alias l='ls -l'
-alias la='ls -A'
 alias lla='ls -la'
 
 # Search improvements
@@ -21,11 +22,13 @@ alias grep='grep --color=auto'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias dev='cd ~/Development'
+alias evo='cd ~/code/caylent/builders/evo'
+alias fe='cd ~/code/caylent/builders/evo/evo-frontend/'
 alias docs='cd ~/Documents'
-alias dot='cd /dotfiles'
+alias dot='cd ~/code/dotfiles'
 
 # System configuration
-alias zshrc='vim ~/.zshrc'
+alias zshrc='nvim ~/.zshrc'
 alias reload='source ~/.zshrc'
 
 ###############################
