@@ -9,7 +9,7 @@ alias wget='wget -c'
 
 # ls improvements
 
-alias la='exa -laghm@ --all --icons --git --color=always'
+alias la='eza -laghm@ --all --icons --git --color=always'
 alias ls='ls --color=auto -ACF'
 alias ll='ls -la'
 alias l='ls -l'

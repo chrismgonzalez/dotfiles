@@ -90,8 +90,8 @@ export NVM_DIR="$HOME/.nvm"
 # Source Additional Files
 ###############################
 # Source aliases first (so they're available in other sourced files)
-if [ -f "$DOTFILESDIR/.aliases" ]; then
-    source "$DOTFILESDIR/.aliases"
+if [ -f "$DOTFILES/.aliases" ]; then
+    source "$DOTFILES/.aliases"
 else
     echo "Warning: .aliases file not found in $DOTFILES"
 fi
