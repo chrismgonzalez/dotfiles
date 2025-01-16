@@ -63,6 +63,7 @@ brews=(
   awscli
   cfn-lint
   derailed/k9s/k9s
+  rust-analyzer
   tmux
   tree
   ack
