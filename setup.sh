@@ -35,6 +35,7 @@ common_directories=(
 )
 
 common_items=(
+  "starship.toml:$XDG_CONFIG_HOME/starship.toml"
   "k9s/skin.yml:$XDG_CONFIG_HOME/k9s/skin.yml"
   ".inputrc:$HOME/.inputrc"
   ".tmux.conf:$HOME/.tmux.conf"
