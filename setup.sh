@@ -71,22 +71,50 @@ fi
 # Packages
 
 # install brew
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # get the font out of the way first, it's the most annoying
 
 # install for Mac using brew.
-# brew install --cask font-iosevka-nerd-font
-# brew install --cask font-ubuntu-mono-nerd-font
-# brew install --cask font-hack-nerd-font
+brew install --cask font-iosevka-nerd-font
+brew install --cask font-ubuntu-mono-nerd-font
+brew install --cask font-hack-nerd-font
 
 # For ubuntu:
 # mkdir -p $HOME/.local/share/fonts
 # cp $PWD/fonts/UbuntuMono* $HOME/.local/share/fonts
 
 # brew packages Mac
-# brew install --cask alacritty
-# amethyst fzf fd nvim exa hugo bash-completion@2 newsboat kubectl starship
+brew install --cask alacritty
+
+install_brew_packages() {
+  local packages=("$@")
+  for package in "${packages[@]}"; do
+    brew install "$package"
+  done
+}
+
+brew_packages=(
+"go"
+"neovim" 
+"lazygit" 
+"tmux" 
+"uv"
+"amethyst" 
+"fzf" 
+"fd" 
+"eza" 
+"hugo" 
+"bash-completion@2"
+"newsboat" 
+"kubectl" 
+"starship" 
+"gh" 
+"derailed/k9s/k9s" 
+"wget"
+)
+
+install_brew_packages "${brew_packages[@]}"
 
 # ubuntu packages apt
 # sudo apt install ripgrep gh
