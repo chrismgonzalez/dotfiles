@@ -6,6 +6,7 @@ XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 DRY_RUN=false
 GO_PATH="$HOME/go"
 PYTHON_VERSION="3.11"
+ZETTELKASTEN=$HOME/zettelkasten
 
 create_directories() {
   local directories=("$@")
@@ -44,6 +45,7 @@ common_directories=(
   "$GO_PATH/src"
   "$GO_PATH/pkg"
   "$GO_PATH/bin"
+  "$ZETTELKASTEN"
 )
 
 common_items=(

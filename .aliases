@@ -9,7 +9,7 @@ alias wget='wget -c'
 
 # ls improvements
 
-alias la='eza -laghm@ --all --icons --git --color=always'
+alias la='eza -la --all --color=always'
 alias ls='ls --color=auto -ACF'
 alias ll='ls -la'
 alias l='ls -l'
@@ -36,6 +36,10 @@ alias reload='source ~/.zshrc'
 # Development Tools
 ###############################
 # Git
+
+alias gp='git pull'
+alias gs='git status'
+alias lg='lazygit'
 alias gs='git status'
 alias gc='git commit'
 alias gcam='git commit -am'
@@ -45,6 +49,11 @@ alias gd='git diff'
 alias gco='git checkout'
 alias gb='git branch'
 alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+# Zettelkasten
+
+alias in="cd \$ZETTELKASTEN/0\ Inbox/"
+alias cdzk="cd \$ZETTELKASTEN"
 
 # Docker
 alias d='docker'
