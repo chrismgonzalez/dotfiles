@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Zettelkasten
+# This one's a little tricky on MacOS because the path contains a space. It needs to be stored as an array,
+# and when called it needs to be quoted.
+export ZETTELKASTEN=("/Users/chris/Library/Mobile Documents/com~apple~CloudDocs/Documents/Zettelkasten")
+ln -sf "$ZETTELKASTEN" $HOME/Zettelkasten
+#
+# iCloud
+export ICLOUD=("/Users/chris/Library/Mobile Documents/com~apple~CloudDocs")
+ln -sf "$ICLOUD" $HOME/icloud

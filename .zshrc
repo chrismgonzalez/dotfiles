@@ -21,8 +21,8 @@ export VISUAL='nvim'
 export DOTFILES=$HOME/code/dotfiles
 export CODEDIR=$HOME/code
 export ICLOUD=$HOME/icloud
-export ZETTELKASTEN=$HOME/zettelkasten
-export SCRIPTS=$DOTFILES/scripts
+export ZETTELKASTEN=$HOME/Zettelkasten
+export SCRIPTS=$DOTFILES/bin
 
 # Go configuration
 export GODEBUG=asyncpreemptoff=1

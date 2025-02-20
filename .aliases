@@ -54,6 +54,8 @@ alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset
 
 alias in="cd \$ZETTELKASTEN/0\ Inbox/"
 alias cdzk="cd \$ZETTELKASTEN"
+alias zet="sh ~/code/dotfiles/bin/zet"
+alias zksync="sh ~/code/dotfiles/bin/zk_sync"
 
 # Docker
 alias d='docker'
