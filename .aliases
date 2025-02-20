@@ -35,11 +35,11 @@ alias reload='source ~/.zshrc'
 ###############################
 # Development Tools
 ###############################
-# Git
 
+# Git
 alias gp='git pull'
 alias gs='git status'
-alias lg='lazygit'
+alias lg='LazyGit'
 alias gs='git status'
 alias gc='git commit'
 alias gcam='git commit -am'
@@ -60,6 +60,7 @@ alias d='docker'
 alias dc='docker-compose'
 alias dps='docker ps'
 alias di='docker images'
+alias dsp='docker system prune -f'
 
 # Kubernetes
 alias k='kubectl'

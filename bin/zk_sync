@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+ZK_PATH="/Users/chris/zettelkasten"
+cd "$ZK_PATH"
+
+CHANGES_EXIST="$(git status --porcelain | wc -l)"
+
+if I "$CHANGES_EXIST" -eq 0 ]; then
+exit 0
+fi
+
+git commit -q -m "Last Sync: $(date +"©Y-%m-°d %H:%M:%S" )"
+git pull
+git add
+git push -q
