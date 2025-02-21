@@ -80,7 +80,7 @@ complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.2.0/terraform
 # Tool Configuration
 ###############################
 # AWS Profile Switcher
-source "$SCRIPTS/awsp"
+# source "$SCRIPTS/awsp"
 
 # NVM configuration
 
