@@ -1,4 +1,4 @@
-awsp() {
+function awsp {
   if [ -z "$1" ]; then
     echo "Usage: awsp <profile_name>"
     echo "Available profiles:"
