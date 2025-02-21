@@ -1,21 +1,19 @@
 #!/bin/bash
 
 awsp() {
-    if [ -z "$1" ]; then
-        echo "Usage: awsp <profile_name>"
-        echo "Available profiles:"
-        grep '\[profile' ~/.aws/config | sed 's/\[profile \(.*\)\]/\1/'
-        return 1
-    fi
-    
-    # Check if profile exists
-    if ! grep -q "\[profile $1\]" ~/.aws/config; then
-        echo "Error: Profile '$1' not found in ~/.aws/config"
-        return 1
-    fi
-    
-    export AWS_PROFILE="$1"
-    echo "AWS Profile set to: $AWS_PROFILE"
+  if [ -z "$1" ]; then
+    echo "Usage: awsp <profile_name>"
+    echo "Available profiles:"
+    grep '\[profile' ~/.aws/config | sed 's/\[profile \(.*\)\]/\1/'
+    return 1
+  fi
+
+  # Check if profile exists
+  if ! grep -q "\[profile $1\]" ~/.aws/config; then
+    echo "Error: Profile '$1' not found in ~/.aws/config"
+    return 1
+  fi
+
+  export AWS_PROFILE="$1"
+  echo "AWS Profile set to: $AWS_PROFILE"
 }
-
-
