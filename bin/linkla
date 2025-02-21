@@ -1,0 +1,14 @@
+!#/bin/bash
+
+ # Create LaunchAgents directory if it doesn't exist
+ mkdir -p ~/Library/LaunchAgents
+
+ # Symlink LaunchAgents
+ for file in LaunchAgents/*; do
+     if [ -f "$file" ]; then
+         ln -sf "$PWD/$file" ~/Library/LaunchAgents/
+     fi
+ done
+
+ # Load the LaunchAgent
+ launchctl load ~/Library/LaunchAgents/com.chris.zksync.plist 2>/dev/null || true

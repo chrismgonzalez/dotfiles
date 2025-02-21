@@ -23,7 +23,10 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias dev='cd ~/Development'
 alias evo='cd ~/code/caylent/builders/evo'
-alias fe='cd ~/code/caylent/builders/evo/evo-frontend/'
+alias evofe='cd ~/code/caylent/builders/evo/evo-frontend/'
+alias evobe='cd ~/code/caylent/builders/evo/evo-librarian-steve/'
+alias evodemos='cd ~/code/caylent/builders/evo/evo-demos/'
+alias evord='cd ~/code/caylent/builders/evo/evo-r-and-d/'
 alias docs='cd ~/Documents'
 alias dot='cd ~/code/dotfiles'
 alias ru='cd ~/code/sandbox/rust/'
@@ -54,8 +57,8 @@ alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset
 
 alias in="cd \$ZETTELKASTEN/0\ Inbox/"
 alias cdzk="cd \$ZETTELKASTEN"
-alias zet="sh ~/code/dotfiles/bin/zet"
-alias zksync="sh ~/code/dotfiles/bin/zk_sync"
+# alias zet="sh ~/code/dotfiles/bin/zet"
+# alias zksync="sh ~/code/dotfiles/bin/zk_sync"
 
 # Docker
 alias d='docker'
@@ -99,4 +102,4 @@ alias node='nodejs'
 
 alias sso='aws sso login --profile $1'
 alias sts='aws sts get-caller-identity'
-alias awsp='. ~/code/dotfiles/bin/awsp'
+# alias awsp='. ~/code/dotfiles/bin/awsp'

@@ -34,6 +34,18 @@ create_symlinks() {
   done
 }
 
+function setup_local_bin() {
+  echo "Setting up ~/.local/bin files..."
+  mkdir -p "$HOME/.local/bin"
+  for file in "$DOTFILES_DIR/bin/"*; do
+    if [ -f "$file" ]; then
+      local basename=$(basename "$file")
+      ln -sf "$file" "$HOME/.local/bin/$basename"
+      echo "Linked $basename to ~/.local/bin/"
+    fi
+  done
+}
+
 common_directories=(
   "$XDG_CONFIG_HOME/k9s"
   "$XDG_CONFIG_HOME/kitty"
@@ -58,10 +70,7 @@ common_items=(
   ".zprofile:$HOME/.zprofile"
   ".zshrc:$HOME/.zshrc"
   "kitty.conf:$XDG_CONFIG_HOME/kitty/kitty.conf"
-  "zk/config.toml:$XDG_CONFIG_HOME/zk/config.toml"
-  "zk/templates/:$XDG_CONFIG_HOME/zk/templates/"
   "LaunchAgents/com.chris.zksync.plist:$HOME/Library/LaunchAgents/com.chris.zksync.plist"
-  "bin:$HOME/bin"
 )
 
 brews=(
@@ -100,11 +109,9 @@ brews=(
   starship
   gh
   poetry
-  zk
 )
 
 casks=(
-  kitty
   docker
   rectangle
 )
@@ -517,6 +524,10 @@ function main() {
     if [[ "$OSTYPE" == darwin* ]]; then
       create_symlinks "${common_items[@]}"
     fi
+  fi
+
+  if confirm "Set up local bin files? [y/N]"; then
+    setup_local_bin
   fi
 
   if confirm "Set up Homebrew? [y/N]"; then

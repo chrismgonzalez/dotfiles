@@ -22,7 +22,6 @@ export DOTFILES=$HOME/code/dotfiles
 export CODEDIR=$HOME/code
 export ICLOUD=$HOME/icloud
 export ZETTELKASTEN=$HOME/Zettelkasten
-export SCRIPTS=$DOTFILES/bin
 
 # Go configuration
 export GODEBUG=asyncpreemptoff=1
@@ -36,7 +35,6 @@ export DOCKER_DEFAULT_PLATFORM=linux/arm64
 path=(
     $HOME/.local/bin                          # pipx binaries, uv python installs
     /opt/homebrew/opt/postgresql@13/bin       # PostgreSQL
-    $SCRIPTS
     ${GOPATH}/bin
     ${GOROOT}/bin
     $path
