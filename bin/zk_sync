@@ -50,15 +50,27 @@ if ! /usr/bin/git commit -m "Automated commit at: $(date)"; then
     exit 1
 fi
 
-log "Pulling latest changes"
-if ! /usr/bin/git pull; then
-    log "ERROR: Failed to pull changes"
+log "Pulling latest changes from private remote"
+if ! /usr/bin/git pull private main; then
+    log "ERROR: Failed to pull changes from private remote"
     exit 1
 fi
 
-log "Pushing changes"
-if ! /usr/bin/git push; then
-    log "ERROR: Failed to push changes"
+log "Pulling latest changes from public remote"
+if ! /usr/bin/git pull public main; then
+    log "ERROR: Failed to pull changes from public remote"
+    exit 1
+fi
+
+log "Pushing changes to private remote"
+if ! /usr/bin/git push private main; then
+    log "ERROR: Failed to push changes to private remote"
+    exit 1
+fi
+
+log "Pushing changes to public remote"
+if ! /usr/bin/git push public main; then
+    log "ERROR: Failed to push changes to public remote"
     exit 1
 fi
 
