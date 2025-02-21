@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Log startup to separate file for monitoring cron execution
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Cron job started" >> /Users/chris/Desktop/log/cron_monitor.log
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Environment: PATH=$PATH" >> /Users/chris/Desktop/log/cron_monitor.log
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Running as user: $(whoami)" >> /Users/chris/Desktop/log/cron_monitor.log
+# Required parameters:
+# @raycast.schemaVersion 1
+# @raycast.title Zettelkasten Sync
+# @raycast.mode compact
+# @raycast.packageName Zettelkasten
+
+# Optional parameters:
+# @raycast.icon 📝
+# @raycast.description Sync Zettelkasten notes with git repository
 
 # Set up minimal git environment
 export PATH="/usr/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
