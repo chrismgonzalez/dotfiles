@@ -98,5 +98,7 @@ alias node='nodejs'
 # AWS CLI
 
 alias sso='aws sso login --profile $1'
-alias awsp='export AWS_PROFILE=$1'
+awsp() {
+    export AWS_PROFILE="$1"
+}
 alias sts='aws sts get-caller-identity'
