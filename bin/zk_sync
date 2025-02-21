@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Source profile to ensure git and other commands work
+[ -f "$HOME/.zshrc" ] && source "$HOME/.zshrc"
+
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
