@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-ZK_PATH="/Users/chris/zettelkasten"
-cd "$ZK_PATH"
+ZK_PATH="/Users/chris/Zettelkasten"
+cd "$ZK_PATH" || exit
 
 CHANGES_EXIST="$(git status --porcelain | wc -l)"
 
