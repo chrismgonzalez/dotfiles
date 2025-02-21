@@ -1,7 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env zsh
 
-# Source profile to ensure git and other commands work
-[ -f "$HOME/.zshrc" ] && source "$HOME/.zshrc"
+# Set up minimal git environment
+export PATH="/usr/bin:$PATH"
+export GIT_AUTHOR_NAME="Chris Gonzalez"
+export GIT_AUTHOR_EMAIL="chris.gonzalez@caylent.com"
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
