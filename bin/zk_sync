@@ -2,9 +2,11 @@
 
 # Log startup to separate file for monitoring cron execution
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Cron job started" >> /Users/chris/Desktop/log/cron_monitor.log
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Environment: PATH=$PATH" >> /Users/chris/Desktop/log/cron_monitor.log
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Running as user: $(whoami)" >> /Users/chris/Desktop/log/cron_monitor.log
 
 # Set up minimal git environment
-export PATH="/usr/bin:$PATH"
+export PATH="/usr/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
 export GIT_AUTHOR_NAME="Chris Gonzalez"
 export GIT_AUTHOR_EMAIL="chris.gonzalez@caylent.com"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
@@ -31,26 +33,26 @@ if [ "$CHANGES_EXIST" -eq 0 ]; then
     exit 0
 fi
 
-log "Adding changes to git"
-if ! git add .; then
+log "Adding changes to git using $(which git)"
+if ! /usr/bin/git add .; then
     log "ERROR: Failed to add changes"
     exit 1
 fi
 
 log "Committing changes"
-if ! git commit -m "Automated commit at: $(date)"; then
+if ! /usr/bin/git commit -m "Automated commit at: $(date)"; then
     log "ERROR: Failed to commit changes"
     exit 1
 fi
 
 log "Pulling latest changes"
-if ! git pull; then
+if ! /usr/bin/git pull; then
     log "ERROR: Failed to pull changes"
     exit 1
 fi
 
 log "Pushing changes"
-if ! git push; then
+if ! /usr/bin/git push; then
     log "ERROR: Failed to push changes"
     exit 1
 fi
