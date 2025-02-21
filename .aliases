@@ -99,5 +99,5 @@ alias node='nodejs'
 
 alias sso='aws sso login --profile $1'
 alias sts='aws sts get-caller-identity'
-alias awsp='sh ~/code/dotfiles/bin/awsp'
+alias awsp='. ~/code/dotfiles/bin/awsp'
 alias .alia='alias | grep -i'
