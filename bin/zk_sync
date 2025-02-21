@@ -1,15 +1,48 @@
 #!/usr/bin/env sh
 
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
 ZK_PATH="/Users/chris/Zettelkasten"
-cd "$ZK_PATH" || exit
+log "Starting Zettelkasten sync"
+log "Changing to directory: $ZK_PATH"
 
-CHANGES_EXIST="$(git status --porcelain | wc -l)"
-
-if [ "$CHANGES_EXIST" -eq 0 ]; then
-  exit 0
+if ! cd "$ZK_PATH"; then
+    log "ERROR: Failed to change to directory $ZK_PATH"
+    exit 1
 fi
 
-git add .
-git commit -q -m "Automated commit at: $(date)"
-git pull
-git push -q
+CHANGES_EXIST="$(git status --porcelain | wc -l)"
+log "Found $CHANGES_EXIST changed files"
+
+if [ "$CHANGES_EXIST" -eq 0 ]; then
+    log "No changes to sync"
+    exit 0
+fi
+
+log "Adding changes to git"
+if ! git add .; then
+    log "ERROR: Failed to add changes"
+    exit 1
+fi
+
+log "Committing changes"
+if ! git commit -m "Automated commit at: $(date)"; then
+    log "ERROR: Failed to commit changes"
+    exit 1
+fi
+
+log "Pulling latest changes"
+if ! git pull; then
+    log "ERROR: Failed to pull changes"
+    exit 1
+fi
+
+log "Pushing changes"
+if ! git push; then
+    log "ERROR: Failed to push changes"
+    exit 1
+fi
+
+log "Sync completed successfully"
