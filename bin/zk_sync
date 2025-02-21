@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
 # Log startup to separate file for monitoring cron execution
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Cron job started" >> /Users/chris/Desktop/log/cron_monitor.log
