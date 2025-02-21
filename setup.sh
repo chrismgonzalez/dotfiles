@@ -46,6 +46,7 @@ common_directories=(
   "$GO_PATH/pkg"
   "$GO_PATH/bin"
   "$ZETTELKASTEN"
+  "$HOME/Library/LaunchAgents"
 )
 
 common_items=(
@@ -59,6 +60,7 @@ common_items=(
   "kitty.conf:$XDG_CONFIG_HOME/kitty/kitty.conf"
   "zk/config.toml:$XDG_CONFIG_HOME/zk/config.toml"
   "zk/templates/:$XDG_CONFIG_HOME/zk/templates/"
+  "LaunchAgents/com.chris.zksync.plist:$HOME/Library/LaunchAgents/com.chris.zksync.plist"
 )
 
 brews=(
