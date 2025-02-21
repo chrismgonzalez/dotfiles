@@ -61,6 +61,7 @@ common_items=(
   "zk/config.toml:$XDG_CONFIG_HOME/zk/config.toml"
   "zk/templates/:$XDG_CONFIG_HOME/zk/templates/"
   "LaunchAgents/com.chris.zksync.plist:$HOME/Library/LaunchAgents/com.chris.zksync.plist"
+  "bin:$HOME/bin"
 )
 
 brews=(
