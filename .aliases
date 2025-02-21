@@ -98,7 +98,15 @@ alias node='nodejs'
 # AWS CLI
 
 alias sso='aws sso login --profile $1'
-awsp() {
+
+# Function to set AWS profile
+function awsp() {
+    if [ -z "$1" ]; then
+        echo "Please provide an AWS profile name"
+        return 1
+    fi
     export AWS_PROFILE="$1"
+    echo "AWS Profile set to: $AWS_PROFILE"
 }
+
 alias sts='aws sts get-caller-identity'
