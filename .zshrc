@@ -106,3 +106,8 @@ done
 # Python configuration
 export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
 
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/chris/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions

@@ -114,6 +114,7 @@ brews=(
 casks=(
   docker
   rectangle
+  ghostty
 )
 
 node_packages=(

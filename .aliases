@@ -80,7 +80,7 @@ alias ke='kubectl edit'
 alias kr='kubectl run'
 
 # Python
-alias python='python3'
+alias python='~/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/bin/python3'
 alias pip='pip3'
 alias pym='python3 manage.py'
 alias mkenv='python3 -m venv venv'
