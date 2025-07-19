@@ -1,5 +1,4 @@
 {
-  "workbench.colorTheme": "Cobalt2",
   "redhat.telemetry.enabled": false,
   "editor.fontLigatures": true,
   "editor.fontFamily": "Jetbrains Mono, Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
@@ -64,7 +63,6 @@
   "editor.inlineSuggest.showToolbar": "always",
   "remote.autoForwardPortsSource": "hybrid",
   "editor.detectIndentation": false,
-  "workbench.iconTheme": "material-icon-theme",
   "git.confirmSync": false,
   "editor.unicodeHighlight.invisibleCharacters": false,
   "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
@@ -105,9 +103,19 @@
     "markdown": false,
     "scminput": false
   },
-"workbench.activityBar.location": "top",
-"workbench.sideBar.location": "right",
-"[json]": {
+  "workbench.activityBar.location": "top",
+  "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-}
+  },
+  "editor.tabSize": 2,
+  "files.readonlyInclude": {
+    "  \"**/.cargo/registry/src/**/*.rs\": true,   \"**/.cargo/git/checkouts/**/*.rs\": true,   \"**/lib/rustlib/src/rust/library/**/*.rs\": true,": true
+  },
+  "workbench.colorTheme": "Vite Theme Night",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

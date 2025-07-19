@@ -30,6 +30,13 @@ return {
       },
     },
   },
+  {
+    "https://github.com/windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-autopairs").setup()
+    end,
+  },
   { "folke/neodev.nvim", enabled = false }, -- make sure to uninstall or disable neodev.nvim
   {
     "L3MON4D3/LuaSnip",
@@ -83,6 +90,25 @@ return {
             fallback()
           end
         end, { "i", "s" }),
+      })
+    end,
+  },
+  {
+    "https://github.com/stevearc/oil.nvim",
+    cmd = "Oil",
+    config = function()
+      local oil = require("oil")
+      oil.setup({
+        columns = {},
+        view_options = {
+          show_hidden = true,
+          is_always_hidden = function(name, _)
+            return name == ".."
+          end,
+        },
+        win_options = {
+          concealcursor = "nvic",
+        },
       })
     end,
   },

@@ -31,6 +31,14 @@ export GOROOT="$(brew --prefix golang)/libexec"
 # Docker configuration
 export DOCKER_DEFAULT_PLATFORM=linux/arm64
 
+# AWS CLI
+export AWS_CLI_AUTO_PROMPT=on-partial
+
+# Claude Code
+export CLAUDE_CODE_USE_BEDROCK=1
+export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-west-2
+
+
 # Path configuration
 path=(
     $HOME/.local/bin                          # pipx binaries, uv python installs
