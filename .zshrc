@@ -1,3 +1,5 @@
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
 eval "$(starship init zsh)"
 
 # Better history management
@@ -21,8 +23,7 @@ export VISUAL='nvim'
 export DOTFILES=$HOME/code/dotfiles
 export CODEDIR=$HOME/code
 export ICLOUD=$HOME/icloud
-export ZETTELKASTEN=$HOME/zettelkasten
-export SCRIPTS=$DOTFILES/scripts
+export ZETTELKASTEN=$HOME/Zettelkasten
 
 # Go configuration
 export GODEBUG=asyncpreemptoff=1
@@ -32,11 +33,18 @@ export GOROOT="$(brew --prefix golang)/libexec"
 # Docker configuration
 export DOCKER_DEFAULT_PLATFORM=linux/arm64
 
+# AWS CLI
+export AWS_CLI_AUTO_PROMPT=on-partial
+
+# Claude Code
+export CLAUDE_CODE_USE_BEDROCK=1
+export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-west-2
+
+
 # Path configuration
 path=(
     $HOME/.local/bin                          # pipx binaries, uv python installs
     /opt/homebrew/opt/postgresql@13/bin       # PostgreSQL
-    $SCRIPTS
     ${GOPATH}/bin
     ${GOROOT}/bin
     $path
@@ -79,6 +87,9 @@ complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.2.0/terraform
 ###############################
 # Tool Configuration
 ###############################
+# AWS Profile Switcher
+# source "$SCRIPTS/awsp"
+
 # NVM configuration
 
 export NVM_DIR="$HOME/.nvm"
@@ -105,3 +116,18 @@ done
 # Python configuration
 export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
 
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/chris/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+
+# bun completions
+[ -s "/Users/chris/.bun/_bun" ] && source "/Users/chris/.bun/_bun"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+export DISABLE_AUTOUPDATER=1
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"

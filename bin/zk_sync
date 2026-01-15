@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Required parameters:
+# @raycast.schemaVersion 1
+# @raycast.title Zettelkasten Sync
+# @raycast.mode compact
+# @raycast.packageName Zettelkasten
+
+# Optional parameters:
+# @raycast.icon 📝
+# @raycast.description Sync Zettelkasten notes with git repository
+
+# Set up minimal git environment
+export PATH="/usr/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
+export GIT_AUTHOR_NAME="Chris Gonzalez"
+export GIT_AUTHOR_EMAIL="chris.gonzalez@caylent.com"
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+ZK_PATH="/Users/chris/Zettelkasten"
+log "Starting Zettelkasten sync"
+log "Changing to directory: $ZK_PATH"
+
+if ! cd "$ZK_PATH"; then
+    log "ERROR: Failed to change to directory $ZK_PATH"
+    exit 1
+fi
+
+CHANGES_EXIST="$(git status --porcelain | wc -l)"
+log "Found $CHANGES_EXIST changed files"
+
+if [ "$CHANGES_EXIST" -eq 0 ]; then
+    log "No changes to sync"
+    exit 0
+fi
+
+log "Adding changes to git using $(which git)"
+if ! /usr/bin/git add .; then
+    log "ERROR: Failed to add changes"
+    exit 1
+fi
+
+log "Committing changes"
+if ! /usr/bin/git commit -m "Automated commit at: $(date)"; then
+    log "ERROR: Failed to commit changes"
+    exit 1
+fi
+
+log "Pulling latest changes from private remote"
+if ! /usr/bin/git pull private main; then
+    log "ERROR: Failed to pull changes from private remote"
+    exit 1
+fi
+
+log "Pulling latest changes from public remote"
+if ! /usr/bin/git pull public main; then
+    log "ERROR: Failed to pull changes from public remote"
+    exit 1
+fi
+
+log "Pushing changes to private remote"
+if ! /usr/bin/git push private main; then
+    log "ERROR: Failed to push changes to private remote"
+    exit 1
+fi
+
+log "Pushing changes to public remote"
+if ! /usr/bin/git push public main; then
+    log "ERROR: Failed to push changes to public remote"
+    exit 1
+fi
+
+log "Sync completed successfully"

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.chris.zksync</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/chris/.local/bin/zk_sync</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>1800</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/Users/chris/Library/Logs/zksync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chris/Library/Logs/zksync.error.log</string>
+</dict>
+</plist>

@@ -1,32 +1,103 @@
 {
-  "workbench.colorTheme": "Cobalt2",
-  "redhat.telemetry.enabled": false,
-  "editor.fontLigatures": true,
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnType": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "amazonQ.shareContentWithAWS": false,
+  "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
+  "amazonQ.suppressPrompts": {
+    "amazonQSessionConfigurationMessage": true
+  },
+  "amazonQ.workspaceIndex": true,
+  "aws.codeWhisperer.includeSuggestionsWithCodeReferences": false,
+  "aws.codeWhisperer.shareCodeWhispererContentWithAWS": false,
+  "aws.resources.enabledResources": [
+    "AWS::DynamoDB::Table"
+  ],
+  "aws.suppressPrompts": {
+    "codeWhispererNewWelcomeMessage": true
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.accessibilitySupport": "off",
+  "editor.detectIndentation": false,
   "editor.fontFamily": "Jetbrains Mono, Victor Mono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
-  "editor.formatOnSave": true,
+  "editor.fontLigatures": true,
   "editor.formatOnPaste": true,
-  "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.showToolbar": "always",
+  "editor.minimap.size": "fill",
+  "editor.tabSize": 2,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "eslint.run": "onSave",
   "explorer.confirmDelete": false,
-  "terminal.external.osxExec": "Warp.app",
-  "terminal.integrated.fontFamily": "VictorMono Nerd Font",
-  "git.ignoreRebaseWarning": true,
+  "explorer.confirmDragAndDrop": false,
+  "files.associations": {
+    "*.tf": "terraform"
+  },
+  "files.autoSave": "afterDelay",
+  "files.readonlyInclude": {
+    "  \"**/.cargo/registry/src/**/*.rs\": true,   \"**/.cargo/git/checkouts/**/*.rs\": true,   \"**/lib/rustlib/src/rust/library/**/*.rs\": true,": true
+  },
+  "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "git.ignoreMissingGitWarning": true,
-  "githubPullRequests.createOnPublishBranch": "never",
-  "[python]": {
-    "editor.formatOnType": true,
-    "editor.defaultFormatter": "ms-python.black-formatter"
+  "git.ignoreRebaseWarning": true,
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": false,
+    "plaintext": false,
+    "scminput": false
   },
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "githubPullRequests.createOnPublishBranch": "never",
+  "githubPullRequests.fileListLayout": "flat",
+  "githubPullRequests.pullBranch": "never",
+  "go.toolsManagement.autoUpdate": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "python.defaultInterpreterPath": "/opt/homebrew/bin/python",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.venvFolders": [
+    "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.cache/virtualenvs"
+  ],
+  "python.venvPath": "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.venv",
+  "redhat.telemetry.enabled": false,
+  "remote.SSH.remotePlatform": {
+    "srv-prod-docker01": "linux"
+  },
+  "remote.autoForwardPortsSource": "hybrid",
+  "terminal.external.osxExec": "Warp.app",
+  "terminal.integrated.automationProfile.osx": {
+    "args": [
+      "ssh-add work-mac-air-sep24"
+    ]
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontFamily": "VictorMono Nerd Font",
+  "typescript.updateImportsOnFileMove.enabled": "always",
   "vs-kubernetes": {
+    "vs-kubernetes.minikube-show-information-expiration": "2023-08-11T13:02:03.627Z",
     "vscode-kubernetes.helm-path.mac": "/Users/chris/.vs-kubernetes/tools/helm/darwin-arm64/helm",
     "vscode-kubernetes.kubectl-path.mac": "/Users/chris/.vs-kubernetes/tools/kubectl/kubectl",
-    "vscode-kubernetes.minikube-path.mac": "/Users/chris/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
-    "vs-kubernetes.minikube-show-information-expiration": "2023-08-11T13:02:03.627Z"
+    "vscode-kubernetes.minikube-path.mac": "/Users/chris/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
   },
   "vscode-kubernetes.helm-path.mac": "/opt/homebrew/bin/helm",
   "vscode-kubernetes.kubectl-path.mac": "opt/homebrew/bin/kubectl",
   "window.zoomLevel": -1,
-  "editor.minimap.size": "fill",
+  "workbench.activityBar.location": "top",
+  "workbench.colorTheme": "Tomorrow Night Blue",
+  "workbench.editor.enablePreview": false,
   "yaml.customTags": [
     "!And",
     "!And sequence",
@@ -56,58 +127,7 @@
     "!Split",
     "!Split sequence"
   ],
-  "aws.codeWhisperer.shareCodeWhispererContentWithAWS": false,
-  "aws.codeWhisperer.includeSuggestionsWithCodeReferences": false,
-  "aws.suppressPrompts": {
-    "codeWhispererNewWelcomeMessage": true
-  },
-  "editor.inlineSuggest.showToolbar": "always",
-  "remote.autoForwardPortsSource": "hybrid",
-  "editor.detectIndentation": false,
-  "workbench.iconTheme": "material-icon-theme",
-  "git.confirmSync": false,
-  "editor.unicodeHighlight.invisibleCharacters": false,
-  "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
-  "amazonQ.shareContentWithAWS": false,
-  "python.venvFolders": [
-    "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.cache/virtualenvs"
-  ],
-  "python.venvPath": "/Users/chris/code/caylent/builders/evo/evo-backlog-automation/.venv",
-  "terminal.integrated.defaultProfile.osx": "zsh",
-  "python.terminal.activateEnvInCurrentTerminal": true,
-  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
-  "aws.resources.enabledResources": ["AWS::DynamoDB::Table"],
-  "githubPullRequests.fileListLayout": "flat",
-  "workbench.editor.enablePreview": false,
-  "go.toolsManagement.autoUpdate": true,
-  "amazonQ.workspaceIndex": true,
-  "terminal.integrated.automationProfile.osx": {
-    "args": ["ssh-add work-mac-air-sep24"]
-  },
-  "amazonQ.suppressPrompts": {
-    "amazonQSessionConfigurationMessage": true
-  },
-  "eslint.run": "onSave",
-  "remote.SSH.remotePlatform": {
-    "srv-prod-docker01": "linux"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "githubPullRequests.pullBranch": "never",
-  "diffEditor.ignoreTrimWhitespace": false,
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": false,
-    "markdown": false,
-    "scminput": false
-  },
-"workbench.activityBar.location": "top",
-"workbench.sideBar.location": "right",
-"[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-}
+  "terminal.integrated.env.osx": {
+    "Q_NEW_SESSION": "1"
+  }
 }
