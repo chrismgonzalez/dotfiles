@@ -1,0 +1,110 @@
+# Dotfiles Setup Configuration
+# Edit this file to customize your setup
+
+# Feature toggles
+features:
+  install_xcode: true
+  install_homebrew: true
+  install_zsh: true
+  install_node: true
+  install_python: true
+  install_rust: true
+  install_go: true
+  setup_symlinks: true
+  setup_local_bin: true
+
+# Package lists
+packages:
+  brews:
+    - wget
+    - gnupg
+    - awscli
+    - rust-analyzer
+    - tmux
+    - tree
+    - ack
+    - jq
+    - htop
+    - tldr
+    - coreutils
+    - pre-commit
+    - vim
+    - neovim
+    - go
+    - git-extras
+    - git-lfs
+    - gnu-sed
+    - kubectl
+    - pinentry-mac
+    - bash-completion@2
+    - ssh-copy-id
+    - uv
+    - lazygit
+    - fzf
+    - fd
+    - eza
+    - hugo
+    - newsboat
+    - starship
+    - gh
+    - yq
+    - oven-sh/bun/bun
+    - vite
+
+  casks:
+    - docker
+    - rectangle
+    - ghostty
+    - font-fira-code
+    - font-jetbrains-mono
+    - font-victor-mono
+    - font-victor-mono-nerd-font
+
+  zsh_plugins:
+    - zsh-syntax-highlighting
+    - zsh-autosuggestions
+    - zsh-completions
+
+  npm_global:
+    - typescript
+    - ts-node
+    - npm@latest
+
+# Symlinks to create
+# Format: source:target (source is relative to dotfiles_dir)
+symlinks:
+  - "starship.toml:$HOME/.config/starship.toml"
+  - ".inputrc:$HOME/.inputrc"
+  - ".tmux.conf:$HOME/.tmux.conf"
+  - "nvim:$HOME/.config/nvim"
+  - ".zprofile:$HOME/.zprofile"
+  - ".zshrc:$HOME/.zshrc"
+
+# Directories to create
+directories:
+  - "$HOME/.config/zk"
+  - "$HOME/.config/zk/templates"
+  - "$HOME/.aws"
+  - "$HOME/.kube"
+  - "$HOME/go"
+  - "$HOME/go/src"
+  - "$HOME/go/pkg"
+  - "$HOME/go/bin"
+  - "$HOME/zettelkasten"
+  - "$HOME/Library/LaunchAgents"
+
+# Environment
+environment:
+  dotfiles_dir: "$HOME/code/dotfiles"
+  xdg_config_home: "$HOME/.config"
+  go_path: "$HOME/go"
+  python_version: "3.12"
+  zettelkasten: "$HOME/zettelkasten"
+
+# Version pinning for language runtimes
+versions:
+  python: "3.12" # Installed via uv
+  node: "lts/*" # Installed via nvm (use "20.11.0" for specific version)
+  rust: "stable" # Installed via rustup (use "1.75.0" for specific version)
+  go: "latest" # Installed via brew or asdf (use "1.21.5" for specific version)
+  ruby: "3.3.0" # Installed via rbenv (optional)

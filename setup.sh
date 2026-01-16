@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# ============================================================================
+# DEPRECATION NOTICE
+# ============================================================================
+# This script has been refactored into a modular structure.
+# Please use setup-new.sh instead, which offers:
+#   - Modular library structure
+#   - Configuration via config.yaml
+#   - Multiple operation modes (--init, --update, --validate, --restore)
+#   - Dry-run support (--dry-run)
+#   - Verbose logging (--verbose)
+#   - Backup/restore functionality
+#
+# See MIGRATION.md for details on migrating to the new script.
+#
+# This script will be moved to deprecated/ in a future update.
+# ============================================================================
+
 # Global variables
 DOTFILES_DIR="$HOME/code/dotfiles"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"

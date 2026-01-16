@@ -1,6 +1,5 @@
 # Kiro CLI pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
-eval "$(starship init zsh)"
 
 # Better history management
 HISTSIZE=10000
@@ -40,17 +39,17 @@ export AWS_CLI_AUTO_PROMPT=on-partial
 export CLAUDE_CODE_USE_BEDROCK=1
 export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-west-2
 
-
 # Path configuration
 path=(
+    /opt/homebrew/opt/python@3.12/bin         # Python 3.12
     $HOME/.local/bin                          # pipx binaries, uv python installs
     /opt/homebrew/opt/postgresql@13/bin       # PostgreSQL
     ${GOPATH}/bin
     ${GOROOT}/bin
+    /opt/homebrew/bin
     $path
 )
 export PATH
-
 
 # Plugin configuration
 plugins=(
@@ -113,9 +112,6 @@ for config_file in ~/.{bashrc}; do
 done
 
 
-# Python configuration
-export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
-
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(/Users/chris/.docker/completions $fpath)
 autoload -Uz compinit
@@ -128,6 +124,6 @@ compinit
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 export DISABLE_AUTOUPDATER=1
-
+eval "$(starship init zsh)"
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
