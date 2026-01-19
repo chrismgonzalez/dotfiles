@@ -50,20 +50,17 @@ packages:
     - yq
     - oven-sh/bun/bun
     - vite
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+    - zsh-completions
 
   casks:
-    - docker
     - rectangle
     - ghostty
     - font-fira-code
     - font-jetbrains-mono
     - font-victor-mono
     - font-victor-mono-nerd-font
-
-  zsh_plugins:
-    - zsh-syntax-highlighting
-    - zsh-autosuggestions
-    - zsh-completions
 
   npm_global:
     - typescript
