@@ -1,6 +1,7 @@
 # Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
-eval "$(starship init zsh)"
+# [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
+typeset -U path
 
 # Better history management
 HISTSIZE=10000
@@ -30,6 +31,24 @@ export GODEBUG=asyncpreemptoff=1
 export GOPATH="$HOME/go"
 export GOROOT="$(brew --prefix golang)/libexec"
 
+# fzf parameters used in all widgets - configure layout and wrapped the preview results (useful in large command rendering)
+export FZF_DEFAULT_OPTS="--height 100% --layout reverse --preview-window=wrap"
+
+# CTRL + R: put the selected history command in the preview window - "{}" will be replaced by item selected in fzf execution runtime
+export FZF_CTRL_R_OPTS="--preview 'echo {}'"
+
+# ALT + C: set "fd-find" as directory search engine instead of "find" and exclude "venv|virtualenv|.git" of the results during searching
+export FZF_ALT_C_COMMAND="fd --type directory --exclude venv --exclude virtualenv --exclude .git"
+
+# ALT + C: put the tree command output based on item selected
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+
+# CTRL + T: set "fd-find" as search engine instead of "find" and exclude "venv|virtualenv|.git" for the results
+export FZF_CTRL_T_COMMAND="fd --exclude venv --exclude virtualenv --exclude .git"
+
+# CTRL + T: put the file content if item select is a file, or put tree command output if item selected is directory
+export FZF_CTRL_T_OPTS="--preview '[ -d {} ] && tree -C {} || bat --color=always --style=numbers {}'"
+
 # Docker configuration
 export DOCKER_DEFAULT_PLATFORM=linux/arm64
 
@@ -40,17 +59,15 @@ export AWS_CLI_AUTO_PROMPT=on-partial
 export CLAUDE_CODE_USE_BEDROCK=1
 export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-west-2
 
-
 # Path configuration
 path=(
     $HOME/.local/bin                          # pipx binaries, uv python installs
-    /opt/homebrew/opt/postgresql@13/bin       # PostgreSQL
     ${GOPATH}/bin
     ${GOROOT}/bin
+    /opt/homebrew/bin
     $path
 )
 export PATH
-
 
 # Plugin configuration
 plugins=(
@@ -68,6 +85,11 @@ plugins=(
 ###############################
 # Completion Settings
 ###############################
+
+# Add zsh-completions to fpath
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
 
 # Initialize completion system
 autoload -Uz compinit && compinit
@@ -87,6 +109,10 @@ complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.2.0/terraform
 ###############################
 # Tool Configuration
 ###############################
+# Zsh plugins
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # AWS Profile Switcher
 # source "$SCRIPTS/awsp"
 
@@ -113,9 +139,6 @@ for config_file in ~/.{bashrc}; do
 done
 
 
-# Python configuration
-export PATH="/opt/homebrew/opt/python@3.12/bin:$PATH"
-
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(/Users/chris/.docker/completions $fpath)
 autoload -Uz compinit
@@ -125,9 +148,11 @@ compinit
 # bun completions
 [ -s "/Users/chris/.bun/_bun" ] && source "/Users/chris/.bun/_bun"
 
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+# [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 export DISABLE_AUTOUPDATER=1
+eval "$(fzf --zsh)"
+eval "$(starship init zsh)"
 
 # Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+# [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"

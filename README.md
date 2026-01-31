@@ -1,13 +1,113 @@
 # Dotfiles and set up scripts (use at your own risk)
 
-## Features:
-* TODO
+## Features
+
+* Modular setup script with configuration file
+* Automated macOS development environment setup
+* Homebrew package management
+* Shell configuration (Zsh with Oh My Zsh)
+* Python and Node.js environment setup
+* Dotfile symlink management
+* Backup and restore functionality
+* Dry-run mode for safe testing
+
 ## Contents
 
-- `installgo.sh` - checks the machine characteristics and installs the proper Go version based on CPU architectures
-- `create-macos-boot-iso.sh` - used to create a bootable .iso file to use when creating macOS virtual machines in virtual box
-- `installs.sh` - stripped down version of `setup.sh` that focuses on installing essential apps and settings for a new dev machine
-- `setup.sh` facilitates the scalable and proactive deliverables of running all the scripts and `apt upgrade`
+### Main Setup Scripts
+
+- **`setup-new.sh`** - Modern modular setup script (recommended)
+  - Multiple operation modes: `--init`, `--update`, `--validate`, `--restore`
+  - Configuration via `config.yaml`
+  - Dry-run support with `--dry-run`
+  - Verbose logging with `--verbose`
+  - Automatic backups with restore capability
+  
+- **`setup.sh`** - Legacy monolithic setup script (deprecated, see MIGRATION.md)
+
+- **`config.yaml`** - Configuration file for setup-new.sh
+  - Feature toggles
+  - Package lists (brews, casks, fonts)
+  - Custom symlinks and directories
+  - Environment variables
+
+### Library Modules (`lib/`)
+
+- `utils.sh` - Logging, helpers, confirmation prompts
+- `validate.sh` - Configuration validation
+- `backup.sh` - Backup/restore with JSON manifest
+- `packages.sh` - Package installation (Homebrew, Xcode, Zsh, Python, Node)
+- `symlinks.sh` - Symlink and directory management
+
+### Other Scripts
+
+- `installgo.sh` - Installs Go based on CPU architecture
+- `create-macos-boot-iso.sh` - Creates bootable macOS ISO for VirtualBox
+- `installs.sh` - Stripped down version focusing on essential apps
+
+## Quick Start
+
+### Prerequisites
+
+1. Install Xcode Command Line Tools:
+   ```sh
+   xcode-select --install
+   ```
+
+2. Clone this repository:
+   ```sh
+   cd $HOME
+   git clone https://github.com/chrismgonzalez/dotfiles.git
+   cd dotfiles
+   ```
+
+### Using the New Setup Script (Recommended)
+
+1. **Review and customize configuration:**
+   ```sh
+   vim config.yaml
+   ```
+
+2. **Validate configuration:**
+   ```sh
+   ./setup-new.sh --validate
+   ```
+
+3. **Preview changes (dry-run):**
+   ```sh
+   ./setup-new.sh --init --dry-run --verbose
+   ```
+
+4. **Run initial setup:**
+   ```sh
+   ./setup-new.sh --init
+   ```
+
+5. **Update packages later:**
+   ```sh
+   ./setup-new.sh --update
+   ```
+
+### Setup Script Modes
+
+```sh
+# Initial setup (full installation)
+./setup-new.sh --init
+
+# Update packages only
+./setup-new.sh --update
+
+# Validate configuration file
+./setup-new.sh --validate
+
+# Restore from backup
+./setup-new.sh --restore TIMESTAMP
+
+# Dry-run (preview without changes)
+./setup-new.sh --init --dry-run
+
+# Verbose logging
+./setup-new.sh --init --verbose
+```
 
 ## Usage
 I recommend you pick and choose what you want to use from this repo, and create your own dotfiles repo to which they can be added.  Consider changing the git remote to point to your own personal dotfiles, or copy/paste mine into your existing dotfiles. 
