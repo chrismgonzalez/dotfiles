@@ -1,6 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
+-- -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
@@ -37,6 +35,20 @@ return {
         [".*/etc/foo/.*"] = "fooscript",
       },
     },
+    -- Configure autocommands
+    autocmds = {
+      autosave = {
+        {
+          event = { "InsertLeave", "TextChanged" },
+          desc = "Autosave on change",
+          callback = function()
+            if vim.bo.modified and not vim.bo.readonly and vim.fn.expand("%") ~= "" and vim.bo.buftype == "" then
+              vim.cmd("silent! write")
+            end
+          end,
+        },
+      },
+    },
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
@@ -45,6 +57,7 @@ return {
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = false, -- sets vim.opt.wrap
+        updatetime = 200, -- faster autosave trigger
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
