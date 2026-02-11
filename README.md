@@ -1,179 +1,244 @@
-# Dotfiles and set up scripts (use at your own risk)
+# Dotfiles and System Setup
+
+Personal dotfiles and automated system setup using Ansible + GNU Stow. Works on both macOS and Linux.
 
 ## Features
 
-* Modular setup script with configuration file
-* Automated macOS development environment setup
-* Homebrew package management
-* Shell configuration (Zsh with Oh My Zsh)
-* Python and Node.js environment setup
-* Dotfile symlink management
-* Backup and restore functionality
-* Dry-run mode for safe testing
-
-## Contents
-
-### Main Setup Scripts
-
-- **`setup-new.sh`** - Modern modular setup script (recommended)
-  - Multiple operation modes: `--init`, `--update`, `--validate`, `--restore`
-  - Configuration via `config.yaml`
-  - Dry-run support with `--dry-run`
-  - Verbose logging with `--verbose`
-  - Automatic backups with restore capability
-  
-- **`setup.sh`** - Legacy monolithic setup script (deprecated, see MIGRATION.md)
-
-- **`config.yaml`** - Configuration file for setup-new.sh
-  - Feature toggles
-  - Package lists (brews, casks, fonts)
-  - Custom symlinks and directories
-  - Environment variables
-
-### Library Modules (`lib/`)
-
-- `utils.sh` - Logging, helpers, confirmation prompts
-- `validate.sh` - Configuration validation
-- `backup.sh` - Backup/restore with JSON manifest
-- `packages.sh` - Package installation (Homebrew, Xcode, Zsh, Python, Node)
-- `symlinks.sh` - Symlink and directory management
-
-### Other Scripts
-
-- `installgo.sh` - Installs Go based on CPU architecture
-- `create-macos-boot-iso.sh` - Creates bootable macOS ISO for VirtualBox
-- `installs.sh` - Stripped down version focusing on essential apps
+* **Cross-platform** - Supports macOS and Linux (Debian/Ubuntu)
+* **Ansible automation** - Idempotent system setup and package installation
+* **GNU Stow** - Clean symlink management for dotfiles
+* **Modular structure** - Organized into logical packages
+* **Language runtimes** - Python (uv), Node.js (nvm), Rust, Go, TypeScript, Terraform
+* **Shell setup** - Zsh with Oh My Zsh and plugins
+* **Version controlled** - All configs tracked in git
 
 ## Quick Start
 
 ### Prerequisites
 
-1. Install Xcode Command Line Tools:
-   ```sh
-   xcode-select --install
-   ```
+On a fresh machine, you'll need Git and basic command line tools:
 
-2. Clone this repository:
+**macOS:**
+```sh
+xcode-select --install
+```
+
+**Linux (Debian/Ubuntu):**
+```sh
+sudo apt update
+sudo apt install git curl
+```
+
+### Installation
+
+1. **Clone the repository:**
    ```sh
-   cd $HOME
+   cd ~
    git clone https://github.com/chrismgonzalez/dotfiles.git
    cd dotfiles
    ```
 
-### Using the New Setup Script (Recommended)
-
-1. **Review and customize configuration:**
+2. **Bootstrap** (installs uv and Ansible in a local venv):
    ```sh
-   vim config.yaml
+   ./bootstrap.sh
    ```
 
-2. **Validate configuration:**
+3. **Run the setup:**
    ```sh
-   ./setup-new.sh --validate
+   make setup
    ```
 
-3. **Preview changes (dry-run):**
-   ```sh
-   ./setup-new.sh --init --dry-run --verbose
-   ```
+   This will:
+   - Install system packages (Homebrew/apt)
+   - Install language runtimes (Python, Node.js, Rust, Go, TypeScript, Terraform)
+   - Set up Zsh with Oh My Zsh
+   - Symlink all dotfiles using Stow
 
-4. **Run initial setup:**
-   ```sh
-   ./setup-new.sh --init
-   ```
-
-5. **Update packages later:**
-   ```sh
-   ./setup-new.sh --update
-   ```
-
-### Setup Script Modes
+## Available Commands
 
 ```sh
-# Initial setup (full installation)
-./setup-new.sh --init
-
-# Update packages only
-./setup-new.sh --update
-
-# Validate configuration file
-./setup-new.sh --validate
-
-# Restore from backup
-./setup-new.sh --restore TIMESTAMP
-
-# Dry-run (preview without changes)
-./setup-new.sh --init --dry-run
-
-# Verbose logging
-./setup-new.sh --init --verbose
+make help       # Show all available commands
+make setup      # Run full Ansible playbook
+make check      # Dry run (check what would change)
+make diff       # Show detailed diff of changes
+make update     # Update Ansible and dependencies
+make lint       # Lint Ansible playbooks
+make clean      # Remove virtual environment
 ```
 
-## Usage
-I recommend you pick and choose what you want to use from this repo, and create your own dotfiles repo to which they can be added.  Consider changing the git remote to point to your own personal dotfiles, or copy/paste mine into your existing dotfiles. 
-
-Your terminal and system configs are most likely custom to you, I've simply provided mine here so that you can receive some inspiration. Please save a copy of the files you want to take into your own dotfiles repo on your machine.
-
-**DISCLAIMER** Carefully review the files and scripts to be sure they will meet your requirements.  You may want to comment certain things out (such as the symlink creation in `installs.sh`)
-
-## Download & installation
-
-A brand new developer machine will most likely require you to install XCode and Command Line tools.  There are a few solutions to this problem:
-
-1. When you start up your machine for the first time, go ahead and run `xcode-select --install`. This will install Git for you so that you can clone this repo through normal methods, like a `git clone ...`
-2. Use the commands below to download a tarball of the repo, unpack it, give the install script execution rights, and boom you're off.
-
-### Follow the below commands to setup your maching entirely from a script
+### Advanced Usage
 
 ```sh
-# navigate to a director on your machine, in this instance, we'll use /Desktop
-cd $HOME
+# Run specific tags
+make tags TAG=packages      # Just install packages
+make tags TAG=languages     # Just setup languages
+make tags TAG=dotfiles      # Just stow dotfiles
+make tags TAG=zsh           # Just setup Zsh
 
-# Use curl to download a tarball of our mac-setup-v2 branch
-curl -L -o mac-setup.zip https://github.com/chrismgonzalez/dotfiles/archive/mac-setup.zip
+# Skip specific tags
+make skip TAG=dotfiles      # Skip dotfile symlinking
 
-# Unzip the archive we just downloaded
-unzip mac-setup.zip
+# Verbose output
+make verbose
+```
 
-# navigate to to the ./scripts directory
-cd dotfiles/bin
-
-# make the script we want to run executable
-chmod +x installs.sh
-
-# run the script
-./installs.sh
+## Structure
 
 ```
-### If Git is already installed on your machine, follow the below steps
+dotfiles/
+├── ansible/              # Ansible automation
+│   ├── playbook.yml     # Main playbook
+│   ├── roles/           # Modular roles
+│   │   ├── prerequisites/
+│   │   ├── packages/
+│   │   ├── languages/
+│   │   └── dotfiles/
+│   └── vars/            # OS-specific variables
+│       ├── common.yml
+│       ├── darwin.yml   # macOS
+│       └── debian.yml   # Linux
+├── bin/                 # Scripts → ~/.local/bin/
+├── zsh/                 # Zsh config → ~/
+├── bash/                # Bash config → ~/
+├── vim/                 # Vim config → ~/
+├── git/                 # Git config → ~/
+├── alacritty/           # Alacritty → ~/.config/alacritty/
+├── nvim/                # Neovim → ~/.config/nvim/
+├── tmux/                # Tmux config → ~/
+├── starship/            # Starship → ~/.config/
+├── kiro/                # Kiro config → ~/.kiro/
+├── launchagents/        # macOS LaunchAgents
+├── macos/               # macOS-specific configs
+├── bootstrap.sh         # Initial setup script
+├── Makefile            # Command shortcuts
+└── pyproject.toml      # Python dependencies
+```
 
-Clone the repo to a hard disk location of your choice, for me, it's the home directory.
+## What Gets Installed
 
+### Common (macOS & Linux)
+- **CLI tools**: git, curl, wget, vim, neovim, tmux, fzf, ripgrep, fd, eza, starship, lazygit
+- **Shell**: Zsh with Oh My Zsh and plugins (autosuggestions, syntax-highlighting, completions)
+- **Languages**: 
+  - Python 3.12 (via uv)
+  - Node.js LTS (via nvm)
+  - Rust stable (via rustup)
+  - Go latest
+  - TypeScript + ts-node
+  - Terraform
+- **Tools**: GNU Stow, jq, yq, htop, tree, pre-commit
+
+### macOS Specific
+- Homebrew packages and casks
+- Fonts: FiraCode Nerd Font, JetBrains Mono Nerd Font, Victor Mono Nerd Font
+- Applications: Rectangle, Ghostty
+- Mac App Store apps (via `mas`)
+
+### Linux Specific
+- APT packages (Debian/Ubuntu)
+- Starship, GitHub CLI via external installers
+
+## Customization
+
+### Adding Packages
+
+Edit the appropriate vars file:
+
+**macOS packages** (`ansible/vars/darwin.yml`):
+```yaml
+brew_packages:
+  - your-package-here
+
+brew_casks:
+  - your-app-here
+
+mas_apps:
+  - { id: 497799835, name: "Xcode" }
+```
+
+**Linux packages** (`ansible/vars/debian.yml`):
+```yaml
+apt_packages:
+  - your-package-here
+```
+
+### Adding Dotfiles
+
+1. Create a new stow package:
+   ```sh
+   mkdir -p myapp
+   # Add files with proper structure
+   # e.g., myapp/.config/myapp/config.yml
+   ```
+
+2. Add to Ansible stow list (`ansible/roles/dotfiles/tasks/main.yml`):
+   ```yaml
+   loop:
+     - myapp  # Add your package here
+   ```
+
+3. Run `make setup` to stow it
+
+### Language Versions
+
+Edit `ansible/vars/common.yml`:
+```yaml
+python_version: "3.12"
+node_version: "lts/*"  # or "20.11.0" for specific version
+rust_version: "stable"
+go_version: "latest"
+```
+
+## How It Works
+
+### Ansible
+Handles system-level setup:
+- Package installation (Homebrew, apt)
+- Language runtime installation
+- Zsh and Oh My Zsh setup
+- System configuration
+
+### GNU Stow
+Manages dotfile symlinks:
+- Each directory is a "package" (zsh, nvim, etc.)
+- Directory structure mirrors your home directory
+- Creates symlinks from `~` to `~/dotfiles/package/`
+- Example: `~/.zshrc` → `~/dotfiles/zsh/.zshrc`
+
+### Workflow
+1. Bootstrap installs uv and Ansible in a local venv
+2. Ansible runs playbook to set up system
+3. Stow creates symlinks for all dotfiles
+4. Edit files in the dotfiles repo, changes are live immediately
+
+## Troubleshooting
+
+### Stow conflicts
+If stow reports conflicts, backup and remove the conflicting files:
 ```sh
-
-cd $HOME
-
-git clone https://github.com/chrismgonzalez/dotfiles.git
-
-# change to the scripts directory
-cd dotfiles/bin
-
-# make it executable
-chmod +x installs.sh
-
-# run
-./installs.sh
+mv ~/.conflicting-file ~/.conflicting-file.backup
+make setup
 ```
 
-### Additional considerations
+### Ansible asks for password
+Some tasks require sudo (changing default shell, modifying /etc/shells). Enter your password when prompted.
 
-The rest of the repository contains various configuration files for a handful of tools such as:
+### Missing packages
+If a package fails to install, check:
+- macOS: `brew search package-name`
+- Linux: `apt search package-name`
 
-- `.zshrc`
-- `.bashrc`
-- `.git-completion.bash`
-- `.osx` (OS X specific configuration -- use at your own risk, I recommend analyzing this file and running it independently from the `installs.sh` script)
-- `.vimrc`
+Update the appropriate vars file with the correct package name.
+
+## Notes
+
+This is my personal dotfiles setup. Feel free to fork and customize for your needs. Your terminal and system configs are personal - use mine as inspiration.
+
+**Disclaimer**: Review the Ansible playbooks and dotfiles before running to ensure they meet your requirements.
+
+## License
+
+MIT - Use at your own risk.
 
 ### Creating a GPG key for commit signing
 * Follow steps listed in the linked Github documentation [here](https://docs.github.com/en/authentication/managing-commit-signature-verification/checking-for-existing-gpg-keys)

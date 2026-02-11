@@ -1,0 +1,24 @@
+---
+- name: Setup Python
+  ansible.builtin.include_tasks: python.yml
+  tags: python
+
+- name: Setup Node.js
+  ansible.builtin.include_tasks: node.yml
+  tags: node
+
+- name: Setup Rust
+  ansible.builtin.include_tasks: rust.yml
+  tags: rust
+
+- name: Setup Go
+  ansible.builtin.include_tasks: go.yml
+  tags: go
+
+- name: Setup TypeScript
+  ansible.builtin.include_tasks: typescript.yml
+  tags: typescript
+
+- name: Setup Terraform
+  ansible.builtin.include_tasks: terraform.yml
+  tags: terraform

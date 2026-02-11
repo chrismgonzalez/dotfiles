@@ -1,0 +1,50 @@
+---
+- name: Install Homebrew packages
+  community.general.homebrew:
+    name: "{{ brew_packages }}"
+    state: present
+  when: brew_packages is defined
+
+- name: Install Homebrew casks
+  community.general.homebrew_cask:
+    name: "{{ brew_casks }}"
+    state: present
+  when: brew_casks is defined
+
+- name: Install fonts
+  community.general.homebrew_cask:
+    name: "{{ brew_fonts }}"
+    state: present
+  when: brew_fonts is defined
+
+- name: Install Zsh plugins
+  community.general.homebrew:
+    name: "{{ zsh_plugins }}"
+    state: present
+  when: zsh_plugins is defined
+
+- name: Check if signed into Mac App Store
+  ansible.builtin.command: mas account
+  register: mas_account
+  failed_when: false
+  changed_when: false
+  when: mas_apps is defined and mas_apps | length > 0
+
+- name: Install Mac App Store apps
+  ansible.builtin.command: "mas install {{ item.id }}"
+  loop: "{{ mas_apps }}"
+  when: 
+    - mas_apps is defined
+    - mas_apps | length > 0
+    - mas_account.rc == 0
+  register: mas_install
+  changed_when: "'Installed' in mas_install.stdout"
+  failed_when: false
+
+- name: Display Mac App Store sign-in message
+  ansible.builtin.debug:
+    msg: "Not signed into Mac App Store. Please sign in to install apps: {{ mas_apps | map(attribute='name') | join(', ') }}"
+  when:
+    - mas_apps is defined
+    - mas_apps | length > 0
+    - mas_account.rc != 0

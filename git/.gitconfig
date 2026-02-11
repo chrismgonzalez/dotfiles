@@ -1,0 +1,47 @@
+[user]
+	name = Chris Gonzalez
+	email = cmgonza89@gmail.com
+	signingkey = 37423E6F8BF4546A
+[core]
+  editor = nvim
+  excludesfile = ~/.gitignore
+  autocrlf = input
+[color]
+  interactive = auto
+  diff = auto
+  status = auto
+  branch = auto
+[init]
+	defaultBranch = main
+[web]
+  browser = google-chrome
+[credential]
+  helper = osxkeychain
+[push]
+  default = simple
+  followTags = true
+[pull]
+  rebase = true
+[merge]
+  tool = kdiff3
+[difftool]
+  prompt = false  
+# [commit]
+#   template = ~/.gitmessage
+[alias]
+  c = commit
+  ca = commit -a
+  cm = commit -m
+  cam = commit -am
+  d = diff
+  dc = diff --cached
+  l  = log --graph --pretty=format:'%C(bold blue)%h%Creset - %C(yellow)%d%Creset %s %C(cyan dim)(%cr)%Creset %n' --abbrev-commit --branches
+[commit]
+	gpgsign = false
+[gpg]
+	program = gpg
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f

@@ -1,67 +1,57 @@
 #!/bin/bash
-# Bootstrap script - installs minimal dependencies needed for setup.sh
-# Run this first on a fresh machine
-
 set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_DIR="$SCRIPT_DIR/.venv"
 
 echo "======================================"
 echo "   Dotfiles Bootstrap"
 echo "======================================"
 echo ""
 
-# Check if running on macOS
-if [[ "$OSTYPE" != darwin* ]]; then
-  echo "Error: This script is designed for macOS"
-  exit 1
-fi
-
-# Install Xcode Command Line Tools if needed
-if ! command -v gcc >/dev/null 2>&1; then
-  echo "Installing Xcode Command Line Tools..."
-  echo "Please follow the prompts and re-run this script after installation completes."
-  xcode-select --install
-  exit 0
+# Detect OS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  OS="macos"
+elif [[ -f /etc/debian_version ]]; then
+  OS="debian"
+elif [[ -f /etc/arch-release ]]; then
+  OS="arch"
 else
-  echo "✓ Xcode Command Line Tools installed"
+  OS="unknown"
 fi
 
-# Install Homebrew if needed
-if ! command -v brew >/dev/null 2>&1; then
-  echo "Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  
-  # Add Homebrew to PATH for Apple Silicon
-  if [[ -f "/opt/homebrew/bin/brew" ]]; then
-    echo "Adding Homebrew to PATH..."
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    
-    # Add to shell profile if not already there
-    if ! grep -q "/opt/homebrew/bin/brew" "$HOME/.zprofile" 2>/dev/null; then
-      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
-    fi
+echo "Detected OS: $OS"
+echo ""
+
+# Install uv if not present
+if ! command -v uv &>/dev/null; then
+  echo "Installing uv..."
+  if [[ "$OS" == "macos" ]] && command -v brew &>/dev/null; then
+    brew install uv
+  else
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
   fi
   
-  echo "✓ Homebrew installed"
+  if ! command -v uv &>/dev/null; then
+    echo "❌ Failed to install uv"
+    exit 1
+  fi
+  
+  echo "✓ uv installed"
 else
-  echo "✓ Homebrew already installed"
+  echo "✓ uv already installed ($(uv --version))"
 fi
 
-# Install yq (required for config parsing)
-if ! command -v yq >/dev/null 2>&1; then
-  echo "Installing yq..."
-  brew install yq
-  echo "✓ yq installed"
-else
-  echo "✓ yq already installed"
-fi
+echo ""
 
-# Install jq (required for backup manifests)
-if ! command -v jq >/dev/null 2>&1; then
-  echo "Installing jq..."
-  brew install jq
-  echo "✓ jq installed"
+# Create venv and install dependencies
+if [[ ! -d "$VENV_DIR" ]]; then
+  echo "Creating virtual environment..."
+  uv sync
+  echo "✓ Virtual environment created"
 else
-  echo "✓ jq already installed"
+  echo "✓ Virtual environment exists"
 fi
 
 echo ""
@@ -69,8 +59,8 @@ echo "======================================"
 echo "   Bootstrap Complete!"
 echo "======================================"
 echo ""
-echo "You can now run the main setup:"
-echo "  ./setup-new.sh --init          # Full setup"
-echo "  ./setup-new.sh --init --dry-run  # Preview changes"
-echo "  ./setup-new.sh --validate      # Check config"
+echo "Next steps:"
+echo "  make setup    # Run full setup"
+echo "  make check    # Dry run"
+echo "  make help     # See all commands"
 echo ""

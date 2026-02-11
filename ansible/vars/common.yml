@@ -1,0 +1,24 @@
+---
+# Common variables across all operating systems
+
+# Directories
+dotfiles_dir: "{{ ansible_env.HOME }}/dotfiles"
+config_dir: "{{ ansible_env.HOME }}/.config"
+local_bin: "{{ ansible_env.HOME }}/.local/bin"
+
+# Language versions
+python_version: "3.12"
+node_version: "lts/*"
+rust_version: "stable"
+go_version: "latest"
+typescript_packages:
+  - typescript
+  - ts-node
+  - "@types/node"
+terraform_version: "latest"
+
+# Directories to create
+directories_to_create:
+  - "{{ config_dir }}"
+  - "{{ local_bin }}"
+  - "{{ ansible_env.HOME }}/.aws"

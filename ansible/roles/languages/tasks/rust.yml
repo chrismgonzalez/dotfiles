@@ -1,0 +1,18 @@
+---
+- name: Check if rustup is installed
+  ansible.builtin.command: which rustup
+  register: rustup_check
+  failed_when: false
+  changed_when: false
+
+- name: Install Rust via rustup
+  ansible.builtin.shell: |
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain {{ rust_version }}
+  args:
+    creates: "{{ ansible_env.HOME }}/.cargo/bin/rustup"
+  when: rustup_check.rc != 0
+
+- name: Set default Rust toolchain
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/rustup default {{ rust_version }}"
+  when: rustup_check.rc == 0
+  changed_when: false

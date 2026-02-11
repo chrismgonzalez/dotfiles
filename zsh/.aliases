@@ -1,0 +1,105 @@
+###############################
+# System Commands
+###############################
+# Better defaults for common commands
+alias cp='cp -Rv'
+alias mv='mv -v'
+alias mkdir='mkdir -pv'
+alias wget='wget -c'
+
+# ls improvements
+
+alias la='eza -la --all --color=always'
+alias ls='ls --color=auto -ACF'
+alias ll='ls -la'
+alias l='ls -l'
+alias lla='ls -la'
+
+# Search improvements
+alias grep='grep --color=auto'
+
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias dev='cd ~/Development'
+alias evo='cd ~/code/caylent/builders/evo'
+alias evof='cd ~/code/caylent/builders/evo/evo-v2/'
+alias evob='cd ~/code/caylent/builders/evo/evo-backend/'
+alias evod='cd ~/code/caylent/builders/evo/evo-demos/'
+alias evord='cd ~/code/caylent/builders/evo/evo-r-and-d/'
+alias docs='cd ~/Documents'
+alias dot='cd ~/code/dotfiles'
+alias ru='cd ~/code/sandbox/rust/'
+
+# System configuration
+alias zshrc='nvim ~/.zshrc'
+alias reload='source ~/.zshrc'
+
+###############################
+# Development Tools
+###############################
+
+# Git
+alias gp='git pull'
+alias gs='git status'
+alias lg='LazyGit'
+alias gs='git status'
+alias gc='git commit'
+alias gcam='git commit -am'
+alias gp='git push'
+alias gl='git pull --rebase'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+# Zettelkasten
+
+alias in="cd \$ZETTELKASTEN/0\ Inbox/"
+alias cdzk="cd \$ZETTELKASTEN"
+# alias zet="sh ~/code/dotfiles/bin/zet"
+# alias zksync="sh ~/code/dotfiles/bin/zk_sync"
+
+# Docker
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'
+alias di='docker images'
+alias dsp='docker system prune -f'
+
+# Kubernetes
+alias k='kubectl'
+alias kg='kubectl get'
+alias kga='kubectl get all'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get services'
+alias kgn='kubectl get nodes'
+alias kd='kubectl delete'
+alias kds='kubectl describe'
+alias ke='kubectl edit'
+alias kr='kubectl run'
+
+# Python
+alias python='~/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/bin/python3'
+alias pip='pip3'
+alias pym='python3 manage.py'
+alias mkenv='python3 -m venv venv'
+alias startenv='source venv/bin/activate'
+alias stopenv='deactivate'
+alias pyinstall='pip install -r requirements.txt'
+
+# Go
+alias gr='go run'
+alias gb='go build'
+alias gt='go test'
+alias gmi='go mod init'
+alias gmt='go mod tidy'
+
+# Node.js
+alias node='nodejs'
+
+# AWS CLI
+
+alias sso='aws sso login --profile $1'
+alias sts='aws sts get-caller-identity'
+alias awsp='source ~/.local/bin/awsp'

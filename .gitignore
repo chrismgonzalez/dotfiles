@@ -7,6 +7,21 @@ id_rsa*
 /venv
 .idea
 *.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# uv
+uv.lock
+
+# Ansible
+*.retry
+.ansible/
 *.LSOverride
 node_modules
 yarn.lock

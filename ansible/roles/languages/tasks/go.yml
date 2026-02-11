@@ -1,0 +1,16 @@
+---
+- name: Check if Go is installed
+  ansible.builtin.command: which go
+  register: go_check
+  failed_when: false
+  changed_when: false
+
+- name: Display Go version if installed
+  ansible.builtin.debug:
+    msg: "Go is already installed: {{ go_check.stdout }}"
+  when: go_check.rc == 0
+
+- name: Go installation note
+  ansible.builtin.debug:
+    msg: "Go should be installed via package manager (brew/apt). Skipping manual installation."
+  when: go_check.rc != 0

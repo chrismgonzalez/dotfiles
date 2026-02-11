@@ -1,0 +1,10 @@
+---
+- name: Include OS-specific prerequisites
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Create common directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ directories_to_create }}"

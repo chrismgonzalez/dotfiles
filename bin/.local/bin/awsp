@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# AWS Profile Switcher
+# Usage: source awsp <profile_name>
+# Or add to your shell: alias awsp='source awsp'
+
+if [ -z "$1" ]; then
+  echo "Usage: awsp <profile_name>"
+  echo "Available profiles:"
+  if [ -f ~/.aws/config ]; then
+    grep '\[profile' ~/.aws/config | sed 's/\[profile \(.*\)\]/\1/'
+  else
+    echo "  (No ~/.aws/config file found)"
+  fi
+  return 1 2>/dev/null || exit 1
+fi
+
+# Check if config file exists
+if [ ! -f ~/.aws/config ]; then
+  echo "Error: ~/.aws/config not found"
+  echo "Create it with: mkdir -p ~/.aws && touch ~/.aws/config"
+  return 1 2>/dev/null || exit 1
+fi
+
+# Check if profile exists
+if ! grep -q "\[profile $1\]" ~/.aws/config; then
+  echo "Error: Profile '$1' not found in ~/.aws/config"
+  return 1 2>/dev/null || exit 1
+fi
+
+export AWS_PROFILE="$1"
+echo "AWS Profile set to: $AWS_PROFILE"
+

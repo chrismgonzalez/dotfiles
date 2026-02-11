@@ -1,0 +1,33 @@
+---
+- name: Check if Node.js is installed
+  ansible.builtin.command: which node
+  register: node_check
+  failed_when: false
+  changed_when: false
+
+- name: Install TypeScript globally via npm
+  ansible.builtin.shell: |
+    export NVM_DIR="{{ ansible_env.HOME }}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g {{ typescript_packages | join(' ') }}
+  args:
+    executable: /bin/bash
+  when: node_check.rc == 0
+  register: typescript_install
+  changed_when: "'added' in typescript_install.stdout or 'changed' in typescript_install.stdout"
+
+- name: Verify TypeScript installation
+  ansible.builtin.shell: |
+    export NVM_DIR="{{ ansible_env.HOME }}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    tsc --version
+  args:
+    executable: /bin/bash
+  register: tsc_version
+  changed_when: false
+  failed_when: false
+
+- name: Display TypeScript version
+  ansible.builtin.debug:
+    msg: "TypeScript version: {{ tsc_version.stdout }}"
+  when: tsc_version.rc == 0

@@ -1,0 +1,105 @@
+---
+- name: Check if Zsh is installed
+  ansible.builtin.command: which zsh
+  register: zsh_check
+  failed_when: false
+  changed_when: false
+
+- name: Install Zsh (macOS)
+  community.general.homebrew:
+    name: zsh
+    state: present
+  when: 
+    - ansible_os_family == "Darwin"
+    - zsh_check.rc != 0
+
+- name: Install Zsh (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+  become: yes
+  when:
+    - ansible_os_family == "Debian"
+    - zsh_check.rc != 0
+
+- name: Check if Oh My Zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: ohmyzsh_check
+
+- name: Backup existing .zshrc if not a symlink
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME }}/.zshrc"
+    dest: "{{ ansible_env.HOME }}/.zshrc.pre-oh-my-zsh"
+    remote_src: yes
+  when:
+    - not ohmyzsh_check.stat.exists
+    - ansible_env.HOME + '/.zshrc' is file
+  failed_when: false
+
+- name: Install Oh My Zsh
+  ansible.builtin.shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  when: not ohmyzsh_check.stat.exists
+
+- name: Remove Homebrew Zsh plugins (if installed)
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+    - zsh-completions
+  when: ansible_os_family == "Darwin"
+  failed_when: false
+
+- name: Install Zsh plugins via git
+  ansible.builtin.git:
+    repo: "https://github.com/zsh-users/{{ item }}.git"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/{{ item }}"
+    depth: 1
+  loop:
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+    - zsh-completions
+  failed_when: false
+
+- name: Get current shell
+  ansible.builtin.command: echo $SHELL
+  register: current_shell
+  changed_when: false
+
+- name: Check if Zsh is in /etc/shells
+  ansible.builtin.command: grep -q "{{ zsh_check.stdout }}" /etc/shells
+  register: zsh_in_shells_check
+  failed_when: false
+  changed_when: false
+  when: zsh_check.rc == 0
+
+- name: Add Zsh to /etc/shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: "{{ zsh_check.stdout }}"
+    state: present
+  become: yes
+  when:
+    - zsh_check.rc == 0
+    - zsh_in_shells_check.rc != 0
+
+- name: Change default shell to Zsh
+  ansible.builtin.user:
+    name: "{{ ansible_env.USER }}"
+    shell: "{{ zsh_check.stdout }}"
+  become: yes
+  when:
+    - zsh_check.rc == 0
+    - current_shell.stdout != zsh_check.stdout
+
+- name: Display shell change message
+  ansible.builtin.debug:
+    msg: "Default shell changed to Zsh. Please restart your terminal or run: exec zsh"
+  when:
+    - zsh_check.rc == 0
+    - current_shell.stdout != zsh_check.stdout

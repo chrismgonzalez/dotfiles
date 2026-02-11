@@ -1,0 +1,7 @@
+---
+- name: Include OS-specific package installation
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: Setup Zsh and Oh My Zsh
+  ansible.builtin.include_tasks: zsh.yml
+  tags: zsh

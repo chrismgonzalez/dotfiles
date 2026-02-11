@@ -1,0 +1,78 @@
+---
+- name: Check if dotfiles directory exists
+  ansible.builtin.stat:
+    path: "{{ dotfiles_dir }}"
+  register: dotfiles_check
+
+- name: Fail if dotfiles directory doesn't exist
+  ansible.builtin.fail:
+    msg: "Dotfiles directory not found at {{ dotfiles_dir }}"
+  when: not dotfiles_check.stat.exists
+
+- name: Check if stow is installed
+  ansible.builtin.command: which stow
+  register: stow_check
+  failed_when: false
+  changed_when: false
+
+- name: Display stow check result
+  ansible.builtin.debug:
+    msg: "Stow found: {{ stow_check.rc == 0 }}, Path: {{ stow_check.stdout }}"
+
+- name: Fail if stow is not installed
+  ansible.builtin.fail:
+    msg: "Stow is not installed. Please install it first: brew install stow"
+  when: stow_check.rc != 0
+
+- name: Find existing symlinks to dotfiles directory
+  ansible.builtin.find:
+    paths: "{{ ansible_env.HOME }}"
+    file_type: link
+    recurse: yes
+    hidden: yes
+    follow: no
+    depth: 3
+  register: home_symlinks
+  when: stow_check.rc == 0
+
+- name: Remove old symlinks pointing to dotfiles directory
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ home_symlinks.files }}"
+  when: 
+    - stow_check.rc == 0
+    - home_symlinks.files is defined
+    - item.lnk_target is defined
+    - dotfiles_dir in item.lnk_target
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Stow dotfile packages
+  ansible.builtin.command: "stow -d {{ dotfiles_dir }} -t {{ ansible_env.HOME }} -v {{ item }}"
+  loop:
+    - bin
+    - bash
+    - zsh
+    - vim
+    - git
+    - alacritty
+    - nvim
+    - tmux
+    - starship
+    - launchagents
+    - macos
+  when: stow_check.rc == 0
+  register: stow_result
+  changed_when: "'LINK' in stow_result.stderr"
+  failed_when: stow_result.rc != 0
+
+- name: Display stow results
+  ansible.builtin.debug:
+    msg: "{{ item.stderr_lines }}"
+  loop: "{{ stow_result.results }}"
+  when: 
+    - stow_result.results is defined
+    - item.stderr_lines is defined
+  loop_control:
+    label: "{{ item.item }}"

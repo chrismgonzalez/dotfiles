@@ -1,0 +1,77 @@
+---
+# macOS-specific variables
+
+# Homebrew packages
+brew_packages:
+  - wget
+  - gnupg
+  - awscli
+  - rust-analyzer
+  - tmux
+  - tree
+  - jq
+  - htop
+  - tldr
+  - coreutils
+  - pre-commit
+  - vim
+  - neovim
+  - go
+  - git-extras
+  - git-lfs
+  - gnu-sed
+  - kubectl
+  - pinentry-mac
+  - bash-completion@2
+  - ssh-copy-id
+  - lazygit
+  - fzf
+  - fd
+  - eza
+  - hugo
+  - starship
+  - gh
+  - yq
+  - ripgrep
+  - stow
+  - mas
+  - sops
+  - age
+
+# Homebrew casks
+brew_casks:
+  - rectangle
+
+# Homebrew fonts
+brew_fonts:
+  - font-fira-code
+  - font-fira-code-nerd-font
+  - font-jetbrains-mono
+  - font-jetbrains-mono-nerd-font
+  - font-victor-mono
+  - font-victor-mono-nerd-font
+
+# macOS-specific directories
+macos_directories:
+  - "{{ ansible_env.HOME }}/Library/LaunchAgents"
+
+# Zsh plugins (via Homebrew) - DEPRECATED: Now installed via git in zsh.yml
+# zsh_plugins:
+#   - zsh-autosuggestions
+#   - zsh-syntax-highlighting
+#   - zsh-completions
+
+# Manual installations (DMG, etc.)
+manual_installs:
+  - name: alacritty
+    url: "https://github.com/alacritty/alacritty/releases/latest"
+    note: "Download and install Alacritty.dmg manually from GitHub releases"
+
+# Mac App Store apps (use `mas search <app>` to find IDs)
+mas_apps:
+  # Example apps - uncomment and add your own
+  # - { id: 497799835, name: "Xcode" }
+  # - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  # - { id: 1352778147, name: "Bitwarden" }
+  # - { id: 1480933944, name: "Vimari" }
+  []
