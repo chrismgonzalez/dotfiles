@@ -16,7 +16,7 @@
 [web]
   browser = google-chrome
 [credential]
-  helper = osxkeychain
+	helper = git-credential-osxkeychain
 [push]
   default = simple
   followTags = true
