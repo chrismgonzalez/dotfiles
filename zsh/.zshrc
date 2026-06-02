@@ -136,3 +136,7 @@ eval "$(starship init zsh)"
 
 # Kiro CLI post block. Keep at the bottom of this file.
 # [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+# Obsidian CLI
+export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
+alias obsidian="Obsidian"
